@@ -64,7 +64,7 @@ const Index = () => {
         </div>
 
         <h1 className="text-4xl md:text-5xl font-bold text-center text-gray-800 mb-4">
-          Healthcare Services
+          Sehti
         </h1>
         <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
           Access professional medical services from the comfort of your home
