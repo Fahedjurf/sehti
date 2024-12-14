@@ -1,4 +1,7 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface MedicalReport {
   id: string;
@@ -34,10 +37,26 @@ const mockReports: MedicalReport[] = [
 ];
 
 const MedicalHistory = () => {
+  const navigate = useNavigate();
+
+  const handleGoBack = () => {
+    navigate("/dashboard");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent p-6">
       <div className="max-w-4xl mx-auto">
-        <h1 className="text-3xl font-bold text-medical-dark mb-6">Medical History</h1>
+        <div className="flex items-center mb-6">
+          <Button 
+            variant="outline" 
+            className="mr-4" 
+            onClick={handleGoBack}
+          >
+            <ArrowLeft className="mr-2 h-4 w-4" />
+            Back to Dashboard
+          </Button>
+          <h1 className="text-3xl font-bold text-medical-dark">Medical History</h1>
+        </div>
         <div className="space-y-4">
           {mockReports.map((report) => (
             <Card key={report.id} className="hover:shadow-lg transition-shadow">
