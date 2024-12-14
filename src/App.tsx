@@ -6,6 +6,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Index from "./pages/Index";
+import MedicalHistory from "./pages/MedicalHistory";
 
 const queryClient = new QueryClient();
 
@@ -19,6 +20,7 @@ const App = () => (
           <Route path="/" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/dashboard" element={<Index />} />
+          <Route path="/medical-history" element={<MedicalHistory />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>

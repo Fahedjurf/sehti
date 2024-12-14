@@ -1,5 +1,6 @@
-import { Stethoscope, Users, Truck, Phone, UserRound, MoreVertical } from "lucide-react";
+import { Stethoscope, Users, Truck, Phone, UserRound, MoreVertical, History } from "lucide-react";
 import { CategoryCard } from "@/components/CategoryCard";
+import { useNavigate } from "react-router-dom";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -53,6 +54,7 @@ const userProfile = {
 const Index = () => {
   const [language, setLanguage] = useState<"en" | "ar">("en");
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const navigate = useNavigate();
 
   const toggleLanguage = () => {
     setLanguage(prev => prev === "en" ? "ar" : "en");
@@ -76,6 +78,10 @@ const Index = () => {
               <MoreVertical className="h-6 w-6 text-gray-600" />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => navigate("/medical-history")}>
+                <History className="mr-2 h-4 w-4" />
+                Medical History
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={toggleLanguage}>
                 {language === "en" ? "Switch to Arabic" : "Switch to English"}
               </DropdownMenuItem>
