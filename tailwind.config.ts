@@ -20,11 +20,11 @@ export default {
     extend: {
       colors: {
         medical: {
-          primary: "#2B8CB6",
-          secondary: "#64B5F6",
-          accent: "#81D4FA",
-          light: "#E3F2FD",
-          dark: "#1976D2",
+          primary: "#16a34a",
+          secondary: "#22c55e",
+          accent: "#86efac",
+          light: "#f0fdf4",
+          dark: "#15803d",
         },
         border: 'hsl(var(--border))',
         input: 'hsl(var(--input))',

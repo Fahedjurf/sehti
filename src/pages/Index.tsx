@@ -60,21 +60,21 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-medical-light to-white">
+    <div className="min-h-screen bg-gradient-to-b from-medical-light via-white to-medical-light">
       <div className="container px-4 py-12">
         {/* Header with Profile and Settings */}
         <div className="absolute top-4 right-4 flex items-center gap-4">
           <Avatar 
-            className="h-10 w-10 bg-purple-100 cursor-pointer hover:ring-2 hover:ring-purple-400 transition-all"
+            className="h-10 w-10 bg-medical-light cursor-pointer hover:ring-2 hover:ring-medical-primary transition-all"
             onClick={() => setIsProfileOpen(true)}
           >
-            <AvatarFallback className="text-purple-700">
+            <AvatarFallback className="text-medical-primary">
               <UserRound className="h-6 w-6" />
             </AvatarFallback>
           </Avatar>
           
           <DropdownMenu>
-            <DropdownMenuTrigger className="p-2 hover:bg-gray-100 rounded-full transition-colors">
+            <DropdownMenuTrigger className="p-2 hover:bg-medical-light rounded-full transition-colors">
               <MoreVertical className="h-6 w-6 text-gray-600" />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
@@ -89,46 +89,50 @@ const Index = () => {
         <Dialog open={isProfileOpen} onOpenChange={setIsProfileOpen}>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              <DialogTitle>Profile Details</DialogTitle>
+              <DialogTitle className="text-medical-primary">Profile Details</DialogTitle>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-2 items-center gap-4">
-                <div className="font-semibold">Name</div>
+                <div className="font-semibold text-medical-dark">Name</div>
                 <div>{userProfile.firstName} {userProfile.lastName}</div>
                 
-                <div className="font-semibold">Phone</div>
+                <div className="font-semibold text-medical-dark">Phone</div>
                 <div>{userProfile.phoneNumber}</div>
                 
-                <div className="font-semibold">Email</div>
+                <div className="font-semibold text-medical-dark">Email</div>
                 <div className="break-all">{userProfile.email}</div>
                 
-                <div className="font-semibold">Blood Type</div>
+                <div className="font-semibold text-medical-dark">Blood Type</div>
                 <div>{userProfile.bloodType}</div>
                 
-                <div className="font-semibold">Emergency Contact</div>
+                <div className="font-semibold text-medical-dark">Emergency Contact</div>
                 <div>{userProfile.emergencyContact}</div>
                 
-                <div className="font-semibold">Address</div>
+                <div className="font-semibold text-medical-dark">Address</div>
                 <div>{userProfile.address}</div>
                 
-                <div className="font-semibold">Insurance Provider</div>
+                <div className="font-semibold text-medical-dark">Insurance Provider</div>
                 <div>{userProfile.insuranceProvider}</div>
                 
-                <div className="font-semibold">Policy Number</div>
+                <div className="font-semibold text-medical-dark">Policy Number</div>
                 <div>{userProfile.policyNumber}</div>
               </div>
             </div>
           </DialogContent>
         </Dialog>
 
-        <h1 className="text-4xl md:text-5xl font-bold text-center text-gray-800 mb-4">
-          Sehti
-        </h1>
-        <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-          Access professional medical services from the comfort of your home
-        </p>
+        <div className="relative">
+          <div className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-medical-primary to-transparent"></div>
+          <h1 className="text-4xl md:text-5xl font-bold text-center text-medical-dark mb-4 pt-8">
+            Sehti
+          </h1>
+          <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
+            Access professional medical services from the comfort of your home
+          </p>
+          <div className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-medical-primary to-transparent"></div>
+        </div>
         
-        <div className="grid grid-cols-2 gap-6 max-w-4xl mx-auto">
+        <div className="grid grid-cols-2 gap-6 max-w-4xl mx-auto mt-8">
           {categories.map((category) => (
             <CategoryCard
               key={category.title}
