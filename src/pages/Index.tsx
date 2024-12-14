@@ -60,7 +60,7 @@ const Index = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-medical-light via-white to-medical-light">
+    <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent">
       <div className="container px-4 py-12">
         {/* Header with Profile and Settings */}
         <div className="absolute top-4 right-4 flex items-center gap-4">
@@ -121,15 +121,13 @@ const Index = () => {
           </DialogContent>
         </Dialog>
 
-        <div className="relative">
-          <div className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-medical-primary to-transparent"></div>
-          <h1 className="text-4xl md:text-5xl font-bold text-center text-medical-dark mb-4 pt-8">
+        <div className="relative py-8">
+          <h1 className="text-4xl md:text-5xl font-bold text-center text-medical-dark mb-4">
             Sehti
           </h1>
           <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
             Access professional medical services from the comfort of your home
           </p>
-          <div className="absolute left-0 right-0 h-px bg-gradient-to-r from-transparent via-medical-primary to-transparent"></div>
         </div>
         
         <div className="grid grid-cols-2 gap-6 max-w-4xl mx-auto mt-8">
