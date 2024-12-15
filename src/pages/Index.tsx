@@ -59,6 +59,11 @@ const Index = () => {
     setLanguage(prev => prev === "en" ? "ar" : "en");
   };
 
+  const handleSignOut = () => {
+    // Here you would handle sign out logic
+    navigate("/");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent">
       <div className="container px-4 py-12">
@@ -77,14 +82,13 @@ const Index = () => {
               <MoreVertical className="h-6 w-6 text-gray-600" />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={() => navigate("/medical-history")}>
-                <History className="mr-2 h-4 w-4" />
-                Medical History
-              </DropdownMenuItem>
               <DropdownMenuItem onClick={toggleLanguage}>
                 {language === "en" ? "Switch to Arabic" : "Switch to English"}
               </DropdownMenuItem>
               <DropdownMenuItem>Help</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleSignOut} className="text-red-600">
+                Sign Out
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
