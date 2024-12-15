@@ -7,6 +7,7 @@ import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Index from "./pages/Index";
 import MedicalHistory from "./pages/MedicalHistory";
+import DoctorDashboard from "./pages/DoctorDashboard";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +22,7 @@ const App = () => (
           <Route path="/signup" element={<Signup />} />
           <Route path="/dashboard" element={<Index />} />
           <Route path="/medical-history" element={<MedicalHistory />} />
+          <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
