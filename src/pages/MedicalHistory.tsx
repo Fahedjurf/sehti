@@ -49,13 +49,13 @@ const MedicalHistory = () => {
         <div className="flex items-center mb-6">
           <Button 
             variant="outline" 
-            className="mr-4" 
+            className="flex items-center gap-2 bg-white/80 backdrop-blur-sm border-medical-primary text-medical-primary hover:bg-medical-light hover:text-medical-dark transition-all duration-300 shadow-sm" 
             onClick={handleGoBack}
           >
-            <ArrowLeft className="mr-2 h-4 w-4" />
+            <ArrowLeft className="h-4 w-4" />
             Back to Dashboard
           </Button>
-          <h1 className="text-3xl font-bold text-medical-dark">Medical History</h1>
+          <h1 className="text-3xl font-bold text-medical-dark ml-4">Medical History</h1>
         </div>
         <div className="space-y-4">
           {mockReports.map((report) => (

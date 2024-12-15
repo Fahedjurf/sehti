@@ -37,7 +37,6 @@ const DoctorDashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent p-6">
       <div className="max-w-4xl mx-auto">
-        {/* Header with Profile and Settings */}
         <div className="absolute top-4 right-4 flex items-center gap-4">
           <Avatar 
             className="h-10 w-10 bg-medical-light cursor-pointer hover:ring-2 hover:ring-medical-primary transition-all"
@@ -90,7 +89,7 @@ const DoctorDashboard = () => {
           </DialogContent>
         </Dialog>
 
-        <h1 className="text-3xl font-bold text-medical-dark mb-6">
+        <h1 className="text-3xl font-bold text-medical-dark mb-6 text-center">
           Welcome Dr. {doctorProfile.lastName}
         </h1>
         

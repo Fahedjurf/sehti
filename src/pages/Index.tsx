@@ -123,7 +123,7 @@ const Index = () => {
 
         <div className="relative py-8">
           <h1 className="text-4xl md:text-5xl font-bold text-center text-medical-dark mb-4">
-            Welcome {userProfile.firstName}
+            Welcome Mr. {userProfile.firstName}
           </h1>
           <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
             Access professional medical services from the comfort of your home
