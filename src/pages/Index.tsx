@@ -47,8 +47,7 @@ const userProfile = {
   bloodType: "O+",
   emergencyContact: "+1 234 567 8901",
   address: "123 Medical Street, Health City",
-  insuranceProvider: "HealthCare Plus",
-  policyNumber: "HC123456789"
+  sehtiId: "1234567890" // 10-digit ID for patients
 };
 
 const Index = () => {
@@ -85,7 +84,7 @@ const Index = () => {
               <DropdownMenuItem onClick={toggleLanguage}>
                 {language === "en" ? "Switch to Arabic" : "Switch to English"}
               </DropdownMenuItem>
-              <DropdownMenuItem>Settings</DropdownMenuItem>
+              <DropdownMenuItem>Help</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -115,11 +114,8 @@ const Index = () => {
                 <div className="font-semibold text-medical-dark">Address</div>
                 <div>{userProfile.address}</div>
                 
-                <div className="font-semibold text-medical-dark">Insurance Provider</div>
-                <div>{userProfile.insuranceProvider}</div>
-                
-                <div className="font-semibold text-medical-dark">Policy Number</div>
-                <div>{userProfile.policyNumber}</div>
+                <div className="font-semibold text-medical-dark">Sehti ID</div>
+                <div>{userProfile.sehtiId}</div>
               </div>
             </div>
           </DialogContent>
@@ -127,7 +123,7 @@ const Index = () => {
 
         <div className="relative py-8">
           <h1 className="text-4xl md:text-5xl font-bold text-center text-medical-dark mb-4">
-            Sehti
+            Welcome {userProfile.firstName}
           </h1>
           <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
             Access professional medical services from the comfort of your home
