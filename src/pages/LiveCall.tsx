@@ -4,7 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
-import { X, Send, Pills } from "lucide-react";
+import { X, Send, Pill } from "lucide-react";
 
 interface Message {
   id: number;
@@ -141,7 +141,7 @@ const LiveCall = () => {
         <div className="lg:col-span-1">
           <Card className="p-4">
             <div className="flex items-center gap-2 mb-4">
-              <Pills className="h-5 w-5 text-medical-primary" />
+              <Pill className="h-5 w-5 text-medical-primary" />
               <h2 className="text-lg font-semibold">Prescribed Medications</h2>
             </div>
             <ScrollArea className="h-[400px]">
