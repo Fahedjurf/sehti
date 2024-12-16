@@ -108,7 +108,10 @@ const DoctorDashboard = () => {
             </CardContent>
           </Card>
 
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+          <Card 
+            className="hover:shadow-lg transition-shadow cursor-pointer"
+            onClick={() => navigate("/schedule")}
+          >
             <CardContent className="flex flex-col items-center justify-center p-6">
               <Calendar className="h-12 w-12 text-medical-primary mb-4" />
               <h2 className="text-xl font-semibold">Schedule</h2>
