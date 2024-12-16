@@ -93,12 +93,15 @@ const PharmaceuticalSupplies = () => {
     if (prescribedMeds) {
       const medications = JSON.parse(prescribedMeds);
       medications.forEach((med: any) => {
-        const product = {
+        const product: Product = {
           id: med.id,
           name: med.name,
           price: med.price,
           description: `${med.dosage} - ${med.frequency}`,
-          image: "/placeholder.svg"
+          image: "/placeholder.svg",
+          usage: med.frequency || "As prescribed by your healthcare provider",
+          sideEffects: "Please consult your healthcare provider for potential side effects",
+          fullDescription: med.description || "Prescription medication as recommended by your healthcare provider"
         };
         addToCart(product);
       });
