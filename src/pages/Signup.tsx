@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
 import { UserTypeSelect } from "@/components/signup/UserTypeSelect";
 import { PhoneVerification } from "@/components/signup/PhoneVerification";
+import { DoctorFields } from "@/components/signup/DoctorFields";
 import { MedicalProfessionalFields } from "@/components/signup/MedicalProfessionalFields";
 import { PatientFields } from "@/components/signup/PatientFields";
 
@@ -18,10 +19,10 @@ const Signup = () => {
     phoneNumber: "",
     password: "",
     confirmPassword: "",
-    bloodType: "",
     emergencyContact: "",
     address: "",
     hospitalAddress: "",
+    specialization: "",
     certificate: null as File | null,
   });
 
@@ -42,28 +43,8 @@ const Signup = () => {
     }
   };
 
-  const handleSendOTP = () => {
-    if (!formData.phoneNumber || !formData.fullName) {
-      toast.error("Please enter your full name and phone number first");
-      return;
-    }
-    toast.success("OTP sent to your phone number");
-    setOtpSent(true);
-  };
-
-  const handleVerifyOTP = (otp: string) => {
-    if (otp.length === 6) {
-      setOtpVerified(true);
-      toast.success("OTP verified successfully");
-    }
-  };
-
-  const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      setFormData((prev) => ({ ...prev, certificate: file }));
-      toast.success("Certificate uploaded successfully");
-    }
+  const handleChange = (field: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -84,17 +65,12 @@ const Signup = () => {
       return;
     }
 
-    if (
-      (formData.userType === "doctor" || formData.userType === "nurse") &&
-      !formData.certificate
-    ) {
+    if (formData.userType === "doctor" && !formData.certificate) {
       toast.error("Please upload your certificate");
       return;
     }
 
     const userId = generateId(formData.userType);
-
-    // Simulate sending email with Sehti-ID
     toast.success(`Sehti-ID has been sent to ${formData.email}`);
 
     if (formData.userType === "doctor") {
@@ -107,10 +83,6 @@ const Signup = () => {
       toast.success("Registration successful! Your Patient ID is: " + userId);
       navigate("/dashboard");
     }
-  };
-
-  const handleChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   return (
@@ -151,31 +123,35 @@ const Signup = () => {
               <PhoneVerification
                 phoneNumber={formData.phoneNumber}
                 onPhoneChange={(value) => handleChange("phoneNumber", value)}
-                onSendOTP={handleSendOTP}
+                onSendOTP={() => setOtpSent(true)}
                 otpSent={otpSent}
                 otpVerified={otpVerified}
-                onVerifyOTP={handleVerifyOTP}
+                onVerifyOTP={() => setOtpVerified(true)}
               />
 
-              {(formData.userType === "doctor" || formData.userType === "nurse") && (
+              {formData.userType === "doctor" && (
+                <DoctorFields
+                  specialization={formData.specialization}
+                  hospitalAddress={formData.hospitalAddress}
+                  onSpecializationChange={(value) => handleChange("specialization", value)}
+                  onHospitalAddressChange={(value) => handleChange("hospitalAddress", value)}
+                  onFileChange={(e) => setFormData(prev => ({ ...prev, certificate: e.target.files?.[0] || null }))}
+                />
+              )}
+
+              {formData.userType === "nurse" && (
                 <MedicalProfessionalFields
                   hospitalAddress={formData.hospitalAddress}
-                  onHospitalAddressChange={(value) =>
-                    handleChange("hospitalAddress", value)
-                  }
-                  onFileChange={handleFileChange}
+                  onHospitalAddressChange={(value) => handleChange("hospitalAddress", value)}
+                  onFileChange={(e) => setFormData(prev => ({ ...prev, certificate: e.target.files?.[0] || null }))}
                 />
               )}
 
               {formData.userType === "patient" && (
                 <PatientFields
-                  bloodType={formData.bloodType}
                   emergencyContact={formData.emergencyContact}
                   address={formData.address}
-                  onBloodTypeChange={(value) => handleChange("bloodType", value)}
-                  onEmergencyContactChange={(value) =>
-                    handleChange("emergencyContact", value)
-                  }
+                  onEmergencyContactChange={(value) => handleChange("emergencyContact", value)}
                   onAddressChange={(value) => handleChange("address", value)}
                 />
               )}
