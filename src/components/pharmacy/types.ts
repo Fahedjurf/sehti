@@ -4,6 +4,9 @@ export interface Product {
   price: number;
   description: string;
   image: string;
+  usage: string;
+  sideEffects: string;
+  fullDescription: string;
 }
 
 export interface CartItem extends Product {
