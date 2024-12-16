@@ -14,8 +14,8 @@ interface UserTypeSelectProps {
 
 export const UserTypeSelect = ({ value, onChange }: UserTypeSelectProps) => (
   <div className="space-y-2">
-    <Label>User Type</Label>
-    <Select value={value} onValueChange={onChange}>
+    <Label>User Type <span className="text-red-500">*</span></Label>
+    <Select value={value} onValueChange={onChange} required>
       <SelectTrigger>
         <SelectValue placeholder="Select user type" />
       </SelectTrigger>

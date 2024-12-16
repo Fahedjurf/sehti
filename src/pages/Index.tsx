@@ -82,6 +82,10 @@ const Index = () => {
               <MoreVertical className="h-6 w-6 text-gray-600" />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
+              <DropdownMenuItem onClick={() => navigate("/medical-history")}>
+                <History className="mr-2 h-4 w-4" />
+                Medical History
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={toggleLanguage}>
                 {language === "en" ? "Switch to Arabic" : "Switch to English"}
               </DropdownMenuItem>

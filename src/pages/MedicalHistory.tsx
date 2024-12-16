@@ -6,9 +6,10 @@ import { useNavigate } from "react-router-dom";
 interface MedicalReport {
   id: string;
   date: string;
-  address: string;
+  hospitalAddress: string;
   details: string;
   doctorName: string;
+  serviceType: string;
 }
 
 // Mock data - in a real app, this would come from an API
@@ -16,23 +17,26 @@ const mockReports: MedicalReport[] = [
   {
     id: "1",
     date: "2024-03-15 14:30",
-    address: "123 Medical Center, Health City",
+    hospitalAddress: "123 Medical Center, Health City",
     details: "Regular checkup - Blood pressure normal, heart rate stable",
-    doctorName: "Dr. Sarah Johnson"
+    doctorName: "Dr. Sarah Johnson",
+    serviceType: "Quick Diagnosis"
   },
   {
     id: "2",
     date: "2024-02-28 09:15",
-    address: "456 City Hospital, Downtown",
+    hospitalAddress: "456 City Hospital, Downtown",
     details: "Flu symptoms treatment - Prescribed antibiotics and rest",
-    doctorName: "Dr. Michael Chen"
+    doctorName: "Dr. Michael Chen",
+    serviceType: "Live Call Consultation"
   },
   {
     id: "3",
     date: "2024-01-10 11:45",
-    address: "789 Family Clinic, Westside",
+    hospitalAddress: "789 Family Clinic, Westside",
     details: "Annual physical examination - All tests within normal range",
-    doctorName: "Dr. Emily Williams"
+    doctorName: "Dr. Emily Williams",
+    serviceType: "In-Person Visit"
   }
 ];
 
@@ -61,6 +65,11 @@ const MedicalHistory = () => {
           {mockReports.map((report) => (
             <Card key={report.id} className="hover:shadow-lg transition-shadow">
               <CardHeader>
+                <div className="text-center mb-2">
+                  <span className="text-lg font-semibold text-medical-primary">
+                    {report.serviceType}
+                  </span>
+                </div>
                 <CardTitle className="flex justify-between items-center text-center">
                   <span className="text-lg text-medical-primary">
                     {new Date(report.date).toLocaleString()}
@@ -72,7 +81,7 @@ const MedicalHistory = () => {
               </CardHeader>
               <CardContent>
                 <p className="text-gray-600 mb-2 text-center">
-                  <strong>Location:</strong> {report.address}
+                  <strong>Location:</strong> {report.hospitalAddress}
                 </p>
                 <p className="text-gray-800 text-center">
                   <strong>Details:</strong> {report.details}
