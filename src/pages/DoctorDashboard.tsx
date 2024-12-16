@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/dialog";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { LanguageToggle } from "@/components/LanguageToggle";
 
 // Mock doctor data - in a real app, this would come from your backend
 const doctorProfile = {
@@ -28,13 +29,8 @@ const doctorProfile = {
 };
 
 const DoctorDashboard = () => {
-  const [language, setLanguage] = useState<"en" | "ar">("en");
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const navigate = useNavigate();
-
-  const toggleLanguage = () => {
-    setLanguage(prev => prev === "en" ? "ar" : "en");
-  };
 
   const handleSignOut = () => {
     // Here you would handle sign out logic
@@ -59,9 +55,7 @@ const DoctorDashboard = () => {
               <MoreVertical className="h-6 w-6 text-gray-600" />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={toggleLanguage}>
-                {language === "en" ? "Switch to Arabic" : "Switch to English"}
-              </DropdownMenuItem>
+              <LanguageToggle />
               <DropdownMenuItem>Help</DropdownMenuItem>
               <DropdownMenuItem onClick={handleSignOut} className="text-red-600">
                 Sign Out

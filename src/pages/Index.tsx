@@ -15,6 +15,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useState } from "react";
+import { LanguageToggle } from "@/components/LanguageToggle";
 
 const categories = [
   {
@@ -50,16 +51,10 @@ const userProfile = {
 };
 
 const Index = () => {
-  const [language, setLanguage] = useState<"en" | "ar">("en");
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const navigate = useNavigate();
 
-  const toggleLanguage = () => {
-    setLanguage(prev => prev === "en" ? "ar" : "en");
-  };
-
   const handleSignOut = () => {
-    // Here you would handle sign out logic
     navigate("/");
   };
 
@@ -85,9 +80,7 @@ const Index = () => {
                 <History className="mr-2 h-4 w-4" />
                 Medical History
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={toggleLanguage}>
-                {language === "en" ? "Switch to Arabic" : "Switch to English"}
-              </DropdownMenuItem>
+              <LanguageToggle />
               <DropdownMenuItem>Help</DropdownMenuItem>
               <DropdownMenuItem onClick={handleSignOut} className="text-red-600">
                 Sign Out
