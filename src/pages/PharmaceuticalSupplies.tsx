@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ShoppingCart, Plus, Minus, ArrowLeft } from "lucide-react";
+import { ShoppingCart, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import {
   Sheet,
@@ -10,47 +10,16 @@ import {
 } from "@/components/ui/sheet";
 import { Button } from "@/components/ui/button";
 import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-} from "@/components/ui/dialog";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-
-interface Product {
-  id: number;
-  name: string;
-  price: number;
-  description: string;
-  image: string;
-}
-
-interface CartItem extends Product {
-  quantity: number;
-}
-
-interface CardDetails {
-  cardNumber: string;
-  expiryDate: string;
-  cvv: string;
-  name: string;
-}
+import { CartItem } from "@/components/pharmacy/CartItem";
+import { ProductCard } from "@/components/pharmacy/ProductCard";
+import { CardDetailsDialog } from "@/components/pharmacy/CardDetailsDialog";
+import { Product, CartItem as CartItemType, CardDetails } from "@/components/pharmacy/types";
 
 const products: Product[] = [
   {
@@ -85,7 +54,7 @@ const products: Product[] = [
 
 const PharmaceuticalSupplies = () => {
   const navigate = useNavigate();
-  const [cart, setCart] = useState<CartItem[]>([]);
+  const [cart, setCart] = useState<CartItemType[]>([]);
   const [paymentMethod, setPaymentMethod] = useState<string>("");
   const [showCardDialog, setShowCardDialog] = useState(false);
   const [cardDetails, setCardDetails] = useState<CardDetails>({
@@ -146,7 +115,6 @@ const PharmaceuticalSupplies = () => {
 
   const handleCardDetailsSubmit = () => {
     setShowCardDialog(false);
-    // Here you would typically validate and process the card details
     handleCheckout();
   };
 
@@ -166,6 +134,7 @@ const PharmaceuticalSupplies = () => {
           Pharmaceutical Supplies
         </h1>
 
+        <div className="flex justify-end mb-6">
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="outline" className="relative">
@@ -183,34 +152,12 @@ const PharmaceuticalSupplies = () => {
               </SheetHeader>
               <div className="mt-6 space-y-4">
                 {cart.map((item) => (
-                  <div
+                  <CartItem
                     key={item.id}
-                    className="flex justify-between items-center border-b pb-2"
-                  >
-                    <div>
-                      <h3 className="font-medium">{item.name}</h3>
-                      <p className="text-sm text-gray-500">
-                        ${item.price.toFixed(2)} x {item.quantity}
-                      </p>
-                    </div>
-                    <div className="flex items-center gap-2">
-                      <Button
-                        size="icon"
-                        variant="outline"
-                        onClick={() => removeFromCart(item.id)}
-                      >
-                        <Minus className="h-4 w-4" />
-                      </Button>
-                      <span>{item.quantity}</span>
-                      <Button
-                        size="icon"
-                        variant="outline"
-                        onClick={() => addToCart(item)}
-                      >
-                        <Plus className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
+                    item={item}
+                    onAdd={addToCart}
+                    onRemove={removeFromCart}
+                  />
                 ))}
                 {cart.length > 0 ? (
                   <div className="space-y-4">
@@ -220,7 +167,7 @@ const PharmaceuticalSupplies = () => {
                     </div>
                     <Select
                       value={paymentMethod}
-                      onValueChange={setPaymentMethod}
+                      onValueChange={handlePaymentMethodChange}
                     >
                       <SelectTrigger>
                         <SelectValue placeholder="Select payment method" />
@@ -248,91 +195,21 @@ const PharmaceuticalSupplies = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {products.map((product) => (
-            <Card key={product.id}>
-              <CardHeader>
-                <CardTitle>{product.name}</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <img
-                  src={product.image}
-                  alt={product.name}
-                  className="w-full h-48 object-cover rounded-md mb-4"
-                />
-                <p className="text-gray-600">{product.description}</p>
-                <p className="text-lg font-bold mt-2">
-                  ${product.price.toFixed(2)}
-                </p>
-              </CardContent>
-              <CardFooter>
-                <Button
-                  className="w-full"
-                  onClick={() => addToCart(product)}
-                >
-                  Add to Cart
-                </Button>
-              </CardFooter>
-            </Card>
+            <ProductCard
+              key={product.id}
+              product={product}
+              onAddToCart={addToCart}
+            />
           ))}
         </div>
 
-        <Dialog open={showCardDialog} onOpenChange={setShowCardDialog}>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Enter Card Details</DialogTitle>
-            </DialogHeader>
-            <div className="grid gap-4 py-4">
-              <div className="grid gap-2">
-                <Label htmlFor="name">Cardholder Name</Label>
-                <Input
-                  id="name"
-                  value={cardDetails.name}
-                  onChange={(e) =>
-                    setCardDetails({ ...cardDetails, name: e.target.value })
-                  }
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="cardNumber">Card Number</Label>
-                <Input
-                  id="cardNumber"
-                  value={cardDetails.cardNumber}
-                  onChange={(e) =>
-                    setCardDetails({ ...cardDetails, cardNumber: e.target.value })
-                  }
-                />
-              </div>
-              <div className="grid grid-cols-2 gap-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="expiry">Expiry Date</Label>
-                  <Input
-                    id="expiry"
-                    placeholder="MM/YY"
-                    value={cardDetails.expiryDate}
-                    onChange={(e) =>
-                      setCardDetails({
-                        ...cardDetails,
-                        expiryDate: e.target.value,
-                      })
-                    }
-                  />
-                </div>
-                <div className="grid gap-2">
-                  <Label htmlFor="cvv">CVV</Label>
-                  <Input
-                    id="cvv"
-                    value={cardDetails.cvv}
-                    onChange={(e) =>
-                      setCardDetails({ ...cardDetails, cvv: e.target.value })
-                    }
-                  />
-                </div>
-              </div>
-            </div>
-            <DialogFooter>
-              <Button onClick={handleCardDetailsSubmit}>Confirm Payment</Button>
-            </DialogFooter>
-          </DialogContent>
-        </Dialog>
+        <CardDetailsDialog
+          open={showCardDialog}
+          onOpenChange={setShowCardDialog}
+          cardDetails={cardDetails}
+          onCardDetailsChange={setCardDetails}
+          onSubmit={handleCardDetailsSubmit}
+        />
       </div>
     </div>
   );
