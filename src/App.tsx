@@ -13,6 +13,7 @@ import QuickDiagnoses from "./pages/QuickDiagnoses";
 import PharmaceuticalSupplies from "./pages/PharmaceuticalSupplies";
 import DomesticNurses from "./pages/DomesticNurses";
 import LiveCall from "./pages/LiveCall";
+import DoctorLiveCall from "./pages/DoctorLiveCall";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +34,7 @@ const App = () => (
             <Route path="/pharmacy" element={<PharmaceuticalSupplies />} />
             <Route path="/domestic-nurses" element={<DomesticNurses />} />
             <Route path="/live-call" element={<LiveCall />} />
+            <Route path="/doctor-live-call" element={<DoctorLiveCall />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
