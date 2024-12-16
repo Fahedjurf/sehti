@@ -44,10 +44,9 @@ const userProfile = {
   lastName: "Doe",
   phoneNumber: "+1 234 567 8900",
   email: "john.doe@example.com",
-  bloodType: "O+",
   emergencyContact: "+1 234 567 8901",
   address: "123 Medical Street, Health City",
-  sehtiId: "1234567890" // 10-digit ID for patients
+  sehtiId: "1234567890"
 };
 
 const Index = () => {
@@ -112,9 +111,6 @@ const Index = () => {
                 
                 <div className="font-semibold text-medical-dark">Email</div>
                 <div className="break-all">{userProfile.email}</div>
-                
-                <div className="font-semibold text-medical-dark">Blood Type</div>
-                <div>{userProfile.bloodType}</div>
                 
                 <div className="font-semibold text-medical-dark">Emergency Contact</div>
                 <div>{userProfile.emergencyContact}</div>
