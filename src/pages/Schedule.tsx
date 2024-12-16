@@ -25,43 +25,23 @@ const appointments = [
   },
   {
     id: 2,
-    date: new Date(2024, 3, 15, 14, 0),
-    patientName: "Michael Smith",
-    reason: "Follow-up Consultation",
+    date: new Date(2024, 11, 22, 14, 0), // December 22nd, 2024 at 2:00 PM
+    patientName: "Robert Smith",
+    reason: "Dental Cleaning",
     duration: "45 minutes",
     status: "Confirmed",
-    notes: "Post-surgery follow-up",
+    notes: "Regular dental cleaning and checkup",
     contactNumber: "+1 234 567 8902"
   },
   {
     id: 3,
-    date: new Date(2024, 3, 17, 11, 0),
-    patientName: "Emma Davis",
-    reason: "Initial Consultation",
+    date: new Date(2024, 11, 28, 11, 0), // December 28th, 2024 at 11:00 AM
+    patientName: "Emily Brown",
+    reason: "Annual Physical",
     duration: "60 minutes",
-    status: "Pending",
-    notes: "New patient consultation",
+    status: "Confirmed",
+    notes: "Complete annual physical examination",
     contactNumber: "+1 234 567 8903"
-  },
-  {
-    id: 4,
-    date: new Date(2024, 3, 20, 9, 0),
-    patientName: "James Wilson",
-    reason: "Vaccination",
-    duration: "15 minutes",
-    status: "Confirmed",
-    notes: "Annual flu shot",
-    contactNumber: "+1 234 567 8904"
-  },
-  {
-    id: 5,
-    date: new Date(2024, 3, 22, 13, 30),
-    patientName: "Linda Brown",
-    reason: "Blood Test Results",
-    duration: "30 minutes",
-    status: "Confirmed",
-    notes: "Review quarterly blood test results",
-    contactNumber: "+1 234 567 8905"
   }
 ];
 
@@ -116,9 +96,10 @@ const Schedule = () => {
             }}
             modifiersStyles={{
               hasAppointment: {
-                backgroundColor: "rgb(var(--medical-primary) / 0.15)",
-                fontWeight: "bold",
-                color: "rgb(var(--medical-dark))",
+                textDecoration: "underline",
+                textDecorationColor: "#16a34a",
+                textDecorationThickness: "4px",
+                textUnderlineOffset: "8px",
               },
             }}
             className="rounded-lg border-2 border-medical-light p-4 mx-auto w-full max-w-3xl"
