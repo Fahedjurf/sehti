@@ -1,4 +1,6 @@
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Trash2 } from "lucide-react";
 import {
   Accordion,
   AccordionContent,
@@ -9,12 +11,25 @@ import { Prescription } from "./types";
 
 interface PrescriptionCardProps {
   prescription: Prescription;
+  onRemove?: (id: number) => void;
 }
 
-export const PrescriptionCard = ({ prescription }: PrescriptionCardProps) => {
+export const PrescriptionCard = ({ prescription, onRemove }: PrescriptionCardProps) => {
   return (
     <Card className="p-4">
-      <h3 className="font-semibold">{prescription.name}</h3>
+      <div className="flex justify-between items-start">
+        <h3 className="font-semibold">{prescription.name}</h3>
+        {onRemove && (
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => onRemove(prescription.id)}
+            className="h-8 w-8 text-destructive hover:text-destructive/90"
+          >
+            <Trash2 className="h-4 w-4" />
+          </Button>
+        )}
+      </div>
       <Accordion type="single" collapsible className="w-full">
         <AccordionItem value="details">
           <AccordionTrigger>Medication Details</AccordionTrigger>

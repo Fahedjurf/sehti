@@ -52,6 +52,18 @@ const DoctorLiveCall = () => {
 
   const handleAddPrescription = (product: Product) => {
     setPrescriptions(prev => [...prev, product]);
+    toast({
+      title: "Prescription Added",
+      description: `${product.name} has been added to the prescription list.`,
+    });
+  };
+
+  const handleRemovePrescription = (id: number) => {
+    setPrescriptions(prev => prev.filter(prescription => prescription.id !== id));
+    toast({
+      title: "Prescription Removed",
+      description: "The medication has been removed from the prescription list.",
+    });
   };
 
   return (
@@ -114,6 +126,7 @@ const DoctorLiveCall = () => {
                         sideEffects: prescription.sideEffects,
                         description: prescription.fullDescription,
                       }}
+                      onRemove={handleRemovePrescription}
                     />
                   ))}
                 </div>
