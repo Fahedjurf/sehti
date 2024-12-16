@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { ShoppingCart, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import {
@@ -117,6 +117,24 @@ const PharmaceuticalSupplies = () => {
     setShowCardDialog(false);
     handleCheckout();
   };
+
+  useEffect(() => {
+    const prescribedMeds = localStorage.getItem('prescribedMedications');
+    if (prescribedMeds) {
+      const medications = JSON.parse(prescribedMeds);
+      medications.forEach((med: any) => {
+        const product = {
+          id: med.id,
+          name: med.name,
+          price: med.price,
+          description: `${med.dosage} - ${med.frequency}`,
+          image: "/placeholder.svg"
+        };
+        addToCart(product);
+      });
+      localStorage.removeItem('prescribedMedications');
+    }
+  }, []);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent p-6">

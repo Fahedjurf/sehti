@@ -4,7 +4,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
-import { X, Send, Pill, ArrowLeft } from "lucide-react";
+import { X, Send, Pill, ArrowLeft, ShoppingCart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 interface Message {
@@ -19,13 +19,31 @@ interface Prescription {
   name: string;
   dosage: string;
   frequency: string;
+  price: number;
 }
+
+const samplePrescriptions: Prescription[] = [
+  {
+    id: 1,
+    name: "Amoxicillin",
+    dosage: "500mg",
+    frequency: "3 times daily",
+    price: 15.99
+  },
+  {
+    id: 2,
+    name: "Ibuprofen",
+    dosage: "400mg",
+    frequency: "As needed for pain",
+    price: 8.99
+  }
+];
 
 const LiveCall = () => {
   const navigate = useNavigate();
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
-  const [prescriptions, setPrescriptions] = useState<Prescription[]>([]);
+  const [prescriptions] = useState<Prescription[]>(samplePrescriptions);
   const { toast } = useToast();
 
   const handleSendMessage = () => {
@@ -61,8 +79,12 @@ const LiveCall = () => {
   };
 
   const handleGoToPharmacy = () => {
-    // Here you would typically store prescriptions in a global state or context
-    // For now, we'll just navigate
+    // Store prescriptions in localStorage to access them in the pharmacy page
+    localStorage.setItem('prescribedMedications', JSON.stringify(prescriptions));
+    toast({
+      title: "Prescriptions Added",
+      description: "Your prescriptions have been added to your cart.",
+    });
     navigate("/pharmacy");
   };
 
@@ -147,13 +169,6 @@ const LiveCall = () => {
                   <Pill className="h-5 w-5 text-medical-primary" />
                   <h2 className="text-lg font-semibold">Prescribed Medications</h2>
                 </div>
-                <Button
-                  variant="outline"
-                  className="text-medical-primary hover:text-medical-dark"
-                  onClick={handleGoToPharmacy}
-                >
-                  Order Medications
-                </Button>
               </div>
               <ScrollArea className="h-[400px]">
                 <div className="space-y-4">
@@ -166,8 +181,20 @@ const LiveCall = () => {
                       <p className="text-sm text-gray-600">
                         Frequency: {prescription.frequency}
                       </p>
+                      <p className="text-sm font-medium text-medical-primary mt-2">
+                        Price: ${prescription.price.toFixed(2)}
+                      </p>
                     </Card>
                   ))}
+                  {prescriptions.length > 0 && (
+                    <Button
+                      className="w-full mt-4 flex items-center gap-2"
+                      onClick={handleGoToPharmacy}
+                    >
+                      <ShoppingCart className="h-4 w-4" />
+                      Order Prescribed Medications
+                    </Button>
+                  )}
                 </div>
               </ScrollArea>
             </Card>
