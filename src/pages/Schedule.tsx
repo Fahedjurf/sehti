@@ -21,7 +21,8 @@ const appointments = [
     duration: "30 minutes",
     status: "Confirmed",
     notes: "Patient has reported mild fever symptoms",
-    contactNumber: "+1 234 567 8901"
+    contactNumber: "+1 234 567 8901",
+    location: "Main Hospital - Room 302"
   },
   {
     id: 2,
@@ -31,7 +32,8 @@ const appointments = [
     duration: "45 minutes",
     status: "Confirmed",
     notes: "Regular dental cleaning and checkup",
-    contactNumber: "+1 234 567 8902"
+    contactNumber: "+1 234 567 8902",
+    location: ""
   },
   {
     id: 3,
@@ -41,7 +43,8 @@ const appointments = [
     duration: "60 minutes",
     status: "Confirmed",
     notes: "Complete annual physical examination",
-    contactNumber: "+1 234 567 8903"
+    contactNumber: "+1 234 567 8903",
+    location: "Medical Center - Wing B"
   }
 ];
 
@@ -155,6 +158,9 @@ const Schedule = () => {
 
                   <div className="font-semibold text-medical-dark">Contact Number</div>
                   <div>{selectedAppointment.contactNumber}</div>
+
+                  <div className="font-semibold text-medical-dark">Location</div>
+                  <div>{selectedAppointment.location || "Sehti application"}</div>
 
                   <div className="font-semibold text-medical-dark">Notes</div>
                   <div>{selectedAppointment.notes}</div>
