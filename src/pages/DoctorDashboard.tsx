@@ -33,7 +33,6 @@ const DoctorDashboard = () => {
   const navigate = useNavigate();
 
   const handleSignOut = () => {
-    // Here you would handle sign out logic
     navigate("/");
   };
 
@@ -96,9 +95,12 @@ const DoctorDashboard = () => {
         <h1 className="text-3xl font-bold text-medical-dark mb-6 text-center">
           Welcome Dr. {doctorProfile.lastName}
         </h1>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Card className="hover:shadow-lg transition-shadow cursor-pointer">
+          <Card 
+            className="hover:shadow-lg transition-shadow cursor-pointer"
+            onClick={() => navigate("/doctor-live-call")}
+          >
             <CardContent className="flex flex-col items-center justify-center p-6">
               <Phone className="h-12 w-12 text-medical-primary mb-4" />
               <h2 className="text-xl font-semibold">Live Calls</h2>
