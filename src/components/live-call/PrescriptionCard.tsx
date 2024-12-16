@@ -30,7 +30,7 @@ export const PrescriptionCard = ({ prescription }: PrescriptionCardProps) => {
               </div>
               <div>
                 <h4 className="font-semibold mb-1">Side Effects</h4>
-                <p className="text-sm text-gray-600">{prescription.sideEffects}</p>
+                <p className="text-sm text-gray-600 whitespace-pre-wrap">{prescription.sideEffects}</p>
               </div>
               <div>
                 <h4 className="font-semibold mb-1">Additional Information</h4>
