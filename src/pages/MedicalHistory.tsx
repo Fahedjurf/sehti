@@ -82,11 +82,6 @@ const MedicalHistory = () => {
               onClick={() => handleCardClick(report)}
             >
               <CardHeader className="pb-2">
-                <div className="w-12 h-12 rounded-full bg-medical-light flex items-center justify-center mx-auto mb-2">
-                  <span className="text-2xl text-medical-primary">
-                    {report.serviceType.charAt(0)}
-                  </span>
-                </div>
                 <CardTitle className="text-center text-sm font-medium text-medical-dark">
                   {new Date(report.date).toLocaleDateString()}
                 </CardTitle>
@@ -106,12 +101,7 @@ const MedicalHistory = () => {
         <Dialog open={!!selectedReport} onOpenChange={() => setSelectedReport(null)}>
           <DialogContent className="max-w-2xl bg-white/95 backdrop-blur-sm">
             <DialogHeader>
-              <DialogTitle className="text-2xl text-medical-primary mb-4 flex items-center gap-3">
-                <div className="w-10 h-10 rounded-full bg-medical-light flex items-center justify-center">
-                  <span className="text-xl text-medical-primary">
-                    {selectedReport?.serviceType.charAt(0)}
-                  </span>
-                </div>
+              <DialogTitle className="text-2xl text-medical-primary mb-4">
                 Medical Report Details
               </DialogTitle>
               <DialogDescription>
