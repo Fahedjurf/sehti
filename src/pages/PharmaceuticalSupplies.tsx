@@ -19,7 +19,7 @@ import {
 import { CartItem } from "@/components/pharmacy/CartItem";
 import { ProductCard } from "@/components/pharmacy/ProductCard";
 import { CardDetailsDialog } from "@/components/pharmacy/CardDetailsDialog";
-import { CartItem as CartItemType, CardDetails } from "@/components/pharmacy/types";
+import { CartItem as CartItemType, CardDetails, Product } from "@/components/pharmacy/types";
 import { products } from "@/components/pharmacy/products";
 
 const PharmaceuticalSupplies = () => {
