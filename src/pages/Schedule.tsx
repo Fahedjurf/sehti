@@ -7,6 +7,9 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Card } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 // Mock appointments data - in a real app, this would come from your backend
 const appointments = [
@@ -39,12 +42,33 @@ const appointments = [
     status: "Pending",
     notes: "New patient consultation",
     contactNumber: "+1 234 567 8903"
+  },
+  {
+    id: 4,
+    date: new Date(2024, 3, 20, 9, 0),
+    patientName: "James Wilson",
+    reason: "Vaccination",
+    duration: "15 minutes",
+    status: "Confirmed",
+    notes: "Annual flu shot",
+    contactNumber: "+1 234 567 8904"
+  },
+  {
+    id: 5,
+    date: new Date(2024, 3, 22, 13, 30),
+    patientName: "Linda Brown",
+    reason: "Blood Test Results",
+    duration: "30 minutes",
+    status: "Confirmed",
+    notes: "Review quarterly blood test results",
+    contactNumber: "+1 234 567 8905"
   }
 ];
 
 const Schedule = () => {
   const [selectedAppointment, setSelectedAppointment] = useState<any>(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const navigate = useNavigate();
 
   // Function to check if a date has appointments
   const hasAppointments = (date: Date) => {
@@ -70,6 +94,17 @@ const Schedule = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent p-6">
       <div className="max-w-4xl mx-auto">
+        <div className="flex items-center mb-6">
+          <Button
+            variant="ghost"
+            className="gap-2 text-medical-primary hover:text-medical-primary hover:bg-medical-light"
+            onClick={() => navigate("/doctor-dashboard")}
+          >
+            <ArrowLeft className="h-4 w-4" />
+            Back to Dashboard
+          </Button>
+        </div>
+
         <h1 className="text-3xl font-bold text-medical-dark mb-6 text-center">
           Appointments Schedule
         </h1>
