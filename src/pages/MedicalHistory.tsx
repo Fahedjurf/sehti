@@ -74,34 +74,29 @@ const MedicalHistory = () => {
           </Button>
           <h1 className="text-3xl font-bold text-medical-dark">Medical History</h1>
         </div>
-        <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {mockReports.map((report) => (
             <Card 
               key={report.id} 
-              className="hover:shadow-lg transition-shadow cursor-pointer hover:bg-medical-light/20"
+              className="transform hover:scale-105 transition-all duration-300 cursor-pointer bg-white/70 backdrop-blur-sm border-medical-accent/20 hover:border-medical-primary/40 hover:shadow-lg"
               onClick={() => handleCardClick(report)}
             >
-              <CardHeader>
-                <div className="text-center mb-2">
-                  <span className="text-lg font-semibold text-medical-primary">
-                    {report.serviceType}
+              <CardHeader className="pb-2">
+                <div className="w-12 h-12 rounded-full bg-medical-light flex items-center justify-center mx-auto mb-2">
+                  <span className="text-2xl text-medical-primary">
+                    {report.serviceType.charAt(0)}
                   </span>
                 </div>
-                <CardTitle className="flex justify-between items-center text-center">
-                  <span className="text-lg text-medical-primary">
-                    {new Date(report.date).toLocaleString()}
-                  </span>
-                  <span className="text-sm text-gray-600">
-                    {report.doctorName}
-                  </span>
+                <CardTitle className="text-center text-sm font-medium text-medical-dark">
+                  {new Date(report.date).toLocaleDateString()}
                 </CardTitle>
               </CardHeader>
-              <CardContent>
-                <p className="text-gray-600 mb-2 text-center">
-                  <strong>Location:</strong> {report.hospitalAddress}
+              <CardContent className="text-center">
+                <p className="text-sm text-medical-primary font-medium mb-1">
+                  {report.serviceType}
                 </p>
-                <p className="text-gray-800 text-center">
-                  <strong>Details:</strong> {report.details}
+                <p className="text-xs text-gray-500">
+                  {report.doctorName}
                 </p>
               </CardContent>
             </Card>
@@ -109,36 +104,46 @@ const MedicalHistory = () => {
         </div>
 
         <Dialog open={!!selectedReport} onOpenChange={() => setSelectedReport(null)}>
-          <DialogContent className="max-w-2xl">
+          <DialogContent className="max-w-2xl bg-white/95 backdrop-blur-sm">
             <DialogHeader>
-              <DialogTitle className="text-2xl text-medical-primary mb-4">
+              <DialogTitle className="text-2xl text-medical-primary mb-4 flex items-center gap-3">
+                <div className="w-10 h-10 rounded-full bg-medical-light flex items-center justify-center">
+                  <span className="text-xl text-medical-primary">
+                    {selectedReport?.serviceType.charAt(0)}
+                  </span>
+                </div>
                 Medical Report Details
               </DialogTitle>
               <DialogDescription>
-                <div className="grid gap-4">
-                  <div className="bg-medical-light/30 p-4 rounded-lg">
-                    <h3 className="font-semibold text-lg text-medical-dark mb-2">
+                <div className="space-y-6">
+                  <div className="bg-medical-light/30 p-6 rounded-lg">
+                    <h3 className="font-semibold text-xl text-medical-dark mb-3">
                       {selectedReport?.serviceType}
                     </h3>
-                    <p className="text-gray-600">
-                      <strong>Date:</strong> {selectedReport?.date}
+                    <p className="text-gray-600 flex items-center gap-2">
+                      <strong>Date:</strong> 
+                      {selectedReport && new Date(selectedReport.date).toLocaleString()}
                     </p>
                   </div>
 
-                  <div className="space-y-3">
+                  <div className="grid gap-4 bg-white/80 p-6 rounded-lg">
                     <div>
-                      <strong className="text-medical-dark">Doctor:</strong>
-                      <p className="text-gray-700">{selectedReport?.doctorName}</p>
+                      <strong className="text-medical-dark block mb-1">Doctor</strong>
+                      <p className="text-gray-700 pl-4 border-l-2 border-medical-primary">
+                        {selectedReport?.doctorName}
+                      </p>
                     </div>
                     
                     <div>
-                      <strong className="text-medical-dark">Location:</strong>
-                      <p className="text-gray-700">{selectedReport?.hospitalAddress}</p>
+                      <strong className="text-medical-dark block mb-1">Location</strong>
+                      <p className="text-gray-700 pl-4 border-l-2 border-medical-primary">
+                        {selectedReport?.hospitalAddress}
+                      </p>
                     </div>
                     
                     <div>
-                      <strong className="text-medical-dark">Details:</strong>
-                      <p className="text-gray-700 whitespace-pre-wrap">
+                      <strong className="text-medical-dark block mb-1">Details</strong>
+                      <p className="text-gray-700 pl-4 border-l-2 border-medical-primary whitespace-pre-wrap">
                         {selectedReport?.details}
                       </p>
                     </div>
