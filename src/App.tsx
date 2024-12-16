@@ -11,6 +11,7 @@ import DoctorDashboard from "./pages/DoctorDashboard";
 import QuickDiagnoses from "./pages/QuickDiagnoses";
 import PharmaceuticalSupplies from "./pages/PharmaceuticalSupplies";
 import DomesticNurses from "./pages/DomesticNurses";
+import LiveCall from "./pages/LiveCall";
 
 const queryClient = new QueryClient();
 
@@ -29,6 +30,7 @@ const App = () => (
           <Route path="/quick-diagnoses" element={<QuickDiagnoses />} />
           <Route path="/pharmacy" element={<PharmaceuticalSupplies />} />
           <Route path="/domestic-nurses" element={<DomesticNurses />} />
+          <Route path="/live-call" element={<LiveCall />} />
         </Routes>
       </BrowserRouter>
     </TooltipProvider>
