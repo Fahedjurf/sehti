@@ -92,24 +92,21 @@ const Schedule = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent p-6">
-      <div className="max-w-4xl mx-auto">
-        <div className="flex items-center mb-6">
-          <Button
-            variant="ghost"
-            className="gap-2 text-medical-primary hover:text-medical-primary hover:bg-medical-light"
-            onClick={() => navigate("/doctor-dashboard")}
-          >
-            <ArrowLeft className="h-4 w-4" />
-            Back to Dashboard
-          </Button>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent">
+      <div className="container mx-auto p-6">
+        <Button
+          onClick={() => navigate("/doctor-dashboard")}
+          className="mb-8 bg-medical-primary hover:bg-medical-dark text-white flex items-center gap-2 px-6 py-3 rounded-lg shadow-md transition-all duration-200"
+        >
+          <ArrowLeft className="h-5 w-5" />
+          Back to Dashboard
+        </Button>
 
-        <h1 className="text-3xl font-bold text-medical-dark mb-6 text-center">
+        <h1 className="text-4xl font-bold text-medical-dark mb-8 text-center">
           Appointments Schedule
         </h1>
 
-        <Card className="p-6 bg-white/80 backdrop-blur-sm">
+        <Card className="p-8 bg-white/90 backdrop-blur-sm shadow-xl rounded-xl">
           <Calendar
             mode="single"
             selected={selectedAppointment?.date}
@@ -121,9 +118,26 @@ const Schedule = () => {
               hasAppointment: {
                 backgroundColor: "rgb(var(--medical-primary) / 0.15)",
                 fontWeight: "bold",
+                color: "rgb(var(--medical-dark))",
               },
             }}
-            className="rounded-md border"
+            className="rounded-lg border-2 border-medical-light p-4 mx-auto w-full max-w-3xl"
+            classNames={{
+              months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
+              month: "space-y-4 w-full",
+              caption: "flex justify-center pt-1 relative items-center text-lg font-semibold",
+              caption_label: "text-medical-dark",
+              nav: "space-x-1 flex items-center",
+              nav_button: "h-9 w-9 bg-medical-light text-medical-primary hover:bg-medical-accent rounded-lg transition-colors",
+              table: "w-full border-collapse space-y-1",
+              head_row: "flex",
+              head_cell: "text-medical-dark rounded-md w-10 sm:w-14 font-normal text-base",
+              row: "flex w-full mt-2",
+              cell: "relative p-0 text-center text-base focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-medical-light rounded-lg",
+              day: "h-10 w-10 sm:h-14 sm:w-14 p-0 font-normal hover:bg-medical-light rounded-lg transition-colors",
+              day_today: "bg-medical-accent text-medical-dark",
+              day_selected: "bg-medical-primary text-white hover:bg-medical-dark",
+            }}
           />
         </Card>
 
