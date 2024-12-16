@@ -16,29 +16,7 @@ import {
 } from "@/components/ui/dialog";
 import { useState } from "react";
 import { LanguageToggle } from "@/components/LanguageToggle";
-
-const categories = [
-  {
-    title: "Quick Diagnoses",
-    icon: Stethoscope,
-    description: "Get instant medical assessments from qualified professionals",
-  },
-  {
-    title: "Domestic Nurses",
-    icon: Users,
-    description: "Find experienced nurses for home healthcare services",
-  },
-  {
-    title: "Pharmaceutical Supplies Delivery",
-    icon: Truck,
-    description: "Fast delivery of medications and medical supplies",
-  },
-  {
-    title: "Live Call",
-    icon: Phone,
-    description: "Connect instantly with healthcare professionals",
-  },
-];
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const userProfile = {
   firstName: "John",
@@ -53,6 +31,30 @@ const userProfile = {
 const Index = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const navigate = useNavigate();
+  const { t } = useLanguage();
+
+  const categories = [
+    {
+      title: t("quickDiagnoses"),
+      icon: Stethoscope,
+      description: t("quickDiagnosesDesc"),
+    },
+    {
+      title: t("domesticNurses"),
+      icon: Users,
+      description: t("domesticNursesDesc"),
+    },
+    {
+      title: t("pharmaceuticalSupplies"),
+      icon: Truck,
+      description: t("pharmaceuticalSuppliesDesc"),
+    },
+    {
+      title: t("liveCall"),
+      icon: Phone,
+      description: t("liveCallDesc"),
+    },
+  ];
 
   const handleSignOut = () => {
     navigate("/");
@@ -78,12 +80,12 @@ const Index = () => {
             <DropdownMenuContent align="end">
               <DropdownMenuItem onClick={() => navigate("/medical-history")}>
                 <History className="mr-2 h-4 w-4" />
-                Medical History
+                {t("medicalHistory")}
               </DropdownMenuItem>
               <LanguageToggle />
-              <DropdownMenuItem>Help</DropdownMenuItem>
+              <DropdownMenuItem>{t("help")}</DropdownMenuItem>
               <DropdownMenuItem onClick={handleSignOut} className="text-red-600">
-                Sign Out
+                {t("signOut")}
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -92,26 +94,26 @@ const Index = () => {
         <Dialog open={isProfileOpen} onOpenChange={setIsProfileOpen}>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              <DialogTitle className="text-medical-primary">Profile Details</DialogTitle>
+              <DialogTitle className="text-medical-primary">{t("profileDetails")}</DialogTitle>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-2 items-center gap-4">
-                <div className="font-semibold text-medical-dark">Name</div>
+                <div className="font-semibold text-medical-dark">{t("name")}</div>
                 <div>{userProfile.firstName} {userProfile.lastName}</div>
                 
-                <div className="font-semibold text-medical-dark">Phone</div>
+                <div className="font-semibold text-medical-dark">{t("phone")}</div>
                 <div>{userProfile.phoneNumber}</div>
                 
-                <div className="font-semibold text-medical-dark">Email</div>
+                <div className="font-semibold text-medical-dark">{t("email")}</div>
                 <div className="break-all">{userProfile.email}</div>
                 
-                <div className="font-semibold text-medical-dark">Emergency Contact</div>
+                <div className="font-semibold text-medical-dark">{t("emergencyContact")}</div>
                 <div>{userProfile.emergencyContact}</div>
                 
-                <div className="font-semibold text-medical-dark">Address</div>
+                <div className="font-semibold text-medical-dark">{t("address")}</div>
                 <div>{userProfile.address}</div>
                 
-                <div className="font-semibold text-medical-dark">Sehti ID</div>
+                <div className="font-semibold text-medical-dark">{t("sehtiId")}</div>
                 <div>{userProfile.sehtiId}</div>
               </div>
             </div>
@@ -120,10 +122,10 @@ const Index = () => {
 
         <div className="relative py-8">
           <h1 className="text-4xl md:text-5xl font-bold text-center text-medical-dark mb-4">
-            Welcome Mr. {userProfile.firstName}
+            {t("welcome")} {userProfile.firstName}
           </h1>
           <p className="text-center text-gray-600 mb-12 max-w-2xl mx-auto">
-            Access professional medical services from the comfort of your home
+            {t("accessServices")}
           </p>
         </div>
         

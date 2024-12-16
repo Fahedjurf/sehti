@@ -1,14 +1,18 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
+import { translations } from '@/translations';
+
+type Language = 'en' | 'ar';
 
 type LanguageContextType = {
-  language: 'en' | 'ar';
+  language: Language;
+  t: (key: keyof typeof translations.en) => string;
   toggleLanguage: () => void;
 };
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export const LanguageProvider = ({ children }: { children: ReactNode }) => {
-  const [language, setLanguage] = useState<'en' | 'ar'>('en');
+  const [language, setLanguage] = useState<Language>('en');
 
   const toggleLanguage = () => {
     setLanguage(prev => prev === 'en' ? 'ar' : 'en');
@@ -16,8 +20,12 @@ export const LanguageProvider = ({ children }: { children: ReactNode }) => {
     document.documentElement.dir = language === 'en' ? 'rtl' : 'ltr';
   };
 
+  const t = (key: keyof typeof translations.en): string => {
+    return translations[language][key];
+  };
+
   return (
-    <LanguageContext.Provider value={{ language, toggleLanguage }}>
+    <LanguageContext.Provider value={{ language, toggleLanguage, t }}>
       {children}
     </LanguageContext.Provider>
   );
