@@ -2,6 +2,14 @@ import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
+import { useState } from "react";
 
 interface MedicalReport {
   id: string;
@@ -42,9 +50,14 @@ const mockReports: MedicalReport[] = [
 
 const MedicalHistory = () => {
   const navigate = useNavigate();
+  const [selectedReport, setSelectedReport] = useState<MedicalReport | null>(null);
 
   const handleGoBack = () => {
     navigate("/dashboard");
+  };
+
+  const handleCardClick = (report: MedicalReport) => {
+    setSelectedReport(report);
   };
 
   return (
@@ -63,7 +76,11 @@ const MedicalHistory = () => {
         </div>
         <div className="space-y-4">
           {mockReports.map((report) => (
-            <Card key={report.id} className="hover:shadow-lg transition-shadow">
+            <Card 
+              key={report.id} 
+              className="hover:shadow-lg transition-shadow cursor-pointer hover:bg-medical-light/20"
+              onClick={() => handleCardClick(report)}
+            >
               <CardHeader>
                 <div className="text-center mb-2">
                   <span className="text-lg font-semibold text-medical-primary">
@@ -90,6 +107,47 @@ const MedicalHistory = () => {
             </Card>
           ))}
         </div>
+
+        <Dialog open={!!selectedReport} onOpenChange={() => setSelectedReport(null)}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle className="text-2xl text-medical-primary mb-4">
+                Medical Report Details
+              </DialogTitle>
+              <DialogDescription>
+                <div className="grid gap-4">
+                  <div className="bg-medical-light/30 p-4 rounded-lg">
+                    <h3 className="font-semibold text-lg text-medical-dark mb-2">
+                      {selectedReport?.serviceType}
+                    </h3>
+                    <p className="text-gray-600">
+                      <strong>Date:</strong> {selectedReport?.date}
+                    </p>
+                  </div>
+
+                  <div className="space-y-3">
+                    <div>
+                      <strong className="text-medical-dark">Doctor:</strong>
+                      <p className="text-gray-700">{selectedReport?.doctorName}</p>
+                    </div>
+                    
+                    <div>
+                      <strong className="text-medical-dark">Location:</strong>
+                      <p className="text-gray-700">{selectedReport?.hospitalAddress}</p>
+                    </div>
+                    
+                    <div>
+                      <strong className="text-medical-dark">Details:</strong>
+                      <p className="text-gray-700 whitespace-pre-wrap">
+                        {selectedReport?.details}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </DialogDescription>
+            </DialogHeader>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
