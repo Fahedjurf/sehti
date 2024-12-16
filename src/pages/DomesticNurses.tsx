@@ -26,12 +26,6 @@ const nurseServices = [
     title: "Elderly Care",
     description: "Specialized care for elderly patients",
     estimatedTime: "40 minutes"
-  },
-  {
-    id: "rehabilitation",
-    title: "Rehabilitation Support",
-    description: "Physical therapy and rehabilitation assistance",
-    estimatedTime: "1 hour"
   }
 ];
 

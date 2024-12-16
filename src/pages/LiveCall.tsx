@@ -4,7 +4,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
-import { X, Send, Pill } from "lucide-react";
+import { X, Send, Pill, ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 interface Message {
   id: number;
@@ -21,6 +22,7 @@ interface Prescription {
 }
 
 const LiveCall = () => {
+  const navigate = useNavigate();
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [prescriptions, setPrescriptions] = useState<Prescription[]>([]);
@@ -58,108 +60,118 @@ const LiveCall = () => {
     // Navigate back to dashboard or handle call ending logic
   };
 
-  // Simulated prescriptions (in a real app, these would come from the doctor)
-  const samplePrescriptions: Prescription[] = [
-    {
-      id: 1,
-      name: "Amoxicillin",
-      dosage: "500mg",
-      frequency: "3 times daily",
-    },
-    {
-      id: 2,
-      name: "Ibuprofen",
-      dosage: "400mg",
-      frequency: "As needed for pain",
-    },
-  ];
+  const handleGoToPharmacy = () => {
+    // Here you would typically store prescriptions in a global state or context
+    // For now, we'll just navigate
+    navigate("/pharmacy");
+  };
 
   return (
-    <div className="container mx-auto p-4 max-w-6xl">
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Video Call Section */}
-        <div className="lg:col-span-2">
-          <div className="bg-gray-800 rounded-lg aspect-video relative mb-4">
-            <div className="absolute top-4 right-4">
-              <Button 
-                variant="destructive" 
-                size="sm" 
-                onClick={handleEndCall}
-                className="flex items-center gap-2"
-              >
-                <X className="h-4 w-4" />
-                End Call
-              </Button>
-            </div>
-            <div className="absolute bottom-4 left-4 text-white text-sm">
-              Dr. Smith
-            </div>
-          </div>
+    <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent p-6">
+      <div className="container mx-auto p-4 max-w-6xl">
+        <Button
+          variant="outline"
+          className="mb-6 flex items-center gap-2 bg-white/80 backdrop-blur-sm border-medical-primary text-medical-primary hover:bg-medical-light hover:text-medical-dark transition-all duration-300"
+          onClick={() => navigate("/dashboard")}
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Dashboard
+        </Button>
 
-          {/* Chat Section */}
-          <Card className="p-4">
-            <ScrollArea className="h-[300px] mb-4">
-              <div className="space-y-4">
-                {messages.map((message) => (
-                  <div
-                    key={message.id}
-                    className={`flex ${
-                      message.sender === "patient" ? "justify-end" : "justify-start"
-                    }`}
-                  >
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Video Call Section */}
+          <div className="lg:col-span-2">
+            <div className="bg-gray-800 rounded-lg aspect-video relative mb-4">
+              <div className="absolute top-4 right-4">
+                <Button 
+                  variant="destructive" 
+                  size="sm" 
+                  onClick={handleEndCall}
+                  className="flex items-center gap-2"
+                >
+                  <X className="h-4 w-4" />
+                  End Call
+                </Button>
+              </div>
+              <div className="absolute bottom-4 left-4 text-white text-sm">
+                Dr. Smith
+              </div>
+            </div>
+
+            {/* Chat Section */}
+            <Card className="p-4">
+              <ScrollArea className="h-[300px] mb-4">
+                <div className="space-y-4">
+                  {messages.map((message) => (
                     <div
-                      className={`rounded-lg px-4 py-2 max-w-[80%] ${
-                        message.sender === "patient"
-                          ? "bg-medical-primary text-white"
-                          : "bg-gray-100"
+                      key={message.id}
+                      className={`flex ${
+                        message.sender === "patient" ? "justify-end" : "justify-start"
                       }`}
                     >
-                      <p>{message.text}</p>
-                      <span className="text-xs opacity-70">
-                        {message.timestamp.toLocaleTimeString()}
-                      </span>
+                      <div
+                        className={`rounded-lg px-4 py-2 max-w-[80%] ${
+                          message.sender === "patient"
+                            ? "bg-medical-primary text-white"
+                            : "bg-gray-100"
+                        }`}
+                      >
+                        <p>{message.text}</p>
+                        <span className="text-xs opacity-70">
+                          {message.timestamp.toLocaleTimeString()}
+                        </span>
+                      </div>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </div>
+              </ScrollArea>
+              <div className="flex gap-2">
+                <Textarea
+                  value={newMessage}
+                  onChange={(e) => setNewMessage(e.target.value)}
+                  placeholder="Describe what you're feeling..."
+                  className="resize-none"
+                />
+                <Button onClick={handleSendMessage}>
+                  <Send className="h-4 w-4" />
+                </Button>
               </div>
-            </ScrollArea>
-            <div className="flex gap-2">
-              <Textarea
-                value={newMessage}
-                onChange={(e) => setNewMessage(e.target.value)}
-                placeholder="Describe what you're feeling..."
-                className="resize-none"
-              />
-              <Button onClick={handleSendMessage}>
-                <Send className="h-4 w-4" />
-              </Button>
-            </div>
-          </Card>
-        </div>
+            </Card>
+          </div>
 
-        {/* Prescriptions Section */}
-        <div className="lg:col-span-1">
-          <Card className="p-4">
-            <div className="flex items-center gap-2 mb-4">
-              <Pill className="h-5 w-5 text-medical-primary" />
-              <h2 className="text-lg font-semibold">Prescribed Medications</h2>
-            </div>
-            <ScrollArea className="h-[400px]">
-              <div className="space-y-4">
-                {samplePrescriptions.map((prescription) => (
-                  <Card key={prescription.id} className="p-4">
-                    <h3 className="font-semibold">{prescription.name}</h3>
-                    <p className="text-sm text-gray-600">
-                      Dosage: {prescription.dosage}
-                    </p>
-                    <p className="text-sm text-gray-600">
-                      Frequency: {prescription.frequency}
-                    </p>
-                  </Card>
-                ))}
+          {/* Prescriptions Section */}
+          <div className="lg:col-span-1">
+            <Card className="p-4">
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center gap-2">
+                  <Pill className="h-5 w-5 text-medical-primary" />
+                  <h2 className="text-lg font-semibold">Prescribed Medications</h2>
+                </div>
+                <Button
+                  variant="outline"
+                  className="text-medical-primary hover:text-medical-dark"
+                  onClick={handleGoToPharmacy}
+                >
+                  Order Medications
+                </Button>
               </div>
-            </ScrollArea>
-          </Card>
+              <ScrollArea className="h-[400px]">
+                <div className="space-y-4">
+                  {prescriptions.map((prescription) => (
+                    <Card key={prescription.id} className="p-4">
+                      <h3 className="font-semibold">{prescription.name}</h3>
+                      <p className="text-sm text-gray-600">
+                        Dosage: {prescription.dosage}
+                      </p>
+                      <p className="text-sm text-gray-600">
+                        Frequency: {prescription.frequency}
+                      </p>
+                    </Card>
+                  ))}
+                </div>
+              </ScrollArea>
+            </Card>
+          </div>
         </div>
       </div>
     </div>

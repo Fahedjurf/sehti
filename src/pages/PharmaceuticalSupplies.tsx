@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { ShoppingCart, Plus, Minus } from "lucide-react";
+import { ShoppingCart, Plus, Minus, ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import {
   Sheet,
   SheetContent,
@@ -22,6 +23,15 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogFooter,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 
 interface Product {
   id: number;
@@ -33,6 +43,13 @@ interface Product {
 
 interface CartItem extends Product {
   quantity: number;
+}
+
+interface CardDetails {
+  cardNumber: string;
+  expiryDate: string;
+  cvv: string;
+  name: string;
 }
 
 const products: Product[] = [
@@ -67,8 +84,16 @@ const products: Product[] = [
 ];
 
 const PharmaceuticalSupplies = () => {
+  const navigate = useNavigate();
   const [cart, setCart] = useState<CartItem[]>([]);
   const [paymentMethod, setPaymentMethod] = useState<string>("");
+  const [showCardDialog, setShowCardDialog] = useState(false);
+  const [cardDetails, setCardDetails] = useState<CardDetails>({
+    cardNumber: "",
+    expiryDate: "",
+    name: "",
+    cvv: "",
+  });
 
   const addToCart = (product: Product) => {
     setCart((currentCart) => {
@@ -112,13 +137,35 @@ const PharmaceuticalSupplies = () => {
     console.log("Cart items:", cart);
   };
 
+  const handlePaymentMethodChange = (value: string) => {
+    setPaymentMethod(value);
+    if (value === "card") {
+      setShowCardDialog(true);
+    }
+  };
+
+  const handleCardDetailsSubmit = () => {
+    setShowCardDialog(false);
+    // Here you would typically validate and process the card details
+    handleCheckout();
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent p-6">
       <div className="max-w-7xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-bold text-medical-dark">
-            Pharmaceutical Supplies
-          </h1>
+        <Button
+          variant="outline"
+          className="mb-6 flex items-center gap-2 bg-white/80 backdrop-blur-sm border-medical-primary text-medical-primary hover:bg-medical-light hover:text-medical-dark transition-all duration-300"
+          onClick={() => navigate("/dashboard")}
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Dashboard
+        </Button>
+
+        <h1 className="text-3xl font-bold text-medical-dark mb-8 text-center">
+          Pharmaceutical Supplies
+        </h1>
+
           <Sheet>
             <SheetTrigger asChild>
               <Button variant="outline" className="relative">
@@ -227,6 +274,65 @@ const PharmaceuticalSupplies = () => {
             </Card>
           ))}
         </div>
+
+        <Dialog open={showCardDialog} onOpenChange={setShowCardDialog}>
+          <DialogContent>
+            <DialogHeader>
+              <DialogTitle>Enter Card Details</DialogTitle>
+            </DialogHeader>
+            <div className="grid gap-4 py-4">
+              <div className="grid gap-2">
+                <Label htmlFor="name">Cardholder Name</Label>
+                <Input
+                  id="name"
+                  value={cardDetails.name}
+                  onChange={(e) =>
+                    setCardDetails({ ...cardDetails, name: e.target.value })
+                  }
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="cardNumber">Card Number</Label>
+                <Input
+                  id="cardNumber"
+                  value={cardDetails.cardNumber}
+                  onChange={(e) =>
+                    setCardDetails({ ...cardDetails, cardNumber: e.target.value })
+                  }
+                />
+              </div>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="grid gap-2">
+                  <Label htmlFor="expiry">Expiry Date</Label>
+                  <Input
+                    id="expiry"
+                    placeholder="MM/YY"
+                    value={cardDetails.expiryDate}
+                    onChange={(e) =>
+                      setCardDetails({
+                        ...cardDetails,
+                        expiryDate: e.target.value,
+                      })
+                    }
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="cvv">CVV</Label>
+                  <Input
+                    id="cvv"
+                    value={cardDetails.cvv}
+                    onChange={(e) =>
+                      setCardDetails({ ...cardDetails, cvv: e.target.value })
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+            <DialogFooter>
+              <Button onClick={handleCardDetailsSubmit}>Confirm Payment</Button>
+            </DialogFooter>
+          </DialogContent>
+        </Dialog>
       </div>
     </div>
   );
