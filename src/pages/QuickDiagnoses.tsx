@@ -41,14 +41,14 @@ const QuickDiagnoses = () => {
       return;
     }
 
-    // This is a mock diagnosis - in a real app, you would call an AI service
-    const mockDiagnosis = `Based on your symptoms (${selectedSymptoms.join(
-      ", "
-    )}), you may have one of the following conditions:\n
-    1. Common Cold
-    2. Seasonal Allergies
-    3. Viral Infection\n
-    Please consult with a healthcare professional for an accurate diagnosis.`;
+    const mockDiagnosis = `Preliminary Diagnosis:
+Based on your symptoms, you may have one of the following conditions:
+
+1. Common Cold
+2. Seasonal Allergies
+3. Viral Infection
+
+Please consult with a healthcare professional for an accurate diagnosis.`;
 
     setDiagnosis(mockDiagnosis);
     toast.success("Diagnosis generated");

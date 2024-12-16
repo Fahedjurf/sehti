@@ -83,7 +83,7 @@ const DomesticNurses = () => {
       <div className="max-w-4xl mx-auto">
         <Button 
           variant="outline" 
-          className="mb-6 flex items-center gap-2"
+          className="mb-6 flex items-center gap-2 bg-white/80 backdrop-blur-sm border-medical-primary text-medical-primary hover:bg-medical-light hover:text-medical-dark transition-all duration-300"
           onClick={() => navigate("/dashboard")}
         >
           <ArrowLeft className="h-4 w-4" />

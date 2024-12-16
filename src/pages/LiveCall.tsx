@@ -100,6 +100,10 @@ const LiveCall = () => {
           Back to Dashboard
         </Button>
 
+        <h1 className="text-3xl font-bold text-medical-dark mb-8 text-center">
+          Live Call
+        </h1>
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           {/* Video Call Section */}
           <div className="lg:col-span-2">
