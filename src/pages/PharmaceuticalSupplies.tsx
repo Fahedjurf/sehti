@@ -19,38 +19,8 @@ import {
 import { CartItem } from "@/components/pharmacy/CartItem";
 import { ProductCard } from "@/components/pharmacy/ProductCard";
 import { CardDetailsDialog } from "@/components/pharmacy/CardDetailsDialog";
-import { Product, CartItem as CartItemType, CardDetails } from "@/components/pharmacy/types";
-
-const products: Product[] = [
-  {
-    id: 1,
-    name: "Paracetamol",
-    price: 5.99,
-    description: "Pain relief medication",
-    image: "/placeholder.svg",
-  },
-  {
-    id: 2,
-    name: "Vitamin C",
-    price: 12.99,
-    description: "Immune system support",
-    image: "/placeholder.svg",
-  },
-  {
-    id: 3,
-    name: "First Aid Kit",
-    price: 24.99,
-    description: "Basic medical supplies",
-    image: "/placeholder.svg",
-  },
-  {
-    id: 4,
-    name: "Bandages",
-    price: 8.99,
-    description: "Sterile wound dressing",
-    image: "/placeholder.svg",
-  },
-];
+import { CartItem as CartItemType, CardDetails } from "@/components/pharmacy/types";
+import { products } from "@/components/pharmacy/products";
 
 const PharmaceuticalSupplies = () => {
   const navigate = useNavigate();
