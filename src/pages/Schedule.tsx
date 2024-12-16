@@ -15,7 +15,7 @@ import { useNavigate } from "react-router-dom";
 const appointments = [
   {
     id: 1,
-    date: new Date(2024, 3, 15, 10, 30),
+    date: new Date(2024, 11, 18, 10, 30), // December 18th, 2024 at 10:30 AM
     patientName: "Sarah Johnson",
     reason: "Regular Checkup",
     duration: "30 minutes",
