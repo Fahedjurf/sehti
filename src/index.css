@@ -99,3 +99,11 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  .bg-grid-medical-primary {
+    background-image: linear-gradient(to right, #16a34a 1px, transparent 1px),
+      linear-gradient(to bottom, #16a34a 1px, transparent 1px);
+    background-size: 24px 24px;
+  }
+}
