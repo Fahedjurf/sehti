@@ -9,6 +9,7 @@ import Signup from "./pages/Signup";
 import Index from "./pages/Index";
 import MedicalHistory from "./pages/MedicalHistory";
 import DoctorDashboard from "./pages/DoctorDashboard";
+import NurseDashboard from "./pages/NurseDashboard";
 import QuickDiagnoses from "./pages/QuickDiagnoses";
 import PharmaceuticalSupplies from "./pages/PharmaceuticalSupplies";
 import DomesticNurses from "./pages/DomesticNurses";
@@ -31,6 +32,7 @@ const App = () => (
             <Route path="/dashboard" element={<Index />} />
             <Route path="/medical-history" element={<MedicalHistory />} />
             <Route path="/doctor-dashboard" element={<DoctorDashboard />} />
+            <Route path="/nurse-dashboard" element={<NurseDashboard />} />
             <Route path="/quick-diagnoses" element={<QuickDiagnoses />} />
             <Route path="/pharmacy" element={<PharmaceuticalSupplies />} />
             <Route path="/domestic-nurses" element={<DomesticNurses />} />

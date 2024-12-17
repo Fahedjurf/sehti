@@ -48,7 +48,7 @@ export const SignupForm = () => {
     
     // Navigate based on user type
     if (formData.userType === "nurse") {
-      navigate("/doctor-dashboard");
+      navigate("/nurse-dashboard");
     } else if (formData.userType === "doctor") {
       navigate("/doctor-dashboard");
     } else {
