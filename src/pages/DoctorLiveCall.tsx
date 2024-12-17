@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowLeft, X } from "lucide-react";
+import { ArrowLeft, X, FileText } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChatSection } from "@/components/live-call/ChatSection";
@@ -10,12 +10,52 @@ import { PrescriptionManager } from "@/components/doctor/PrescriptionManager";
 import { Message } from "@/components/live-call/types";
 import { Product } from "@/components/pharmacy/types";
 import { useToast } from "@/components/ui/use-toast";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+
+// Mock medical history data - in a real app, this would come from an API
+const mockMedicalHistory = [
+  {
+    id: 1,
+    date: "2024-03-15",
+    diagnosis: "Common Cold",
+    treatment: "Prescribed antibiotics and rest",
+    doctor: "Dr. Sarah Johnson",
+  },
+  {
+    id: 2,
+    date: "2024-02-01",
+    diagnosis: "Annual Checkup",
+    treatment: "No issues found",
+    doctor: "Dr. Michael Chen",
+  },
+  {
+    id: 3,
+    date: "2023-12-10",
+    diagnosis: "Migraine",
+    treatment: "Prescribed pain medication",
+    doctor: "Dr. Emily Williams",
+  },
+];
 
 const DoctorLiveCall = () => {
   const navigate = useNavigate();
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [prescriptions, setPrescriptions] = useState<Product[]>([]);
+  const [showMedicalHistory, setShowMedicalHistory] = useState(false);
   const { toast } = useToast();
 
   const handleSendMessage = () => {
@@ -85,7 +125,16 @@ const DoctorLiveCall = () => {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
             <div className="bg-gray-800 rounded-lg aspect-video relative mb-4">
-              <div className="absolute top-4 right-4">
+              <div className="absolute top-4 right-4 flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => setShowMedicalHistory(true)}
+                  className="flex items-center gap-2 bg-white/90"
+                >
+                  <FileText className="h-4 w-4" />
+                  View Medical History
+                </Button>
                 <Button 
                   variant="destructive" 
                   size="sm" 
@@ -137,6 +186,36 @@ const DoctorLiveCall = () => {
           </div>
         </div>
       </div>
+
+      <Dialog open={showMedicalHistory} onOpenChange={setShowMedicalHistory}>
+        <DialogContent className="max-w-4xl">
+          <DialogHeader>
+            <DialogTitle>Patient Medical History</DialogTitle>
+          </DialogHeader>
+          <div className="mt-4">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Diagnosis</TableHead>
+                  <TableHead>Treatment</TableHead>
+                  <TableHead>Doctor</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {mockMedicalHistory.map((record) => (
+                  <TableRow key={record.id}>
+                    <TableCell>{record.date}</TableCell>
+                    <TableCell>{record.diagnosis}</TableCell>
+                    <TableCell>{record.treatment}</TableCell>
+                    <TableCell>{record.doctor}</TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
