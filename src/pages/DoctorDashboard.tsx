@@ -16,7 +16,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { MedicalQuote } from "@/components/ui/medical-quote";
-import { QuickActions } from "@/components/doctor/QuickActions";
 import { DashboardStats } from "@/components/doctor/DashboardStats";
 
 const doctorProfile = {
@@ -70,9 +69,6 @@ const DoctorDashboard = () => {
             </DropdownMenu>
           </div>
         </div>
-
-        {/* Quick Actions Section */}
-        <QuickActions />
 
         {/* Statistics Section */}
         <DashboardStats />
