@@ -6,12 +6,18 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Card } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Users, Clock, Calendar as CalendarIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel";
 
-// Mock appointments data - in a real app, this would come from your backend
 const appointments = [
   {
     id: 1,
@@ -53,7 +59,6 @@ const Schedule = () => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const navigate = useNavigate();
 
-  // Function to check if a date has appointments
   const hasAppointments = (date: Date) => {
     return appointments.some(
       (apt) => apt.date.toDateString() === date.toDateString()
@@ -74,6 +79,11 @@ const Schedule = () => {
     }
   };
 
+  // Get today's appointments
+  const todayAppointments = appointments.filter(
+    (apt) => apt.date.toDateString() === new Date().toDateString()
+  );
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent">
       <div className="container mx-auto p-6">
@@ -89,41 +99,124 @@ const Schedule = () => {
           Appointments Schedule
         </h1>
 
-        <Card className="p-8 bg-white/90 backdrop-blur-sm shadow-xl rounded-xl">
-          <Calendar
-            mode="single"
-            selected={selectedAppointment?.date}
-            onSelect={handleDateSelect}
-            modifiers={{
-              hasAppointment: (date) => hasAppointments(date),
-            }}
-            modifiersStyles={{
-              hasAppointment: {
-                textDecoration: "underline",
-                textDecorationColor: "#16a34a",
-                textDecorationThickness: "4px",
-                textUnderlineOffset: "8px",
-              },
-            }}
-            className="rounded-lg border-2 border-medical-light p-4 mx-auto w-full max-w-3xl"
-            classNames={{
-              months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
-              month: "space-y-4 w-full",
-              caption: "flex justify-center pt-1 relative items-center text-lg font-semibold",
-              caption_label: "text-medical-dark",
-              nav: "space-x-1 flex items-center",
-              nav_button: "h-9 w-9 bg-medical-light text-medical-primary hover:bg-medical-accent rounded-lg transition-colors",
-              table: "w-full border-collapse space-y-1",
-              head_row: "flex",
-              head_cell: "text-medical-dark rounded-md w-10 sm:w-14 font-normal text-base",
-              row: "flex w-full mt-2",
-              cell: "relative p-0 text-center text-base focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-medical-light rounded-lg",
-              day: "h-10 w-10 sm:h-14 sm:w-14 p-0 font-normal hover:bg-medical-light rounded-lg transition-colors",
-              day_today: "bg-medical-accent text-medical-dark",
-              day_selected: "bg-medical-primary text-white hover:bg-medical-dark",
-            }}
-          />
-        </Card>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <Card className="bg-white/90 backdrop-blur-sm shadow-md">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium text-medical-dark">
+                Total Appointments
+              </CardTitle>
+              <Users className="h-4 w-4 text-medical-primary" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-medical-dark">{appointments.length}</div>
+            </CardContent>
+          </Card>
+          <Card className="bg-white/90 backdrop-blur-sm shadow-md">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium text-medical-dark">
+                Today's Appointments
+              </CardTitle>
+              <Clock className="h-4 w-4 text-medical-primary" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-2xl font-bold text-medical-dark">{todayAppointments.length}</div>
+            </CardContent>
+          </Card>
+          <Card className="bg-white/90 backdrop-blur-sm shadow-md">
+            <CardHeader className="flex flex-row items-center justify-between pb-2">
+              <CardTitle className="text-sm font-medium text-medical-dark">
+                Next Appointment
+              </CardTitle>
+              <CalendarIcon className="h-4 w-4 text-medical-primary" />
+            </CardHeader>
+            <CardContent>
+              <div className="text-lg font-medium text-medical-dark">
+                {appointments[0]?.date.toLocaleTimeString([], {
+                  hour: '2-digit',
+                  minute: '2-digit'
+                })}
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <Card className="p-8 bg-white/90 backdrop-blur-sm shadow-xl rounded-xl">
+            <Calendar
+              mode="single"
+              selected={selectedAppointment?.date}
+              onSelect={handleDateSelect}
+              modifiers={{
+                hasAppointment: (date) => hasAppointments(date),
+              }}
+              modifiersStyles={{
+                hasAppointment: {
+                  textDecoration: "underline",
+                  textDecorationColor: "#16a34a",
+                  textDecorationThickness: "4px",
+                  textUnderlineOffset: "8px",
+                },
+              }}
+              className="rounded-lg border-2 border-medical-light p-4 mx-auto w-full"
+              classNames={{
+                months: "flex flex-col sm:flex-row space-y-4 sm:space-x-4 sm:space-y-0",
+                month: "space-y-4 w-full",
+                caption: "flex justify-center pt-1 relative items-center text-lg font-semibold",
+                caption_label: "text-medical-dark",
+                nav: "space-x-1 flex items-center",
+                nav_button: "h-9 w-9 bg-medical-light text-medical-primary hover:bg-medical-accent rounded-lg transition-colors",
+                table: "w-full border-collapse space-y-1",
+                head_row: "flex",
+                head_cell: "text-medical-dark rounded-md w-10 sm:w-14 font-normal text-base",
+                row: "flex w-full mt-2",
+                cell: "relative p-0 text-center text-base focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-medical-light rounded-lg",
+                day: "h-10 w-10 sm:h-14 sm:w-14 p-0 font-normal hover:bg-medical-light rounded-lg transition-colors",
+                day_today: "bg-medical-accent text-medical-dark",
+                day_selected: "bg-medical-primary text-white hover:bg-medical-dark",
+              }}
+            />
+          </Card>
+
+          <Card className="p-8 bg-white/90 backdrop-blur-sm shadow-xl rounded-xl">
+            <CardHeader>
+              <CardTitle className="text-xl font-bold text-medical-dark mb-4">
+                Upcoming Appointments
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <Carousel className="w-full">
+                <CarouselContent>
+                  {appointments.map((appointment) => (
+                    <CarouselItem key={appointment.id}>
+                      <Card className="p-4 border-2 border-medical-light hover:border-medical-primary transition-colors">
+                        <CardHeader>
+                          <CardTitle className="text-lg font-semibold text-medical-dark">
+                            {appointment.patientName}
+                          </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                          <p className="text-sm text-gray-600">
+                            {appointment.date.toLocaleDateString()} at{" "}
+                            {appointment.date.toLocaleTimeString([], {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                          </p>
+                          <p className="text-sm text-gray-600">{appointment.reason}</p>
+                          <p className="text-sm text-gray-600">
+                            Location: {appointment.location || "Sehti application"}
+                          </p>
+                        </CardContent>
+                      </Card>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+                <CarouselPrevious />
+                <CarouselNext />
+              </Carousel>
+            </CardContent>
+          </Card>
+        </div>
 
         <Dialog open={isDetailsOpen} onOpenChange={setIsDetailsOpen}>
           <DialogContent className="sm:max-w-[425px]">
