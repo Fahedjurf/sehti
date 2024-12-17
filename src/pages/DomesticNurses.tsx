@@ -79,8 +79,15 @@ const DomesticNurses = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent p-6">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent relative overflow-hidden">
+      {/* Decorative elements */}
+      <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-medical-accent/20 blur-3xl animate-pulse" />
+      <div className="absolute -bottom-32 -left-20 w-96 h-96 rounded-full bg-medical-primary/10 blur-3xl animate-pulse delay-700" />
+      
+      {/* Decorative pattern */}
+      <div className="absolute inset-0 bg-grid-medical-primary/[0.03] -z-10" />
+
+      <div className="max-w-4xl mx-auto p-6 relative">
         <Button 
           variant="outline" 
           className="mb-6 flex items-center gap-2 bg-white/80 backdrop-blur-sm border-medical-primary text-medical-primary hover:bg-medical-light hover:text-medical-dark transition-all duration-300"
@@ -90,12 +97,24 @@ const DomesticNurses = () => {
           Back to Dashboard
         </Button>
 
-        <h1 className="text-3xl font-bold text-medical-dark mb-6 text-center">
-          Request a Domestic Nurse
-        </h1>
+        <div className="text-center mb-8 relative">
+          <h1 className="text-3xl font-bold text-medical-dark mb-2 animate-fade-in">
+            Request a Domestic Nurse
+          </h1>
+          <p className="text-gray-600 animate-fade-in delay-100">
+            Professional healthcare in the comfort of your home
+          </p>
+          {/* Decorative underline */}
+          <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-medical-primary/0 via-medical-primary to-medical-primary/0" />
+        </div>
 
-        <Card className="p-6 mb-6">
-          <div className="h-[300px] w-full mb-6">
+        <Card className="bg-white/80 backdrop-blur-sm p-8 rounded-xl shadow-lg border border-medical-accent/20 relative mb-6">
+          {/* Decorative corner accent */}
+          <div className="absolute -top-2 -right-2 w-20 h-20">
+            <div className="absolute inset-0 bg-medical-primary/20 rounded-br-3xl animate-fade-in" />
+          </div>
+
+          <div className="h-[300px] w-full mb-6 rounded-lg overflow-hidden border border-medical-light/50">
             <LoadScript googleMapsApiKey="YOUR_GOOGLE_MAPS_API_KEY">
               <GoogleMap
                 mapContainerStyle={{ width: "100%", height: "100%" }}
@@ -107,19 +126,22 @@ const DomesticNurses = () => {
             </LoadScript>
           </div>
 
-          <div className="mb-6">
-            <h2 className="text-xl font-semibold mb-4">Select Service Type</h2>
+          <div className="mb-6 relative">
+            <h2 className="text-xl font-semibold mb-4 text-medical-dark">Select Service Type</h2>
             <RadioGroup
               value={selectedService}
               onValueChange={setSelectedService}
               className="space-y-4"
             >
               {nurseServices.map((service) => (
-                <div key={service.id} className="flex items-start space-x-3">
+                <div 
+                  key={service.id} 
+                  className="flex items-start space-x-3 p-4 rounded-lg transition-all duration-300 hover:bg-medical-light/50"
+                >
                   <RadioGroupItem value={service.id} id={service.id} />
                   <Label htmlFor={service.id} className="font-medium cursor-pointer">
-                    <div>{service.title}</div>
-                    <div className="text-sm text-gray-500">{service.description}</div>
+                    <div className="text-medical-dark">{service.title}</div>
+                    <div className="text-sm text-gray-600">{service.description}</div>
                   </Label>
                 </div>
               ))}
@@ -127,7 +149,7 @@ const DomesticNurses = () => {
           </div>
 
           <Button 
-            className="w-full"
+            className="w-full bg-medical-primary hover:bg-medical-dark text-white transition-all duration-300"
             onClick={handleSubmit}
           >
             Request Nurse
