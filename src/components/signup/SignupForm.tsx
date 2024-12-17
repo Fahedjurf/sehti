@@ -2,6 +2,7 @@ import { useState } from "react";
 import { UserTypeSelect } from "./UserTypeSelect";
 import { PhoneVerification } from "./PhoneVerification";
 import { DoctorFields } from "./DoctorFields";
+import { MedicalProfessionalFields } from "./MedicalProfessionalFields";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
@@ -44,7 +45,22 @@ export const SignupForm = () => {
 
     const userId = Math.random().toString(36).substring(7);
     toast.success(`Registration successful! Your ID: ${userId}`);
-    navigate("/dashboard");
+    
+    // Navigate based on user type
+    if (formData.userType === "nurse") {
+      navigate("/doctor-dashboard");
+    } else if (formData.userType === "doctor") {
+      navigate("/doctor-dashboard");
+    } else {
+      navigate("/dashboard");
+    }
+  };
+
+  const handleVerifyOTP = (otp: string) => {
+    if (otp.length === 6) {
+      setOtpVerified(true);
+      toast.success("Phone number verified successfully!");
+    }
   };
 
   return (
@@ -80,8 +96,16 @@ export const SignupForm = () => {
         onSendOTP={() => setOtpSent(true)}
         otpSent={otpSent}
         otpVerified={otpVerified}
-        onVerifyOTP={() => setOtpVerified(true)}
+        onVerifyOTP={handleVerifyOTP}
       />
+
+      {(formData.userType === "doctor" || formData.userType === "nurse") && (
+        <MedicalProfessionalFields
+          hospitalAddress={formData.hospitalAddress}
+          onHospitalAddressChange={(value) => handleChange("hospitalAddress", value)}
+          onFileChange={(e) => setFormData(prev => ({ ...prev, certificate: e.target.files?.[0] || null }))}
+        />
+      )}
 
       {formData.userType === "doctor" && (
         <DoctorFields

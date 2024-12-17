@@ -42,8 +42,15 @@ export const PhoneVerification = ({
         <Label>Enter OTP</Label>
         <Input
           type="text"
+          pattern="[0-9]*"
+          inputMode="numeric"
           maxLength={6}
-          onChange={(e) => onVerifyOTP(e.target.value)}
+          onChange={(e) => {
+            const value = e.target.value.replace(/[^0-9]/g, '');
+            if (value.length <= 6) {
+              onVerifyOTP(value);
+            }
+          }}
           placeholder="Enter 6-digit OTP"
         />
       </div>
