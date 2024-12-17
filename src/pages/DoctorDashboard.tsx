@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { MedicalQuote } from "@/components/ui/medical-quote";
 import { DashboardStats } from "@/components/doctor/DashboardStats";
+import { Logo } from "@/components/ui/logo";
 
 const doctorProfile = {
   firstName: "John",
@@ -51,9 +52,12 @@ const DoctorDashboard = () => {
       <div className="max-w-7xl mx-auto space-y-8">
         {/* Header Section */}
         <div className="flex justify-between items-center">
-          <h1 className="text-3xl font-bold text-medical-dark">
-            Welcome Dr. {doctorProfile.lastName}
-          </h1>
+          <div className="flex items-center gap-4">
+            <Logo size="sm" />
+            <h1 className="text-3xl font-bold text-medical-dark">
+              Welcome Dr. {doctorProfile.lastName}
+            </h1>
+          </div>
           
           <div className="flex items-center gap-4">
             <Avatar 
