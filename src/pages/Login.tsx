@@ -9,6 +9,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
+import { MedicalQuote } from "@/components/ui/medical-quote";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -60,14 +61,24 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent">
-      <div className="container px-4 py-12">
-        <div className="max-w-md mx-auto">
-          <h1 className="text-4xl font-bold text-center text-medical-dark mb-8">
-            Welcome to Sehti
-          </h1>
-          
+    <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent/30 flex items-center justify-center">
+      <div className="container px-4 py-12 grid md:grid-cols-2 gap-8 items-center max-w-6xl">
+        <div className="space-y-8 hidden md:block">
+          <div className="text-4xl font-bold text-medical-dark mb-4">
+            Welcome to <span className="text-medical-primary">Sehti</span>
+          </div>
+          <p className="text-medical-dark/80 text-lg mb-8">
+            Your trusted healthcare companion. Access professional medical services from the comfort of your home.
+          </p>
+          <MedicalQuote />
+        </div>
+
+        <div className="max-w-md w-full mx-auto">
           <div className="bg-white/80 backdrop-blur-sm p-8 rounded-xl shadow-lg border border-medical-light/50">
+            <div className="md:hidden text-3xl font-bold text-medical-dark mb-8 text-center">
+              Welcome to <span className="text-medical-primary">Sehti</span>
+            </div>
+            
             <form onSubmit={handleLogin} className="space-y-6">
               <div className="space-y-2">
                 <label htmlFor="email" className="text-sm font-medium text-medical-dark">
@@ -78,6 +89,7 @@ const Login = () => {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
+                  className="border-medical-accent/20 focus:border-medical-primary"
                   required
                 />
               </div>
@@ -91,6 +103,7 @@ const Login = () => {
                   type="password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
+                  className="border-medical-accent/20 focus:border-medical-primary"
                   required
                 />
               </div>
@@ -105,13 +118,16 @@ const Login = () => {
               </Button>
 
               <div className="space-y-4">
-                <Button type="submit" className="w-full bg-medical-primary hover:bg-medical-dark">
+                <Button 
+                  type="submit" 
+                  className="w-full bg-medical-primary hover:bg-medical-dark"
+                >
                   Log in
                 </Button>
                 <Button
                   type="button"
                   variant="outline"
-                  className="w-full"
+                  className="w-full border-medical-primary text-medical-primary hover:bg-medical-primary hover:text-white"
                   onClick={() => navigate("/signup")}
                 >
                   Sign up
