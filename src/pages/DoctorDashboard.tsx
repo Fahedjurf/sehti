@@ -1,4 +1,4 @@
-import { UserRound, MoreVertical } from "lucide-react";
+import { UserRound, MoreVertical, PhoneCall, Calendar } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -34,6 +34,14 @@ const DoctorDashboard = () => {
 
   const handleSignOut = () => {
     navigate("/");
+  };
+
+  const handleLiveCall = () => {
+    navigate("/doctor-live-call");
+  };
+
+  const handleSchedule = () => {
+    navigate("/schedule");
   };
 
   return (
@@ -81,7 +89,25 @@ const DoctorDashboard = () => {
           
           {/* Schedule Overview */}
           <div className="space-y-4">
-            <h2 className="text-2xl font-semibold text-medical-dark">Today's Schedule</h2>
+            <div className="flex justify-between items-center">
+              <h2 className="text-2xl font-semibold text-medical-dark">Today's Schedule</h2>
+              <div className="flex items-center space-x-2">
+                <button 
+                  onClick={handleLiveCall}
+                  className="p-2 hover:bg-medical-light rounded-full transition-colors"
+                  title="Live Call"
+                >
+                  <PhoneCall className="h-6 w-6 text-medical-primary" />
+                </button>
+                <button 
+                  onClick={handleSchedule}
+                  className="p-2 hover:bg-medical-light rounded-full transition-colors"
+                  title="View Schedule"
+                >
+                  <Calendar className="h-6 w-6 text-medical-primary" />
+                </button>
+              </div>
+            </div>
             <div className="space-y-4">
               <div className="flex items-center justify-between p-3 bg-medical-light rounded-lg">
                 <div>
