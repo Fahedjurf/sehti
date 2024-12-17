@@ -26,7 +26,8 @@ const doctorProfile = {
   email: "john.doe@example.com",
   specialization: "Cardiologist",
   hospitalAddress: "123 Medical Center, Health City",
-  sehtiId: "123456"
+  sehtiId: "123456",
+  userType: "nurse" // This would come from your authentication system
 };
 
 const DoctorDashboard = () => {
@@ -51,7 +52,7 @@ const DoctorDashboard = () => {
         {/* Header Section */}
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-bold text-medical-dark">
-            Welcome Dr. {doctorProfile.lastName}
+            Welcome {doctorProfile.userType === 'nurse' ? 'Nurse' : 'Dr.'} {doctorProfile.lastName}
           </h1>
           
           <div className="flex items-center gap-4">
@@ -83,18 +84,20 @@ const DoctorDashboard = () => {
         <DashboardStats />
 
         {/* Quick Actions Section */}
-        <div className="grid grid-cols-2 gap-6 mb-8">
-          <div 
-            onClick={handleLiveCall}
-            className="bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-medical-light/50 hover:shadow-xl transition-all duration-300 cursor-pointer"
-          >
-            <div className="flex flex-col items-center text-center space-y-4">
-              <div className="p-3 bg-medical-light rounded-full">
-                <PhoneCall className="h-8 w-8 text-medical-primary" />
+        <div className={`grid ${doctorProfile.userType === 'nurse' ? 'grid-cols-1' : 'grid-cols-2'} gap-6 mb-8`}>
+          {doctorProfile.userType !== 'nurse' && (
+            <div 
+              onClick={handleLiveCall}
+              className="bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-medical-light/50 hover:shadow-xl transition-all duration-300 cursor-pointer"
+            >
+              <div className="flex flex-col items-center text-center space-y-4">
+                <div className="p-3 bg-medical-light rounded-full">
+                  <PhoneCall className="h-8 w-8 text-medical-primary" />
+                </div>
+                <h3 className="text-xl font-semibold text-medical-dark">Start Live Call</h3>
               </div>
-              <h3 className="text-xl font-semibold text-medical-dark">Start Live Call</h3>
             </div>
-          </div>
+          )}
           <div 
             onClick={handleSchedule}
             className="bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-medical-light/50 hover:shadow-xl transition-all duration-300 cursor-pointer"
