@@ -1,5 +1,4 @@
 import { Label } from "@/components/ui/label";
-import { Upload } from "lucide-react";
 import {
   Select,
   SelectContent,
@@ -22,7 +21,6 @@ export const DoctorFields = ({
   hospitalAddress,
   onSpecializationChange,
   onHospitalAddressChange,
-  onFileChange,
 }: DoctorFieldsProps) => (
   <>
     <div className="space-y-2">
@@ -42,28 +40,6 @@ export const DoctorFields = ({
           <SelectItem value="other">Other</SelectItem>
         </SelectContent>
       </Select>
-    </div>
-
-    <div className="space-y-2">
-      <Label>Upload Certificate</Label>
-      <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center">
-        <input
-          type="file"
-          id="certificate"
-          className="hidden"
-          onChange={onFileChange}
-          accept=".pdf,.doc,.docx"
-        />
-        <label
-          htmlFor="certificate"
-          className="cursor-pointer flex flex-col items-center"
-        >
-          <Upload className="h-8 w-8 text-gray-400" />
-          <span className="mt-2 text-sm text-gray-500">
-            Click to upload certificate
-          </span>
-        </label>
-      </div>
     </div>
 
     <div className="space-y-2">
