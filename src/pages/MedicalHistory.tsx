@@ -1,6 +1,6 @@
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, User, Calendar, Clipboard, Heart, Stethoscope } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import {
   Dialog,
@@ -60,6 +60,20 @@ const MedicalHistory = () => {
     setSelectedReport(report);
   };
 
+  // Map service types to icons
+  const getIconForServiceType = (serviceType: string) => {
+    switch (serviceType) {
+      case "Quick Diagnosis":
+        return <Stethoscope className="w-16 h-16 text-medical-primary" />;
+      case "Live Call Consultation":
+        return <Heart className="w-16 h-16 text-medical-primary" />;
+      case "In-Person Visit":
+        return <User className="w-16 h-16 text-medical-primary" />;
+      default:
+        return <Clipboard className="w-16 h-16 text-medical-primary" />;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent p-6">
       <div className="max-w-4xl mx-auto">
@@ -78,10 +92,13 @@ const MedicalHistory = () => {
           {mockReports.map((report) => (
             <Card 
               key={report.id} 
-              className="transform hover:scale-105 transition-all duration-300 cursor-pointer bg-white/70 backdrop-blur-sm border-medical-accent/20 hover:border-medical-primary/40 hover:shadow-lg"
+              className="transform hover:scale-105 transition-all duration-300 cursor-pointer bg-white/70 backdrop-blur-sm border-medical-accent/20 hover:border-medical-primary/40 hover:shadow-lg flex flex-col items-center justify-center p-6"
               onClick={() => handleCardClick(report)}
             >
-              <CardHeader className="pb-2">
+              <div className="mb-4">
+                {getIconForServiceType(report.serviceType)}
+              </div>
+              <CardHeader className="pb-2 text-center w-full">
                 <CardTitle className="text-center text-sm font-medium text-medical-dark">
                   {new Date(report.date).toLocaleDateString()}
                 </CardTitle>
