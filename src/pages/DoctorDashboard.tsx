@@ -11,6 +11,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -88,23 +89,23 @@ const DoctorDashboard = () => {
           </div>
           
           {/* Schedule Overview */}
-          <div className="space-y-4">
+          <div className="bg-white p-6 rounded-xl shadow-md space-y-4">
             <div className="flex justify-between items-center">
               <h2 className="text-2xl font-semibold text-medical-dark">Today's Schedule</h2>
-              <div className="flex items-center space-x-2">
+              <div className="flex items-center gap-4">
                 <button 
                   onClick={handleLiveCall}
-                  className="p-2 hover:bg-medical-light rounded-full transition-colors"
-                  title="Live Call"
+                  className="flex items-center gap-2 px-4 py-2 bg-medical-primary text-white rounded-lg hover:bg-medical-dark transition-colors"
                 >
-                  <PhoneCall className="h-6 w-6 text-medical-primary" />
+                  <PhoneCall className="h-5 w-5" />
+                  <span>Live Call</span>
                 </button>
                 <button 
                   onClick={handleSchedule}
-                  className="p-2 hover:bg-medical-light rounded-full transition-colors"
-                  title="View Schedule"
+                  className="flex items-center gap-2 px-4 py-2 bg-medical-primary text-white rounded-lg hover:bg-medical-dark transition-colors"
                 >
-                  <Calendar className="h-6 w-6 text-medical-primary" />
+                  <Calendar className="h-5 w-5" />
+                  <span>Schedule</span>
                 </button>
               </div>
             </div>
@@ -132,6 +133,9 @@ const DoctorDashboard = () => {
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
               <DialogTitle className="text-medical-primary">Profile Details</DialogTitle>
+              <DialogDescription>
+                Your professional information and contact details
+              </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-2 items-center gap-4">
