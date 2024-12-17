@@ -64,15 +64,8 @@ const Login = () => {
     <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent/30 flex items-center justify-center">
       <div className="container px-4 py-12 grid md:grid-cols-2 gap-8 items-center max-w-6xl">
         <div className="space-y-8 hidden md:block">
-          <div className="flex flex-col items-center mb-8">
-            <img 
-              src="/lovable-uploads/999937a5-3a18-4ec2-a762-267d50a875ce.png" 
-              alt="Sehti Logo" 
-              className="h-24 w-auto mb-4"
-            />
-            <div className="text-4xl font-bold text-medical-dark">
-              Welcome to <span className="text-medical-primary">Sehti</span>
-            </div>
+          <div className="text-4xl font-bold text-medical-dark mb-4">
+            Welcome to <span className="text-medical-primary">Sehti</span>
           </div>
           <p className="text-medical-dark/80 text-lg mb-8 text-center">
             Your trusted healthcare companion. Access professional medical services from the comfort of your home.
@@ -82,15 +75,8 @@ const Login = () => {
 
         <div className="max-w-md w-full mx-auto">
           <div className="bg-white/80 backdrop-blur-sm p-8 rounded-xl shadow-lg border border-medical-light/50">
-            <div className="md:hidden flex flex-col items-center mb-8">
-              <img 
-                src="/lovable-uploads/999937a5-3a18-4ec2-a762-267d50a875ce.png" 
-                alt="Sehti Logo" 
-                className="h-16 w-auto mb-4"
-              />
-              <div className="text-3xl font-bold text-medical-dark">
-                Welcome to <span className="text-medical-primary">Sehti</span>
-              </div>
+            <div className="md:hidden text-3xl font-bold text-medical-dark mb-8 text-center">
+              Welcome to <span className="text-medical-primary">Sehti</span>
             </div>
             
             <form onSubmit={handleLogin} className="space-y-6">
