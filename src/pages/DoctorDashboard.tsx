@@ -82,6 +82,24 @@ const DoctorDashboard = () => {
         {/* Statistics Section */}
         <DashboardStats />
 
+        {/* Quick Actions Section */}
+        <div className="grid grid-cols-2 gap-6 mb-8">
+          <button 
+            onClick={handleLiveCall}
+            className="flex items-center justify-center gap-3 p-6 bg-medical-primary text-white rounded-xl hover:bg-medical-dark transition-colors shadow-lg hover:shadow-xl"
+          >
+            <PhoneCall className="h-8 w-8" />
+            <span className="text-xl font-semibold">Start Live Call</span>
+          </button>
+          <button 
+            onClick={handleSchedule}
+            className="flex items-center justify-center gap-3 p-6 bg-medical-primary text-white rounded-xl hover:bg-medical-dark transition-colors shadow-lg hover:shadow-xl"
+          >
+            <Calendar className="h-8 w-8" />
+            <span className="text-xl font-semibold">View Schedule</span>
+          </button>
+        </div>
+
         {/* Medical Quote and Schedule Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="space-y-6">
@@ -90,25 +108,7 @@ const DoctorDashboard = () => {
           
           {/* Schedule Overview */}
           <div className="bg-white p-6 rounded-xl shadow-md space-y-4">
-            <div className="flex justify-between items-center">
-              <h2 className="text-2xl font-semibold text-medical-dark">Today's Schedule</h2>
-              <div className="flex items-center gap-4">
-                <button 
-                  onClick={handleLiveCall}
-                  className="flex items-center gap-2 px-4 py-2 bg-medical-primary text-white rounded-lg hover:bg-medical-dark transition-colors"
-                >
-                  <PhoneCall className="h-5 w-5" />
-                  <span>Live Call</span>
-                </button>
-                <button 
-                  onClick={handleSchedule}
-                  className="flex items-center gap-2 px-4 py-2 bg-medical-primary text-white rounded-lg hover:bg-medical-dark transition-colors"
-                >
-                  <Calendar className="h-5 w-5" />
-                  <span>Schedule</span>
-                </button>
-              </div>
-            </div>
+            <h2 className="text-2xl font-semibold text-medical-dark mb-4">Today's Schedule</h2>
             <div className="space-y-4">
               <div className="flex items-center justify-between p-3 bg-medical-light rounded-lg">
                 <div>
