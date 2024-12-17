@@ -41,8 +41,7 @@ const QuickDiagnoses = () => {
       return;
     }
 
-    const mockDiagnosis = `Preliminary Diagnosis:
-Based on your symptoms, you may have one of the following conditions:
+    const mockDiagnosis = `Based on your symptoms, you may have one of the following conditions:
 
 1. Common Cold
 2. Seasonal Allergies
@@ -55,8 +54,8 @@ Please consult with a healthcare professional for an accurate diagnosis.`;
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent p-6">
-      <div className="max-w-4xl mx-auto">
+    <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent/30">
+      <div className="max-w-4xl mx-auto p-6">
         <Button
           variant="outline"
           className="mb-6 flex items-center gap-2 bg-white/80 backdrop-blur-sm border-medical-primary text-medical-primary hover:bg-medical-light hover:text-medical-dark transition-all duration-300"
@@ -66,21 +65,24 @@ Please consult with a healthcare professional for an accurate diagnosis.`;
           Back to Dashboard
         </Button>
 
-        <div className="bg-white/80 backdrop-blur-sm rounded-xl p-6 shadow-lg">
-          <h1 className="text-2xl font-bold text-center text-medical-dark mb-6">
+        <div className="bg-white/80 backdrop-blur-sm rounded-xl p-8 shadow-lg border border-medical-light">
+          <h1 className="text-3xl font-bold text-center text-medical-dark mb-8">
             Quick Diagnoses
           </h1>
 
-          <div className="space-y-6">
+          <div className="space-y-8">
             <div>
-              <h2 className="text-lg font-semibold mb-4">Select your symptoms:</h2>
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+              <h2 className="text-xl font-semibold mb-4 text-medical-dark">
+                Select your symptoms:
+              </h2>
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-4 bg-white/50 p-6 rounded-lg">
                 {symptoms.map((symptom) => (
-                  <div key={symptom} className="flex items-center space-x-2">
+                  <div key={symptom} className="flex items-center space-x-3">
                     <Checkbox
                       id={symptom}
                       checked={selectedSymptoms.includes(symptom)}
                       onCheckedChange={() => handleSymptomToggle(symptom)}
+                      className="border-medical-primary data-[state=checked]:bg-medical-primary data-[state=checked]:border-medical-primary"
                     />
                     <label
                       htmlFor={symptom}
@@ -94,28 +96,30 @@ Please consult with a healthcare professional for an accurate diagnosis.`;
             </div>
 
             <div className="space-y-2">
-              <label className="text-lg font-semibold">
-                Describe what do you feel?
-              </label>
+              <h2 className="text-xl font-semibold text-medical-dark">
+                Describe how you feel:
+              </h2>
               <Textarea
                 placeholder="Please describe your symptoms in detail..."
                 value={description}
                 onChange={(e) => setDescription(e.target.value)}
-                className="min-h-[100px]"
+                className="min-h-[120px] bg-white/50 border-medical-light focus:border-medical-primary"
               />
             </div>
 
             <Button
-              className="w-full bg-medical-primary hover:bg-medical-dark"
+              className="w-full bg-medical-primary hover:bg-medical-dark text-white transition-colors"
               onClick={handleSubmit}
             >
               Get Diagnosis
             </Button>
 
             {diagnosis && (
-              <div className="mt-6 p-4 bg-white rounded-lg border border-medical-primary">
-                <h3 className="text-lg font-semibold mb-2">Preliminary Diagnosis:</h3>
-                <p className="whitespace-pre-line">{diagnosis}</p>
+              <div className="mt-8 p-6 bg-white/90 rounded-lg border border-medical-primary/30 shadow-md">
+                <h3 className="text-xl font-semibold mb-4 text-medical-dark">
+                  Preliminary Diagnosis:
+                </h3>
+                <p className="whitespace-pre-line text-gray-700">{diagnosis}</p>
               </div>
             )}
           </div>
