@@ -84,20 +84,28 @@ const DoctorDashboard = () => {
 
         {/* Quick Actions Section */}
         <div className="grid grid-cols-2 gap-6 mb-8">
-          <button 
+          <div 
             onClick={handleLiveCall}
-            className="flex items-center justify-center gap-3 p-6 bg-medical-primary text-white rounded-xl hover:bg-medical-dark transition-colors shadow-lg hover:shadow-xl"
+            className="bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-medical-light/50 hover:shadow-xl transition-all duration-300 cursor-pointer"
           >
-            <PhoneCall className="h-8 w-8" />
-            <span className="text-xl font-semibold">Start Live Call</span>
-          </button>
-          <button 
+            <div className="flex flex-col items-center text-center space-y-4">
+              <div className="p-3 bg-medical-light rounded-full">
+                <PhoneCall className="h-8 w-8 text-medical-primary" />
+              </div>
+              <h3 className="text-xl font-semibold text-medical-dark">Start Live Call</h3>
+            </div>
+          </div>
+          <div 
             onClick={handleSchedule}
-            className="flex items-center justify-center gap-3 p-6 bg-medical-primary text-white rounded-xl hover:bg-medical-dark transition-colors shadow-lg hover:shadow-xl"
+            className="bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-medical-light/50 hover:shadow-xl transition-all duration-300 cursor-pointer"
           >
-            <Calendar className="h-8 w-8" />
-            <span className="text-xl font-semibold">View Schedule</span>
-          </button>
+            <div className="flex flex-col items-center text-center space-y-4">
+              <div className="p-3 bg-medical-light rounded-full">
+                <Calendar className="h-8 w-8 text-medical-primary" />
+              </div>
+              <h3 className="text-xl font-semibold text-medical-dark">View Schedule</h3>
+            </div>
+          </div>
         </div>
 
         {/* Medical Quote and Schedule Section */}
