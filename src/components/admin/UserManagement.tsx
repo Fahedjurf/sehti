@@ -20,8 +20,9 @@ interface User {
   status: string;
 }
 
-export const UserManagement = ({ users }: { users: User[] }) => {
+export const UserManagement = ({ users: initialUsers }: { users: User[] }) => {
   const [searchQuery, setSearchQuery] = useState("");
+  const [users, setUsers] = useState(initialUsers);
 
   const filteredUsers = users.filter(
     (user) =>
@@ -31,6 +32,7 @@ export const UserManagement = ({ users }: { users: User[] }) => {
   );
 
   const handleRemoveUser = (id: number) => {
+    setUsers((currentUsers) => currentUsers.filter((user) => user.id !== id));
     toast.success("User removed successfully");
   };
 
