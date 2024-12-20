@@ -110,10 +110,7 @@ export const SignupForm = () => {
       {formData.userType === "doctor" && (
         <DoctorFields
           specialization={formData.specialization}
-          hospitalAddress={formData.hospitalAddress}
           onSpecializationChange={(value) => handleChange("specialization", value)}
-          onHospitalAddressChange={(value) => handleChange("hospitalAddress", value)}
-          onFileChange={(e) => setFormData(prev => ({ ...prev, certificate: e.target.files?.[0] || null }))}
         />
       )}
 
