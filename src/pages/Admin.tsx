@@ -39,6 +39,20 @@ const users = [
     email: "emily.davis@example.com",
     status: "active",
   },
+  {
+    id: 3,
+    name: "John Doe",
+    type: "patient",
+    email: "john.doe@example.com",
+    status: "active",
+  },
+  {
+    id: 4,
+    name: "Jane Smith",
+    type: "patient",
+    email: "jane.smith@example.com",
+    status: "active",
+  },
 ];
 
 const Admin = () => {
