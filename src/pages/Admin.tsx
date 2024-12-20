@@ -27,14 +27,14 @@ const pendingCertificates = [
 const users = [
   {
     id: 1,
-    name: "Dr. Michael Brown",
+    name: "Michael Brown",
     type: "doctor",
     email: "michael.brown@example.com",
     status: "active",
   },
   {
     id: 2,
-    name: "Nurse Emily Davis",
+    name: "Emily Davis",
     type: "nurse",
     email: "emily.davis@example.com",
     status: "active",
