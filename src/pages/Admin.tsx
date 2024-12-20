@@ -1,23 +1,8 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { CertificateManagement } from "@/components/admin/CertificateManagement";
+import { UserManagement } from "@/components/admin/UserManagement";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { toast } from "sonner";
-import { CheckCircle, XCircle, UserPlus, UserMinus, ArrowLeft } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 // Mock data - in a real app, this would come from your backend
 const pendingCertificates = [
@@ -58,27 +43,6 @@ const users = [
 
 const Admin = () => {
   const navigate = useNavigate();
-  const [selectedCertificate, setSelectedCertificate] = useState<any>(null);
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
-
-  const handleApprove = (id: number) => {
-    // In a real app, this would make an API call
-    toast.success("Certificate approved successfully");
-  };
-
-  const handleReject = (id: number) => {
-    // In a real app, this would make an API call
-    toast.error("Certificate rejected");
-  };
-
-  const handleRemoveUser = (id: number) => {
-    // In a real app, this would make an API call
-    toast.success("User removed successfully");
-  };
-
-  const handleAddUser = () => {
-    navigate("/signup");
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent relative overflow-hidden">
@@ -111,109 +75,15 @@ const Admin = () => {
         </div>
 
         <div className="grid gap-6">
-          <Card className="bg-white/80 backdrop-blur-sm p-8 rounded-xl shadow-lg border border-medical-accent/20 relative">
-            <h2 className="text-xl font-semibold text-medical-dark mb-4">Pending Certificates</h2>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Specialization</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {pendingCertificates.map((cert) => (
-                  <TableRow key={cert.id}>
-                    <TableCell>{cert.name}</TableCell>
-                    <TableCell className="capitalize">{cert.type}</TableCell>
-                    <TableCell>{cert.specialization}</TableCell>
-                    <TableCell>
-                      <div className="flex gap-2">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="text-green-600 hover:text-green-700 hover:bg-green-50"
-                          onClick={() => handleApprove(cert.id)}
-                        >
-                          <CheckCircle className="h-5 w-5" />
-                        </Button>
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                          onClick={() => handleReject(cert.id)}
-                        >
-                          <XCircle className="h-5 w-5" />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Card>
+          <div className="bg-white/80 backdrop-blur-sm p-8 rounded-xl shadow-lg border border-medical-accent/20 relative">
+            <CertificateManagement pendingCertificates={pendingCertificates} />
+          </div>
 
-          <Card className="bg-white/80 backdrop-blur-sm p-8 rounded-xl shadow-lg border border-medical-accent/20 relative">
-            <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-semibold text-medical-dark">User Management</h2>
-              <Button
-                className="bg-medical-primary hover:bg-medical-dark text-white"
-                onClick={handleAddUser}
-              >
-                <UserPlus className="h-4 w-4 mr-2" />
-                Add User
-              </Button>
-            </div>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Name</TableHead>
-                  <TableHead>Type</TableHead>
-                  <TableHead>Email</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {users.map((user) => (
-                  <TableRow key={user.id}>
-                    <TableCell>{user.name}</TableCell>
-                    <TableCell className="capitalize">{user.type}</TableCell>
-                    <TableCell>{user.email}</TableCell>
-                    <TableCell>
-                      <Button
-                        variant="ghost"
-                        size="icon"
-                        className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                        onClick={() => handleRemoveUser(user.id)}
-                      >
-                        <UserMinus className="h-5 w-5" />
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </Card>
+          <div className="bg-white/80 backdrop-blur-sm p-8 rounded-xl shadow-lg border border-medical-accent/20 relative">
+            <UserManagement users={users} />
+          </div>
         </div>
       </div>
-
-      <Dialog open={isDialogOpen} onOpenChange={setIsDialogOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>View Certificate</DialogTitle>
-          </DialogHeader>
-          {selectedCertificate && (
-            <div className="mt-4">
-              <iframe
-                src={selectedCertificate.certificateUrl}
-                className="w-full h-[500px]"
-                title="Certificate Preview"
-              />
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
     </div>
   );
 };
