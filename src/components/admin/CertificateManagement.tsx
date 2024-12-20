@@ -21,15 +21,22 @@ interface Certificate {
   status: string;
 }
 
-export const CertificateManagement = ({ pendingCertificates }: { pendingCertificates: Certificate[] }) => {
+export const CertificateManagement = ({ pendingCertificates: initialCertificates }: { pendingCertificates: Certificate[] }) => {
   const [selectedCertificate, setSelectedCertificate] = useState<Certificate | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [certificates, setCertificates] = useState(initialCertificates);
 
   const handleApprove = (id: number) => {
+    setCertificates((currentCertificates) => 
+      currentCertificates.filter((cert) => cert.id !== id)
+    );
     toast.success("Certificate approved successfully");
   };
 
   const handleReject = (id: number) => {
+    setCertificates((currentCertificates) => 
+      currentCertificates.filter((cert) => cert.id !== id)
+    );
     toast.error("Certificate rejected");
   };
 
@@ -52,7 +59,7 @@ export const CertificateManagement = ({ pendingCertificates }: { pendingCertific
           </TableRow>
         </TableHeader>
         <TableBody>
-          {pendingCertificates.map((cert) => (
+          {certificates.map((cert) => (
             <TableRow key={cert.id}>
               <TableCell>{cert.name}</TableCell>
               <TableCell className="capitalize">{cert.type}</TableCell>
