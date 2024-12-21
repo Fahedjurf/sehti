@@ -5,6 +5,24 @@ import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
 
+interface Certificate {
+  id: number;
+  name: string;
+  type: string;
+  specialization: string;
+  certificateUrl: string;
+  status: string;
+  email: string;
+}
+
+interface User {
+  id: number;
+  name: string;
+  type: string;
+  email: string;
+  status: string;
+}
+
 // Mock data - in a real app, this would come from your backend
 const pendingCertificates = [
   {
@@ -60,10 +78,10 @@ const initialUsers = [
 
 const Admin = () => {
   const navigate = useNavigate();
-  const [users, setUsers] = useState(initialUsers);
+  const [users, setUsers] = useState<User[]>(initialUsers);
 
-  const handleApprovedProfessional = (certificate: any) => {
-    const newUser = {
+  const handleApprovedProfessional = (certificate: Certificate) => {
+    const newUser: User = {
       id: users.length + 1,
       name: certificate.name,
       type: certificate.type,
