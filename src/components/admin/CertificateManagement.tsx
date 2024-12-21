@@ -19,16 +19,26 @@ interface Certificate {
   specialization: string;
   certificateUrl: string;
   status: string;
+  email: string;
 }
 
-export const CertificateManagement = ({ pendingCertificates: initialCertificates }: { pendingCertificates: Certificate[] }) => {
+interface CertificateManagementProps {
+  pendingCertificates: Certificate[];
+  onApprove: (certificate: Certificate) => void;
+}
+
+export const CertificateManagement = ({ 
+  pendingCertificates: initialCertificates,
+  onApprove 
+}: CertificateManagementProps) => {
   const [selectedCertificate, setSelectedCertificate] = useState<Certificate | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [certificates, setCertificates] = useState(initialCertificates);
 
-  const handleApprove = (id: number) => {
+  const handleApprove = (certificate: Certificate) => {
+    onApprove(certificate);
     setCertificates((currentCertificates) => 
-      currentCertificates.filter((cert) => cert.id !== id)
+      currentCertificates.filter((cert) => cert.id !== certificate.id)
     );
     toast.success("Certificate approved successfully");
   };
@@ -79,7 +89,7 @@ export const CertificateManagement = ({ pendingCertificates: initialCertificates
                     variant="ghost"
                     size="icon"
                     className="text-green-600 hover:text-green-700 hover:bg-green-50"
-                    onClick={() => handleApprove(cert.id)}
+                    onClick={() => handleApprove(cert)}
                   >
                     <CheckCircle className="h-5 w-5" />
                   </Button>

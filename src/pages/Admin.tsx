@@ -3,6 +3,7 @@ import { UserManagement } from "@/components/admin/UserManagement";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 
 // Mock data - in a real app, this would come from your backend
 const pendingCertificates = [
@@ -13,6 +14,7 @@ const pendingCertificates = [
     specialization: "Cardiology",
     certificateUrl: "/path/to/certificate.pdf",
     status: "pending",
+    email: "john.smith@example.com",
   },
   {
     id: 2,
@@ -21,10 +23,11 @@ const pendingCertificates = [
     specialization: "Emergency Care",
     certificateUrl: "/path/to/certificate.pdf",
     status: "pending",
+    email: "sarah.johnson@example.com",
   },
 ];
 
-const users = [
+const initialUsers = [
   {
     id: 1,
     name: "Michael Brown",
@@ -57,6 +60,18 @@ const users = [
 
 const Admin = () => {
   const navigate = useNavigate();
+  const [users, setUsers] = useState(initialUsers);
+
+  const handleApprovedProfessional = (certificate: any) => {
+    const newUser = {
+      id: users.length + 1,
+      name: certificate.name,
+      type: certificate.type,
+      email: certificate.email,
+      status: "active",
+    };
+    setUsers((prevUsers) => [...prevUsers, newUser]);
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent relative overflow-hidden">
@@ -90,7 +105,10 @@ const Admin = () => {
 
         <div className="grid gap-6">
           <div className="bg-white/80 backdrop-blur-sm p-8 rounded-xl shadow-lg border border-medical-accent/20 relative">
-            <CertificateManagement pendingCertificates={pendingCertificates} />
+            <CertificateManagement 
+              pendingCertificates={pendingCertificates} 
+              onApprove={handleApprovedProfessional}
+            />
           </div>
 
           <div className="bg-white/80 backdrop-blur-sm p-8 rounded-xl shadow-lg border border-medical-accent/20 relative">
