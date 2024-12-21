@@ -36,11 +36,15 @@ export const CertificateManagement = ({
   const [certificates, setCertificates] = useState(initialCertificates);
 
   const handleApprove = (certificate: Certificate) => {
+    // Call the parent's onApprove function first
     onApprove(certificate);
+    
+    // Then update local state
     setCertificates((currentCertificates) => 
       currentCertificates.filter((cert) => cert.id !== certificate.id)
     );
-    toast.success("Certificate approved successfully");
+    
+    toast.success(`${certificate.name} has been approved and added to users`);
   };
 
   const handleReject = (id: number) => {
