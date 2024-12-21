@@ -23,14 +23,14 @@ interface User {
   status: string;
 }
 
-// Mock data - in a real app, this would come from your backend
+// Mock data with publicly accessible PDF URL
 const pendingCertificates = [
   {
     id: 1,
     name: "Dr. John Smith",
     type: "doctor",
     specialization: "Cardiology",
-    certificateUrl: "/path/to/certificate.pdf",
+    certificateUrl: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
     status: "pending",
     email: "john.smith@example.com",
   },
@@ -39,7 +39,7 @@ const pendingCertificates = [
     name: "Nurse Sarah Johnson",
     type: "nurse",
     specialization: "Emergency Care",
-    certificateUrl: "/path/to/certificate.pdf",
+    certificateUrl: "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
     status: "pending",
     email: "sarah.johnson@example.com",
   },
