@@ -1,103 +1,24 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import mapboxgl from 'mapbox-gl';
-import 'mapbox-gl/dist/mapbox-gl.css';
-
-const nurseServices = [
-  {
-    id: "general",
-    title: "General Care",
-    description: "Basic medical care and assistance with daily activities",
-    estimatedTime: "30 minutes"
-  },
-  {
-    id: "specialized",
-    title: "Specialized Care",
-    description: "Advanced medical procedures and monitoring",
-    estimatedTime: "45 minutes"
-  },
-  {
-    id: "elderly",
-    title: "Elderly Care",
-    description: "Specialized care for elderly patients",
-    estimatedTime: "40 minutes"
-  }
-];
+import { LocationMap } from "@/components/nurses/LocationMap";
+import { ServiceSelection, nurseServices } from "@/components/nurses/ServiceSelection";
 
 const DomesticNurses = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [selectedService, setSelectedService] = useState("");
-  const [mapboxToken, setMapboxToken] = useState("");
   const [location, setLocation] = useState({
     lat: 24.7136,
     lng: 46.6753
   });
-  const mapContainer = useRef<HTMLDivElement>(null);
-  const mapInstance = useRef<mapboxgl.Map | null>(null);
-  const marker = useRef<mapboxgl.Marker | null>(null);
 
-  useEffect(() => {
-    if (!mapContainer.current || !mapboxToken) return;
-
-    // Initialize map
-    mapboxgl.accessToken = mapboxToken;
-    
-    const map = new mapboxgl.Map({
-      container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/streets-v12',
-      center: [location.lng, location.lat],
-      zoom: 15
-    });
-
-    mapInstance.current = map;
-
-    // Add navigation controls
-    map.addControl(new mapboxgl.NavigationControl(), 'top-right');
-
-    // Add marker for current location
-    marker.current = new mapboxgl.Marker()
-      .setLngLat([location.lng, location.lat])
-      .addTo(map);
-
-    // Get user's location
-    if (navigator.geolocation) {
-      navigator.geolocation.getCurrentPosition(
-        (position) => {
-          const newLocation = {
-            lat: position.coords.latitude,
-            lng: position.coords.longitude
-          };
-          setLocation(newLocation);
-          
-          if (mapInstance.current) {
-            mapInstance.current.setCenter([newLocation.lng, newLocation.lat]);
-            marker.current?.setLngLat([newLocation.lng, newLocation.lat]);
-          }
-        },
-        (error) => {
-          console.error("Error getting location:", error);
-          toast({
-            title: "Location Error",
-            description: "Unable to get your current location. Please enable location services.",
-            variant: "destructive"
-          });
-        }
-      );
-    }
-
-    return () => {
-      marker.current?.remove();
-      mapInstance.current?.remove();
-    };
-  }, [mapboxToken]);
+  const handleLocationChange = (lat: number, lng: number) => {
+    setLocation({ lat, lng });
+  };
 
   const handleSubmit = () => {
     if (!selectedService) {
@@ -119,11 +40,8 @@ const DomesticNurses = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent relative overflow-hidden">
-      {/* Decorative elements */}
       <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-medical-accent/20 blur-3xl animate-pulse" />
       <div className="absolute -bottom-32 -left-20 w-96 h-96 rounded-full bg-medical-primary/10 blur-3xl animate-pulse delay-700" />
-      
-      {/* Decorative pattern */}
       <div className="absolute inset-0 bg-grid-medical-primary/[0.03] -z-10" />
 
       <div className="max-w-4xl mx-auto p-6 relative">
@@ -143,53 +61,18 @@ const DomesticNurses = () => {
           <p className="text-gray-600 animate-fade-in delay-100">
             Professional healthcare in the comfort of your home
           </p>
-          {/* Decorative underline */}
           <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-medical-primary/0 via-medical-primary to-medical-primary/0" />
         </div>
 
         <Card className="bg-white/80 backdrop-blur-sm p-8 rounded-xl shadow-lg border border-medical-accent/20 relative mb-6">
-          <div className="mb-4">
-            <Label htmlFor="mapbox-token">Mapbox Token (Temporary - Enter your public token here)</Label>
-            <Input
-              id="mapbox-token"
-              value={mapboxToken}
-              onChange={(e) => setMapboxToken(e.target.value)}
-              placeholder="Enter your Mapbox public token"
-              className="mb-4"
-            />
-          </div>
-
           <div className="h-[300px] w-full mb-6 rounded-lg overflow-hidden border border-medical-light/50">
-            {mapboxToken ? (
-              <div ref={mapContainer} className="w-full h-full" />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                <p className="text-gray-500">Enter your Mapbox token to display the map</p>
-              </div>
-            )}
+            <LocationMap onLocationChange={handleLocationChange} />
           </div>
 
-          <div className="mb-6 relative">
-            <h2 className="text-xl font-semibold mb-4 text-medical-dark">Select Service Type</h2>
-            <RadioGroup
-              value={selectedService}
-              onValueChange={setSelectedService}
-              className="space-y-4"
-            >
-              {nurseServices.map((service) => (
-                <div 
-                  key={service.id} 
-                  className="flex items-start space-x-3 p-4 rounded-lg transition-all duration-300 hover:bg-medical-light/50"
-                >
-                  <RadioGroupItem value={service.id} id={service.id} />
-                  <Label htmlFor={service.id} className="font-medium cursor-pointer">
-                    <div className="text-medical-dark">{service.title}</div>
-                    <div className="text-sm text-gray-600">{service.description}</div>
-                  </Label>
-                </div>
-              ))}
-            </RadioGroup>
-          </div>
+          <ServiceSelection 
+            selectedService={selectedService}
+            onServiceChange={setSelectedService}
+          />
 
           <Button 
             className="w-full bg-medical-primary hover:bg-medical-dark text-white transition-all duration-300"
