@@ -23,7 +23,7 @@ interface User {
   status: string;
 }
 
-// Mock data with publicly accessible PDF URL
+// Mock data with properly formatted URLs
 const pendingCertificates = [
   {
     id: 1,
