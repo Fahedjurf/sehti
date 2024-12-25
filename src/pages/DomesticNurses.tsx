@@ -39,28 +39,31 @@ const DomesticNurses = () => {
     lng: 46.6753
   });
   const mapContainer = useRef<HTMLDivElement>(null);
-  const map = useRef<mapboxgl.Map | null>(null);
+  const mapInstance = useRef<mapboxgl.Map | null>(null);
+  const marker = useRef<mapboxgl.Marker | null>(null);
 
   useEffect(() => {
     if (!mapContainer.current) return;
 
     // Initialize map
-    mapboxgl.accessToken = 'YOUR_MAPBOX_TOKEN'; // Replace with your Mapbox token
+    mapboxgl.accessToken = 'YOUR_MAPBOX_TOKEN';
     
-    map.current = new mapboxgl.Map({
+    const map = new mapboxgl.Map({
       container: mapContainer.current,
       style: 'mapbox://styles/mapbox/streets-v12',
       center: [location.lng, location.lat],
       zoom: 15
     });
 
+    mapInstance.current = map;
+
     // Add navigation controls
-    map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
+    map.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
     // Add marker for current location
-    new mapboxgl.Marker()
+    marker.current = new mapboxgl.Marker()
       .setLngLat([location.lng, location.lat])
-      .addTo(map.current);
+      .addTo(map);
 
     // Get user's location
     if (navigator.geolocation) {
@@ -72,11 +75,9 @@ const DomesticNurses = () => {
           };
           setLocation(newLocation);
           
-          if (map.current) {
-            map.current.setCenter([newLocation.lng, newLocation.lat]);
-            new mapboxgl.Marker()
-              .setLngLat([newLocation.lng, newLocation.lat])
-              .addTo(map.current);
+          if (mapInstance.current) {
+            mapInstance.current.setCenter([newLocation.lng, newLocation.lat]);
+            marker.current?.setLngLat([newLocation.lng, newLocation.lat]);
           }
         },
         (error) => {
@@ -91,9 +92,10 @@ const DomesticNurses = () => {
     }
 
     return () => {
-      map.current?.remove();
+      marker.current?.remove();
+      mapInstance.current?.remove();
     };
-  }, [toast]);
+  }, []);
 
   const handleSubmit = () => {
     if (!selectedService) {
