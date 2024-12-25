@@ -37,7 +37,7 @@ export const LocationMap = ({ onLocationChange }: LocationMapProps) => {
   }, [onLocationChange]);
 
   return (
-    <LoadScript googleMapsApiKey={process.env.VITE_GOOGLE_MAPS_API_KEY || ""}>
+    <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ""}>
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
         center={currentPosition}
