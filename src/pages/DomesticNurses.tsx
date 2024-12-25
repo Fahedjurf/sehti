@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { ArrowLeft } from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
@@ -34,6 +35,7 @@ const DomesticNurses = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [selectedService, setSelectedService] = useState("");
+  const [mapboxToken, setMapboxToken] = useState("");
   const [location, setLocation] = useState({
     lat: 24.7136,
     lng: 46.6753
@@ -43,10 +45,10 @@ const DomesticNurses = () => {
   const marker = useRef<mapboxgl.Marker | null>(null);
 
   useEffect(() => {
-    if (!mapContainer.current) return;
+    if (!mapContainer.current || !mapboxToken) return;
 
     // Initialize map
-    mapboxgl.accessToken = 'YOUR_MAPBOX_TOKEN';
+    mapboxgl.accessToken = mapboxToken;
     
     const map = new mapboxgl.Map({
       container: mapContainer.current,
@@ -95,7 +97,7 @@ const DomesticNurses = () => {
       marker.current?.remove();
       mapInstance.current?.remove();
     };
-  }, []);
+  }, [mapboxToken]);
 
   const handleSubmit = () => {
     if (!selectedService) {
@@ -146,13 +148,25 @@ const DomesticNurses = () => {
         </div>
 
         <Card className="bg-white/80 backdrop-blur-sm p-8 rounded-xl shadow-lg border border-medical-accent/20 relative mb-6">
-          {/* Decorative corner accent */}
-          <div className="absolute -top-2 -right-2 w-20 h-20">
-            <div className="absolute inset-0 bg-medical-primary/20 rounded-br-3xl animate-fade-in" />
+          <div className="mb-4">
+            <Label htmlFor="mapbox-token">Mapbox Token (Temporary - Enter your public token here)</Label>
+            <Input
+              id="mapbox-token"
+              value={mapboxToken}
+              onChange={(e) => setMapboxToken(e.target.value)}
+              placeholder="Enter your Mapbox public token"
+              className="mb-4"
+            />
           </div>
 
           <div className="h-[300px] w-full mb-6 rounded-lg overflow-hidden border border-medical-light/50">
-            <div ref={mapContainer} className="w-full h-full" />
+            {mapboxToken ? (
+              <div ref={mapContainer} className="w-full h-full" />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                <p className="text-gray-500">Enter your Mapbox token to display the map</p>
+              </div>
+            )}
           </div>
 
           <div className="mb-6 relative">
