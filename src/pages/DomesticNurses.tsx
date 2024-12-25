@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -6,7 +6,8 @@ import { ArrowLeft } from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { useToast } from "@/components/ui/use-toast";
-import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import mapboxgl from 'mapbox-gl';
+import 'mapbox-gl/dist/mapbox-gl.css';
 
 const nurseServices = [
   {
@@ -37,16 +38,46 @@ const DomesticNurses = () => {
     lat: 24.7136,
     lng: 46.6753
   });
+  const mapContainer = useRef<HTMLDivElement>(null);
+  const map = useRef<mapboxgl.Map | null>(null);
 
-  // Get user's current location when component mounts
-  useState(() => {
+  useEffect(() => {
+    if (!mapContainer.current) return;
+
+    // Initialize map
+    mapboxgl.accessToken = 'YOUR_MAPBOX_TOKEN'; // Replace with your Mapbox token
+    
+    map.current = new mapboxgl.Map({
+      container: mapContainer.current,
+      style: 'mapbox://styles/mapbox/streets-v12',
+      center: [location.lng, location.lat],
+      zoom: 15
+    });
+
+    // Add navigation controls
+    map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
+
+    // Add marker for current location
+    new mapboxgl.Marker()
+      .setLngLat([location.lng, location.lat])
+      .addTo(map.current);
+
+    // Get user's location
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (position) => {
-          setLocation({
+          const newLocation = {
             lat: position.coords.latitude,
             lng: position.coords.longitude
-          });
+          };
+          setLocation(newLocation);
+          
+          if (map.current) {
+            map.current.setCenter([newLocation.lng, newLocation.lat]);
+            new mapboxgl.Marker()
+              .setLngLat([newLocation.lng, newLocation.lat])
+              .addTo(map.current);
+          }
         },
         (error) => {
           console.error("Error getting location:", error);
@@ -58,7 +89,11 @@ const DomesticNurses = () => {
         }
       );
     }
-  });
+
+    return () => {
+      map.current?.remove();
+    };
+  }, [toast]);
 
   const handleSubmit = () => {
     if (!selectedService) {
@@ -115,15 +150,7 @@ const DomesticNurses = () => {
           </div>
 
           <div className="h-[300px] w-full mb-6 rounded-lg overflow-hidden border border-medical-light/50">
-            <LoadScript googleMapsApiKey="YOUR_GOOGLE_MAPS_API_KEY">
-              <GoogleMap
-                mapContainerStyle={{ width: "100%", height: "100%" }}
-                center={location}
-                zoom={15}
-              >
-                <Marker position={location} />
-              </GoogleMap>
-            </LoadScript>
+            <div ref={mapContainer} className="w-full h-full" />
           </div>
 
           <div className="mb-6 relative">
