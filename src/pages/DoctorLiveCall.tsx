@@ -11,8 +11,18 @@ const DoctorLiveCall = () => {
   const handleReceiveRequests = () => {
     setIsReceiving(true);
     toast.success("You are now receiving call requests");
-    // In a real app, this would connect to a backend service
-    // to handle incoming call requests
+    
+    // Simulate receiving a call after 3 seconds (in a real app, this would be handled by your backend)
+    setTimeout(() => {
+      if (isReceiving) {
+        toast("Incoming call from patient John Doe", {
+          action: {
+            label: "Accept",
+            onClick: () => navigate("/doctor-video-call")
+          },
+        });
+      }
+    }, 3000);
   };
 
   return (

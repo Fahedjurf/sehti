@@ -15,6 +15,7 @@ import PharmaceuticalSupplies from "./pages/PharmaceuticalSupplies";
 import DomesticNurses from "./pages/DomesticNurses";
 import LiveCall from "./pages/LiveCall";
 import DoctorLiveCall from "./pages/DoctorLiveCall";
+import DoctorVideoCall from "./pages/DoctorVideoCall";
 import Schedule from "./pages/Schedule";
 import Admin from "./pages/Admin";
 
@@ -39,6 +40,7 @@ const App = () => (
             <Route path="/domestic-nurses" element={<DomesticNurses />} />
             <Route path="/live-call" element={<LiveCall />} />
             <Route path="/doctor-live-call" element={<DoctorLiveCall />} />
+            <Route path="/doctor-video-call" element={<DoctorVideoCall />} />
             <Route path="/schedule" element={<Schedule />} />
             <Route path="/admin" element={<Admin />} />
           </Routes>
