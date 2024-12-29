@@ -3,22 +3,9 @@ import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { Message } from "@/components/live-call/types";
 import { Product } from "@/components/pharmacy/types";
-import { ReceivingCall } from "@/components/live-call/ReceivingCall";
 import { ConsultationView } from "@/components/live-call/ConsultationView";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
+import { Phone } from "lucide-react";
 
 // Mock medical history data - in a real app, this would come from an API
 const mockMedicalHistory = [
@@ -50,9 +37,34 @@ const DoctorLiveCall = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [prescriptions, setPrescriptions] = useState<Product[]>([]);
-  const [showMedicalHistory, setShowMedicalHistory] = useState(false);
+  const [isReceivingCalls, setIsReceivingCalls] = useState(false);
   const [isCallAccepted, setIsCallAccepted] = useState(false);
   const { toast } = useToast();
+
+  const handleToggleReceiving = () => {
+    setIsReceivingCalls(!isReceivingCalls);
+    if (!isReceivingCalls) {
+      toast({
+        title: "Now Receiving Calls",
+        description: "You will be notified when a patient calls.",
+      });
+      // Simulate receiving a call after 3 seconds when turned on
+      setTimeout(() => {
+        if (isReceivingCalls) {
+          setIsCallAccepted(true);
+          toast({
+            title: "Call Connected",
+            description: "You are now connected with John Doe.",
+          });
+        }
+      }, 3000);
+    } else {
+      toast({
+        title: "Call Receiving Turned Off",
+        description: "You will not receive any calls.",
+      });
+    }
+  };
 
   const handleSendMessage = () => {
     if (newMessage.trim()) {
@@ -79,25 +91,11 @@ const DoctorLiveCall = () => {
   };
 
   const handleEndCall = () => {
+    setIsCallAccepted(false);
+    setIsReceivingCalls(false);
     toast({
       title: "Call Ended",
       description: "The consultation has been completed.",
-    });
-    navigate("/doctor-dashboard");
-  };
-
-  const handleAcceptCall = () => {
-    setIsCallAccepted(true);
-    toast({
-      title: "Call Connected",
-      description: "You are now connected with the patient.",
-    });
-  };
-
-  const handleDeclineCall = () => {
-    toast({
-      title: "Call Declined",
-      description: "You have declined the call.",
     });
     navigate("/doctor-dashboard");
   };
@@ -118,59 +116,45 @@ const DoctorLiveCall = () => {
     });
   };
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent p-6">
-      {!isCallAccepted ? (
-        <ReceivingCall
-          patientName="John Doe"
-          onAccept={handleAcceptCall}
-          onDecline={handleDeclineCall}
-        />
-      ) : (
-        <ConsultationView
-          onBack={() => navigate("/doctor-dashboard")}
-          onEndCall={handleEndCall}
-          onViewHistory={() => setShowMedicalHistory(true)}
-          messages={messages}
-          newMessage={newMessage}
-          onMessageChange={setNewMessage}
-          onSendMessage={handleSendMessage}
-          prescriptions={prescriptions}
-          onAddPrescription={handleAddPrescription}
-          onRemovePrescription={handleRemovePrescription}
-        />
-      )}
+  if (!isCallAccepted) {
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent p-6 flex items-center justify-center">
+        <div className="text-center space-y-8">
+          <Button
+            onClick={handleToggleReceiving}
+            className={`w-48 h-48 rounded-full text-xl font-semibold transition-all duration-300 ${
+              isReceivingCalls 
+                ? 'bg-medical-primary hover:bg-medical-primary/90 animate-pulse'
+                : 'bg-gray-200 hover:bg-gray-300'
+            }`}
+          >
+            <div className="flex flex-col items-center gap-4">
+              <Phone className="w-12 h-12" />
+              <span>{isReceivingCalls ? 'Receiving Calls...' : 'Start Receiving'}</span>
+            </div>
+          </Button>
+          {isReceivingCalls && (
+            <p className="text-medical-primary animate-pulse">
+              Waiting for patient calls...
+            </p>
+          )}
+        </div>
+      </div>
+    );
+  }
 
-      <Dialog open={showMedicalHistory} onOpenChange={setShowMedicalHistory}>
-        <DialogContent className="max-w-4xl">
-          <DialogHeader>
-            <DialogTitle>Patient Medical History</DialogTitle>
-          </DialogHeader>
-          <div className="mt-4">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Date</TableHead>
-                  <TableHead>Diagnosis</TableHead>
-                  <TableHead>Treatment</TableHead>
-                  <TableHead>Doctor</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {mockMedicalHistory.map((record) => (
-                  <TableRow key={record.id}>
-                    <TableCell>{record.date}</TableCell>
-                    <TableCell>{record.diagnosis}</TableCell>
-                    <TableCell>{record.treatment}</TableCell>
-                    <TableCell>{record.doctor}</TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </div>
-        </DialogContent>
-      </Dialog>
-    </div>
+  return (
+    <ConsultationView
+      onBack={() => navigate("/doctor-dashboard")}
+      onEndCall={handleEndCall}
+      messages={messages}
+      newMessage={newMessage}
+      onMessageChange={setNewMessage}
+      onSendMessage={handleSendMessage}
+      prescriptions={prescriptions}
+      onAddPrescription={handleAddPrescription}
+      onRemovePrescription={handleRemovePrescription}
+    />
   );
 };
 
