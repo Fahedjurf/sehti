@@ -7,7 +7,6 @@ import { ConsultationView } from "@/components/live-call/ConsultationView";
 import { Button } from "@/components/ui/button";
 import { Phone } from "lucide-react";
 
-// Mock medical history data - in a real app, this would come from an API
 const mockMedicalHistory = [
   {
     id: 1,
@@ -100,6 +99,14 @@ const DoctorLiveCall = () => {
     navigate("/doctor-dashboard");
   };
 
+  const handleViewHistory = () => {
+    toast({
+      title: "Medical History",
+      description: "Viewing patient's medical history.",
+    });
+    // You can implement additional logic here, like opening a modal or navigating to a history page
+  };
+
   const handleAddPrescription = (product: Product) => {
     setPrescriptions(prev => [...prev, product]);
     toast({
@@ -147,6 +154,7 @@ const DoctorLiveCall = () => {
     <ConsultationView
       onBack={() => navigate("/doctor-dashboard")}
       onEndCall={handleEndCall}
+      onViewHistory={handleViewHistory}
       messages={messages}
       newMessage={newMessage}
       onMessageChange={setNewMessage}
