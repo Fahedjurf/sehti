@@ -1,4 +1,4 @@
-import { UserRound, MoreVertical } from "lucide-react";
+import { UserRound, MoreVertical, PhoneCall, Calendar } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -38,6 +38,14 @@ const DoctorDashboard = () => {
     navigate("/");
   };
 
+  const handleLiveCall = () => {
+    navigate("/doctor-live-call");
+  };
+
+  const handleSchedule = () => {
+    navigate("/schedule");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent p-6">
       <div className="max-w-7xl mx-auto space-y-8">
@@ -74,6 +82,32 @@ const DoctorDashboard = () => {
 
         {/* Statistics Section */}
         <DashboardStats />
+
+        {/* Quick Actions Section */}
+        <div className="grid grid-cols-2 gap-6 mb-8">
+          <div 
+            onClick={handleLiveCall}
+            className="bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-medical-light/50 hover:shadow-xl transition-all duration-300 cursor-pointer"
+          >
+            <div className="flex flex-col items-center text-center space-y-4">
+              <div className="p-3 bg-medical-light rounded-full">
+                <PhoneCall className="h-8 w-8 text-medical-primary" />
+              </div>
+              <h3 className="text-xl font-semibold text-medical-dark">Start Live Call</h3>
+            </div>
+          </div>
+          <div 
+            onClick={handleSchedule}
+            className="bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-medical-light/50 hover:shadow-xl transition-all duration-300 cursor-pointer"
+          >
+            <div className="flex flex-col items-center text-center space-y-4">
+              <div className="p-3 bg-medical-light rounded-full">
+                <Calendar className="h-8 w-8 text-medical-primary" />
+              </div>
+              <h3 className="text-xl font-semibold text-medical-dark">View Schedule</h3>
+            </div>
+          </div>
+        </div>
 
         {/* Medical Quote and Schedule Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
