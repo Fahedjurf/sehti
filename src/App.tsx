@@ -16,6 +16,7 @@ import DomesticNurses from "./pages/DomesticNurses";
 import LiveCall from "./pages/LiveCall";
 import DoctorLiveCall from "./pages/DoctorLiveCall";
 import DoctorVideoCall from "./pages/DoctorVideoCall";
+import PatientVideoCall from "./pages/PatientVideoCall";
 import Schedule from "./pages/Schedule";
 import Admin from "./pages/Admin";
 import DeliveryTracking from "./pages/DeliveryTracking";
@@ -43,6 +44,7 @@ const App = () => (
             <Route path="/live-call" element={<LiveCall />} />
             <Route path="/doctor-live-call" element={<DoctorLiveCall />} />
             <Route path="/doctor-video-call" element={<DoctorVideoCall />} />
+            <Route path="/patient-video-call" element={<PatientVideoCall />} />
             <Route path="/schedule" element={<Schedule />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/delivery-tracking" element={<DeliveryTracking />} />
