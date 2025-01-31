@@ -13,6 +13,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
+import { Button } from "@/components/ui/button";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DashboardStats } from "@/components/doctor/DashboardStats";
@@ -31,6 +32,7 @@ const nurseProfile = {
 
 const NurseDashboard = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
+  const [isAvailable, setIsAvailable] = useState(false);
   const navigate = useNavigate();
 
   const handleSignOut = () => {
@@ -39,6 +41,10 @@ const NurseDashboard = () => {
 
   const handleSchedule = () => {
     navigate("/schedule");
+  };
+
+  const toggleAvailability = () => {
+    setIsAvailable(!isAvailable);
   };
 
   return (
@@ -78,7 +84,7 @@ const NurseDashboard = () => {
         <DashboardStats />
 
         {/* Quick Actions Section */}
-        <div className="grid grid-cols-1 gap-6 mb-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <div 
             onClick={handleSchedule}
             className="bg-white/80 backdrop-blur-sm p-6 rounded-xl shadow-lg border border-medical-light/50 hover:shadow-xl transition-all duration-300 cursor-pointer"
@@ -90,6 +96,16 @@ const NurseDashboard = () => {
               <h3 className="text-xl font-semibold text-medical-dark">View Schedule</h3>
             </div>
           </div>
+
+          <Button
+            onClick={toggleAvailability}
+            variant={isAvailable ? "default" : "secondary"}
+            className={`h-full min-h-[200px] text-xl font-semibold ${
+              isAvailable ? 'bg-medical-primary hover:bg-medical-primary/90' : 'bg-gray-100 hover:bg-gray-200'
+            }`}
+          >
+            {isAvailable ? "Available" : "Not Available"}
+          </Button>
         </div>
 
         {/* Medical Quote and Schedule Section */}
