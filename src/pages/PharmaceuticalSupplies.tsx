@@ -83,6 +83,10 @@ const PharmaceuticalSupplies = () => {
     }
   };
 
+  const handlePaymentMethodChange = (value: string) => {
+    setPaymentMethod(value);
+  };
+
   const handleCardDetailsSubmit = () => {
     // Store cart items in localStorage before navigation
     localStorage.setItem("orderItems", JSON.stringify(cart));
