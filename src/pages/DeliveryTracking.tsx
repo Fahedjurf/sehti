@@ -36,11 +36,16 @@ const DeliveryTracking = () => {
   });
 
   useEffect(() => {
-    // Get order items from localStorage
     const items = localStorage.getItem("orderItems");
     if (items) {
-      setOrderItems(JSON.parse(items));
-      localStorage.removeItem("orderItems"); // Clean up after retrieving
+      try {
+        const parsedItems = JSON.parse(items);
+        setOrderItems(parsedItems);
+        // Clean up after retrieving
+        localStorage.removeItem("orderItems");
+      } catch (error) {
+        console.error("Error parsing order items:", error);
+      }
     }
   }, []);
 
@@ -48,7 +53,6 @@ const DeliveryTracking = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       setDeliveryStatus((prev) => {
-        // Simulate driver movement
         const newLat = prev.driverLocation.lat + (Math.random() - 0.5) * 0.001;
         const newLng = prev.driverLocation.lng + (Math.random() - 0.5) * 0.001;
 
@@ -89,7 +93,7 @@ const DeliveryTracking = () => {
         <Button
           variant="outline"
           className="mb-6 flex items-center gap-2 bg-white/80 backdrop-blur-sm border-medical-primary text-medical-primary hover:bg-medical-light hover:text-medical-dark transition-all duration-300"
-          onClick={() => navigate("/pharmaceutical-supplies")}
+          onClick={() => navigate("/pharmacy")}
         >
           <ArrowLeft className="h-4 w-4" />
           Back to Pharmacy
@@ -118,7 +122,7 @@ const DeliveryTracking = () => {
             />
           </div>
 
-          {orderItems.length > 0 && (
+          {orderItems && orderItems.length > 0 && (
             <div className="mt-8">
               <h2 className="text-xl font-semibold mb-4">Order Details</h2>
               <div className="rounded-lg border">
