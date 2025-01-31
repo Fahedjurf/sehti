@@ -85,15 +85,37 @@ const NurseDashboard = () => {
 
         {/* Quick Actions Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-          <Button
-            onClick={toggleAvailability}
-            variant={isAvailable ? "default" : "secondary"}
-            className={`h-full min-h-[200px] text-xl font-semibold ${
-              isAvailable ? 'bg-medical-primary hover:bg-medical-primary/90' : 'bg-gray-100 hover:bg-gray-200'
-            }`}
-          >
-            {isAvailable ? "Available" : "Not Available"}
-          </Button>
+          <div className={`relative overflow-hidden rounded-xl shadow-lg transition-all duration-300 ${
+            isAvailable 
+              ? 'bg-gradient-to-br from-medical-primary to-medical-dark border-2 border-medical-primary/20' 
+              : 'bg-gradient-to-br from-gray-50 to-gray-100 border-2 border-gray-200'
+          }`}>
+            <div className="absolute inset-0 bg-grid-medical-primary opacity-10"></div>
+            <Button
+              onClick={toggleAvailability}
+              variant={isAvailable ? "default" : "secondary"}
+              className={`relative w-full h-full min-h-[200px] text-xl font-semibold transition-all duration-300 ${
+                isAvailable 
+                  ? 'text-white hover:bg-medical-dark/10' 
+                  : 'text-gray-700 hover:bg-gray-200/50'
+              }`}
+            >
+              <div className="flex flex-col items-center gap-4">
+                <div className={`p-4 rounded-full ${
+                  isAvailable 
+                    ? 'bg-white/20' 
+                    : 'bg-gray-200'
+                }`}>
+                  <UserRound className={`h-8 w-8 ${
+                    isAvailable 
+                      ? 'text-white' 
+                      : 'text-gray-600'
+                  }`} />
+                </div>
+                {isAvailable ? "Available" : "Not Available"}
+              </div>
+            </Button>
+          </div>
 
           <div 
             onClick={handleSchedule}
