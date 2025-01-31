@@ -83,7 +83,7 @@ const Index = () => {
                 {t("medicalHistory")}
               </DropdownMenuItem>
               <LanguageToggle />
-              <DropdownMenuItem>{t("help")}</DropdownMenuItem>
+              <DropdownMenuItem>{t("helpCenter")}</DropdownMenuItem>
               <DropdownMenuItem onClick={handleSignOut} className="text-red-600">
                 {t("signOut")}
               </DropdownMenuItem>
