@@ -21,7 +21,7 @@ const LiveCall = () => {
         title: "Doctor Connected",
         description: "You are being connected to the doctor...",
       });
-      navigate("/doctor-live-call");
+      navigate("/patient-video-call");
     }, 10000);
 
     return () => {
