@@ -93,7 +93,7 @@ export const UserDetailsDialog = ({
           ) : (
             <div className="flex items-center justify-between w-full">
               <span className="text-gray-900">
-                {value || "Not set"}
+                {field === "password" && !value ? "Change password" : value}
               </span>
               <Button
                 size="sm"
