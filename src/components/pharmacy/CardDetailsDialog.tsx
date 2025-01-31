@@ -3,6 +3,7 @@ import {
   DialogContent,
   DialogHeader,
   DialogTitle,
+  DialogDescription,
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -30,6 +31,9 @@ export const CardDetailsDialog = ({
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Enter Card Details</DialogTitle>
+          <DialogDescription>
+            Please enter your payment information to complete the purchase.
+          </DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid gap-2">
