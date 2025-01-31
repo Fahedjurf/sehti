@@ -4,6 +4,12 @@ import { useState, useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 interface Certificate {
   id: number;
@@ -87,6 +93,8 @@ const initialUsers = [
 const Admin = () => {
   const [users, setUsers] = useState<User[]>(initialUsers);
   const [helpRequests, setHelpRequests] = useState<HelpRequest[]>([]);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [showUserDialog, setShowUserDialog] = useState(false);
 
   useEffect(() => {
     // Load help requests from localStorage
@@ -114,6 +122,18 @@ const Admin = () => {
     setHelpRequests(updatedRequests);
     localStorage.setItem("helpRequests", JSON.stringify(updatedRequests));
     toast.success("Help request marked as resolved");
+  };
+
+  const getUserByEmail = (email: string): User | undefined => {
+    return users.find(user => user.email === email);
+  };
+
+  const handleShowUserDetails = (email: string) => {
+    const user = getUserByEmail(email);
+    if (user) {
+      setSelectedUser(user);
+      setShowUserDialog(true);
+    }
   };
 
   return (
@@ -153,44 +173,74 @@ const Admin = () => {
                 {helpRequests.length === 0 ? (
                   <p className="text-center text-gray-500">No help requests yet</p>
                 ) : (
-                  helpRequests.map((request) => (
-                    <div
-                      key={request.id}
-                      className="p-4 bg-white rounded-lg border border-gray-200 shadow-sm"
-                    >
-                      <div className="flex justify-between items-start mb-2">
-                        <div>
-                          <p className="font-medium text-medical-dark">{request.userEmail}</p>
-                          <p className="text-sm text-gray-500">
-                            {new Date(request.timestamp).toLocaleString()}
-                          </p>
+                  helpRequests.map((request) => {
+                    const user = getUserByEmail(request.userEmail);
+                    return (
+                      <div
+                        key={request.id}
+                        className="p-4 bg-white rounded-lg border border-gray-200 shadow-sm"
+                      >
+                        <div className="flex justify-between items-start mb-2">
+                          <div>
+                            <button
+                              onClick={() => handleShowUserDetails(request.userEmail)}
+                              className="font-medium text-medical-primary hover:text-medical-dark transition-colors"
+                            >
+                              {user?.name || 'Unknown User'}
+                            </button>
+                            <p className="text-sm text-gray-500">
+                              {new Date(request.timestamp).toLocaleString()}
+                            </p>
+                          </div>
+                          <span className={`px-2 py-1 rounded-full text-xs ${
+                            request.status === "pending" 
+                              ? "bg-yellow-100 text-yellow-800" 
+                              : "bg-green-100 text-green-800"
+                          }`}>
+                            {request.status}
+                          </span>
                         </div>
-                        <span className={`px-2 py-1 rounded-full text-xs ${
-                          request.status === "pending" 
-                            ? "bg-yellow-100 text-yellow-800" 
-                            : "bg-green-100 text-green-800"
-                        }`}>
-                          {request.status}
-                        </span>
+                        <p className="text-gray-700 mb-4">{request.message}</p>
+                        {request.status === "pending" && (
+                          <Button
+                            size="sm"
+                            onClick={() => handleResolveHelpRequest(request.id)}
+                            className="w-full"
+                          >
+                            Mark as Resolved
+                          </Button>
+                        )}
                       </div>
-                      <p className="text-gray-700 mb-4">{request.message}</p>
-                      {request.status === "pending" && (
-                        <Button
-                          size="sm"
-                          onClick={() => handleResolveHelpRequest(request.id)}
-                          className="w-full"
-                        >
-                          Mark as Resolved
-                        </Button>
-                      )}
-                    </div>
-                  ))
+                    );
+                  })
                 )}
               </div>
             </ScrollArea>
           </div>
         </div>
       </div>
+
+      <Dialog open={showUserDialog} onOpenChange={setShowUserDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>User Details</DialogTitle>
+          </DialogHeader>
+          {selectedUser && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-2">
+                <div className="text-sm font-medium text-gray-500">Name:</div>
+                <div>{selectedUser.name}</div>
+                <div className="text-sm font-medium text-gray-500">Email:</div>
+                <div>{selectedUser.email}</div>
+                <div className="text-sm font-medium text-gray-500">Type:</div>
+                <div className="capitalize">{selectedUser.type}</div>
+                <div className="text-sm font-medium text-gray-500">Status:</div>
+                <div className="capitalize">{selectedUser.status}</div>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
