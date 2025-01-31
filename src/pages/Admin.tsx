@@ -152,6 +152,7 @@ const Admin = () => {
     if (user) {
       setSelectedUser(user);
       setShowUserDialog(true);
+      setEditingField(null);
     }
   };
 
@@ -253,7 +254,7 @@ const Admin = () => {
                           <div>
                             <button
                               onClick={() => handleShowUserDetails(request.userEmail)}
-                              className="font-medium text-medical-primary hover:text-medical-dark transition-colors"
+                              className="font-medium text-medical-primary hover:text-medical-dark transition-colors hover:underline"
                             >
                               {user?.name || 'Unknown User'}
                             </button>
@@ -297,218 +298,23 @@ const Admin = () => {
           {selectedUser && (
             <div className="space-y-4">
               <div className="grid gap-4">
-                {/* Name Field */}
-                <div className="space-y-2">
-                  <Label>Name</Label>
-                  <div className="flex items-center gap-2">
-                    {editingField === 'name' ? (
-                      <div className="flex-1 flex gap-2">
-                        <Input
-                          value={tempValue}
-                          onChange={(e) => setTempValue(e.target.value)}
-                          className="flex-1"
-                        />
-                        <Button size="sm" onClick={() => handleSave('name')}>Save</Button>
-                        <Button size="sm" variant="outline" onClick={() => setEditingField(null)}>Cancel</Button>
-                      </div>
-                    ) : (
-                      <div className="flex-1 flex items-center justify-between">
-                        <span className="text-gray-900">{selectedUser.name}</span>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => handleEdit('name', selectedUser.name)}
-                        >
-                          Edit
-                        </Button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Email Field */}
-                <div className="space-y-2">
-                  <Label>Email</Label>
-                  <div className="flex items-center gap-2">
-                    {showPasswordConfirm ? (
-                      <div className="space-y-4 w-full">
-                        <Input
-                          type="email"
-                          value={tempEmail}
-                          onChange={(e) => setTempEmail(e.target.value)}
-                          placeholder="New email"
-                        />
-                        <Input
-                          type="password"
-                          value={confirmPassword}
-                          onChange={(e) => setConfirmPassword(e.target.value)}
-                          placeholder="Enter password to confirm"
-                        />
-                        <div className="flex gap-2 justify-end">
-                          <Button size="sm" onClick={() => handleSave('email')}>Confirm</Button>
-                          <Button 
-                            size="sm" 
-                            variant="outline" 
-                            onClick={() => {
-                              setShowPasswordConfirm(false);
-                              setConfirmPassword("");
-                              setTempEmail("");
-                            }}
-                          >
-                            Cancel
-                          </Button>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="flex-1 flex items-center justify-between">
-                        <span className="text-gray-900">{selectedUser.email}</span>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => handleEdit('email', selectedUser.email)}
-                        >
-                          Edit
-                        </Button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Phone Number Field */}
-                <div className="space-y-2">
-                  <Label>Phone Number</Label>
-                  <div className="flex items-center gap-2">
-                    {showOTPConfirm ? (
-                      <div className="space-y-4 w-full">
-                        <Input
-                          type="tel"
-                          value={tempPhone}
-                          onChange={(e) => setTempPhone(e.target.value)}
-                          placeholder="New phone number"
-                        />
-                        <Input
-                          type="text"
-                          value={otp}
-                          onChange={(e) => setOtp(e.target.value)}
-                          placeholder="Enter OTP"
-                          maxLength={6}
-                        />
-                        <div className="flex gap-2 justify-end">
-                          <Button size="sm" onClick={() => handleSave('phoneNumber')}>Verify</Button>
-                          <Button 
-                            size="sm" 
-                            variant="outline" 
-                            onClick={() => {
-                              setShowOTPConfirm(false);
-                              setOtp("");
-                              setTempPhone("");
-                            }}
-                          >
-                            Cancel
-                          </Button>
-                        </div>
-                      </div>
-                    ) : (
-                      <div className="flex-1 flex items-center justify-between">
-                        <span className="text-gray-900">{selectedUser.phoneNumber || "Not set"}</span>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => handleEdit('phoneNumber', selectedUser.phoneNumber || "")}
-                        >
-                          Edit
-                        </Button>
-                      </div>
-                    )}
-                  </div>
-                </div>
-
-                {/* Status Field (only for doctors and nurses) */}
-                {selectedUser.type !== "patient" && (
-                  <div className="space-y-2">
-                    <Label>Status</Label>
-                    <div className="flex items-center gap-2">
-                      <div className="flex-1 flex items-center justify-between">
-                        <span className="text-gray-900">{selectedUser.status}</span>
-                        <Button
-                          size="sm"
-                          variant="ghost"
-                          onClick={() => {
-                            const newStatus = selectedUser.status === "active" ? "inactive" : "active";
-                            setUsers(users.map(u =>
-                              u.id === selectedUser.id ? { ...u, status: newStatus } : u
-                            ));
-                            setSelectedUser({ ...selectedUser, status: newStatus });
-                            toast.success("Status updated successfully");
-                          }}
-                        >
-                          Toggle
-                        </Button>
-                      </div>
-                    </div>
-                  </div>
-                )}
-
-                {/* Professional Fields (only for doctors and nurses) */}
-                {(selectedUser.type === "doctor" || selectedUser.type === "nurse") && (
+                {renderField("Name", selectedUser.name, "name")}
+                {renderField("Email", selectedUser.email, "email")}
+                {renderField("Password", selectedUser.password, "password")}
+                {renderField("Phone Number", selectedUser.phoneNumber, "phoneNumber")}
+                {renderField("Address", selectedUser.address, "address")}
+                {selectedUser.type === "doctor" && (
                   <>
-                    {/* Specialization Field */}
-                    <div className="space-y-2">
-                      <Label>Specialization</Label>
-                      <div className="flex items-center gap-2">
-                        {editingField === 'specialization' ? (
-                          <div className="flex-1 flex gap-2">
-                            <Input
-                              value={tempValue}
-                              onChange={(e) => setTempValue(e.target.value)}
-                              className="flex-1"
-                            />
-                            <Button size="sm" onClick={() => handleSave('specialization')}>Save</Button>
-                            <Button size="sm" variant="outline" onClick={() => setEditingField(null)}>Cancel</Button>
-                          </div>
-                        ) : (
-                          <div className="flex-1 flex items-center justify-between">
-                            <span className="text-gray-900">{selectedUser.specialization || "Not set"}</span>
-                            <Button
-                              size="sm"
-                              variant="ghost"
-                              onClick={() => handleEdit('specialization', selectedUser.specialization || "")}
-                            >
-                              Edit
-                            </Button>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-
-                    {/* Experience Field */}
-                    <div className="space-y-2">
-                      <Label>Experience</Label>
-                      <div className="flex items-center gap-2">
-                        {editingField === 'experience' ? (
-                          <div className="flex-1 flex gap-2">
-                            <Input
-                              value={tempValue}
-                              onChange={(e) => setTempValue(e.target.value)}
-                              className="flex-1"
-                            />
-                            <Button size="sm" onClick={() => handleSave('experience')}>Save</Button>
-                            <Button size="sm" variant="outline" onClick={() => setEditingField(null)}>Cancel</Button>
-                          </div>
-                        ) : (
-                          <div className="flex-1 flex items-center justify-between">
-                            <span className="text-gray-900">{selectedUser.experience || "Not set"}</span>
-                            <Button
-                              size="sm"
-                              variant="ghost"
-                              onClick={() => handleEdit('experience', selectedUser.experience || "")}
-                            >
-                              Edit
-                            </Button>
-                          </div>
-                        )}
-                      </div>
-                    </div>
+                    {renderField("Specialization", selectedUser.specialization, "specialization")}
+                    {renderField("Experience", selectedUser.experience, "experience")}
+                    {renderField("Status", selectedUser.status, "status")}
+                  </>
+                )}
+                {selectedUser.type === "nurse" && (
+                  <>
+                    {renderField("Specialization", selectedUser.specialization, "specialization")}
+                    {renderField("Experience", selectedUser.experience, "experience")}
+                    {renderField("Status", selectedUser.status, "status")}
                   </>
                 )}
               </div>
