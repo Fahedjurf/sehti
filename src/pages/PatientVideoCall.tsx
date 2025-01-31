@@ -49,13 +49,12 @@ const PatientVideoCall = () => {
     navigate("/dashboard");
   };
 
-  const handleGoToPharmacy = () => {
+  const handleAddToPharmacy = () => {
     localStorage.setItem('prescribedMedications', JSON.stringify(prescriptions));
     toast({
       title: "Prescriptions Added",
-      description: "Your prescriptions have been added to your cart.",
+      description: "Your prescriptions have been added to your pharmacy cart. You can view them later in the pharmacy section.",
     });
-    navigate("/pharmacy");
   };
 
   return (
@@ -117,7 +116,7 @@ const PatientVideoCall = () => {
                   {prescriptions.length > 0 && (
                     <Button
                       className="w-full mt-4 flex items-center gap-2"
-                      onClick={handleGoToPharmacy}
+                      onClick={handleAddToPharmacy}
                     >
                       <ShoppingCart className="h-4 w-4" />
                       Order Prescribed Medications
