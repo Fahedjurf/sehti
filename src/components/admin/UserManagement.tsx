@@ -9,8 +9,15 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { UserMinus, UserPlus, Search } from "lucide-react";
+import { UserMinus, UserPlus, Search, Star } from "lucide-react";
 import { toast } from "sonner";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+} from "@/components/ui/dialog";
 
 interface User {
   id: number;
@@ -18,11 +25,21 @@ interface User {
   type: string;
   email: string;
   status: string;
+  feedback?: {
+    rating: number;
+    comment: string;
+    patientName: string;
+    patientEmail: string;
+    patientPhone: string;
+    date: string;
+  }[];
 }
 
 export const UserManagement = ({ users: initialUsers }: { users: User[] }) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [users, setUsers] = useState(initialUsers);
+  const [selectedUser, setSelectedUser] = useState<User | null>(null);
+  const [showFeedbackDialog, setShowFeedbackDialog] = useState(false);
 
   const filteredUsers = users.filter(
     (user) =>
@@ -37,8 +54,12 @@ export const UserManagement = ({ users: initialUsers }: { users: User[] }) => {
   };
 
   const handleAddUser = () => {
-    // Navigate to signup page or open modal
     toast.info("Redirecting to add user...");
+  };
+
+  const handleShowFeedback = (user: User) => {
+    setSelectedUser(user);
+    setShowFeedbackDialog(true);
   };
 
   return (
@@ -70,6 +91,7 @@ export const UserManagement = ({ users: initialUsers }: { users: User[] }) => {
             <TableHead>Name</TableHead>
             <TableHead>Type</TableHead>
             <TableHead>Email</TableHead>
+            <TableHead>Feedback</TableHead>
             <TableHead>Actions</TableHead>
           </TableRow>
         </TableHeader>
@@ -79,6 +101,19 @@ export const UserManagement = ({ users: initialUsers }: { users: User[] }) => {
               <TableCell>{user.name}</TableCell>
               <TableCell className="capitalize">{user.type}</TableCell>
               <TableCell>{user.email}</TableCell>
+              <TableCell>
+                {user.feedback && user.feedback.length > 0 && (
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => handleShowFeedback(user)}
+                    className="text-medical-primary hover:text-medical-dark"
+                  >
+                    <Star className="h-4 w-4 mr-1" />
+                    {user.feedback.length} Reviews
+                  </Button>
+                )}
+              </TableCell>
               <TableCell>
                 <Button
                   variant="ghost"
@@ -93,6 +128,55 @@ export const UserManagement = ({ users: initialUsers }: { users: User[] }) => {
           ))}
         </TableBody>
       </Table>
+
+      <Dialog open={showFeedbackDialog} onOpenChange={setShowFeedbackDialog}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Feedback for {selectedUser?.name}</DialogTitle>
+            <DialogDescription>
+              <div className="space-y-4 mt-4">
+                {selectedUser?.feedback?.map((feedback, index) => (
+                  <div
+                    key={index}
+                    className="bg-white p-4 rounded-lg border border-gray-200"
+                  >
+                    <div className="flex justify-between items-start mb-2">
+                      <div>
+                        <div className="flex items-center gap-1 mb-1">
+                          {Array.from({ length: 5 }).map((_, i) => (
+                            <Star
+                              key={i}
+                              className={`w-4 h-4 ${
+                                i < feedback.rating
+                                  ? "text-yellow-400 fill-yellow-400"
+                                  : "text-gray-300"
+                              }`}
+                            />
+                          ))}
+                        </div>
+                        <p className="text-sm text-gray-600">
+                          {new Date(feedback.date).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-medium">{feedback.patientName}</p>
+                        <p className="text-sm text-gray-600">{feedback.patientEmail}</p>
+                        <p className="text-sm text-gray-600">{feedback.patientPhone}</p>
+                      </div>
+                    </div>
+                    {feedback.comment && (
+                      <p className="text-gray-700 mt-2">{feedback.comment}</p>
+                    )}
+                  </div>
+                ))}
+                {(!selectedUser?.feedback || selectedUser.feedback.length === 0) && (
+                  <p className="text-center text-gray-500">No feedback yet</p>
+                )}
+              </div>
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };

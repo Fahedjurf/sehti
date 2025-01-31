@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, User, Calendar, Clipboard, Heart, Stethoscope } from "lucide-react";
+import { ArrowLeft, User, Calendar, Clipboard, Heart, Stethoscope, Star, StarOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Textarea } from "@/components/ui/textarea";
 import {
   Dialog,
   DialogContent,
@@ -9,7 +11,7 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { useState } from "react";
+import { toast } from "sonner";
 
 interface MedicalReport {
   id: string;
@@ -20,37 +22,30 @@ interface MedicalReport {
   serviceType: string;
 }
 
-// Mock data - in a real app, this would come from an API
-const mockReports: MedicalReport[] = [
-  {
-    id: "1",
-    date: "2024-03-15 14:30",
-    hospitalAddress: "123 Medical Center, Health City",
-    details: "Regular checkup - Blood pressure normal, heart rate stable",
-    doctorName: "Dr. Sarah Johnson",
-    serviceType: "Quick Diagnosis"
-  },
-  {
-    id: "2",
-    date: "2024-02-28 09:15",
-    hospitalAddress: "456 City Hospital, Downtown",
-    details: "Flu symptoms treatment - Prescribed antibiotics and rest",
-    doctorName: "Dr. Michael Chen",
-    serviceType: "Live Call Consultation"
-  },
-  {
-    id: "3",
-    date: "2024-01-10 11:45",
-    hospitalAddress: "789 Family Clinic, Westside",
-    details: "Annual physical examination - All tests within normal range",
-    doctorName: "Dr. Emily Williams",
-    serviceType: "In-Person Visit"
-  }
-];
+interface Feedback {
+  reportId: string;
+  rating: number;
+  comment: string;
+  patientName: string;
+  patientEmail: string;
+  patientPhone: string;
+  doctorName: string;
+  date: string;
+}
 
 const MedicalHistory = () => {
   const navigate = useNavigate();
   const [selectedReport, setSelectedReport] = useState<MedicalReport | null>(null);
+  const [showFeedbackDialog, setShowFeedbackDialog] = useState(false);
+  const [rating, setRating] = useState(0);
+  const [comment, setComment] = useState("");
+
+  // Mock patient data - in a real app this would come from auth context
+  const patientInfo = {
+    name: "John Doe",
+    email: "john.doe@example.com",
+    phone: "+1234567890"
+  };
 
   const handleGoBack = () => {
     navigate("/dashboard");
@@ -60,18 +55,29 @@ const MedicalHistory = () => {
     setSelectedReport(report);
   };
 
-  // Map service types to icons
-  const getIconForServiceType = (serviceType: string) => {
-    switch (serviceType) {
-      case "Quick Diagnosis":
-        return <Stethoscope className="w-16 h-16 text-medical-primary" />;
-      case "Live Call Consultation":
-        return <Heart className="w-16 h-16 text-medical-primary" />;
-      case "In-Person Visit":
-        return <User className="w-16 h-16 text-medical-primary" />;
-      default:
-        return <Clipboard className="w-16 h-16 text-medical-primary" />;
+  const handleFeedbackSubmit = () => {
+    if (rating === 0) {
+      toast.error("Please select a rating");
+      return;
     }
+
+    const feedback: Feedback = {
+      reportId: selectedReport?.id || "",
+      rating,
+      comment,
+      patientName: patientInfo.name,
+      patientEmail: patientInfo.email,
+      patientPhone: patientInfo.phone,
+      doctorName: selectedReport?.doctorName || "",
+      date: new Date().toISOString(),
+    };
+
+    // In a real app, this would be an API call to save the feedback
+    console.log("Feedback submitted:", feedback);
+    toast.success("Thank you for your feedback!");
+    setShowFeedbackDialog(false);
+    setRating(0);
+    setComment("");
   };
 
   return (
@@ -155,10 +161,58 @@ const MedicalHistory = () => {
                       </p>
                     </div>
                   </div>
+
+                  <div className="flex justify-center">
+                    <Button
+                      onClick={() => setShowFeedbackDialog(true)}
+                      className="bg-medical-primary hover:bg-medical-dark text-white"
+                    >
+                      Give Feedback
+                    </Button>
+                  </div>
                 </div>
               </DialogDescription>
             </DialogHeader>
           </DialogContent>
+
+          <Dialog open={showFeedbackDialog} onOpenChange={setShowFeedbackDialog}>
+            <DialogContent className="max-w-md">
+              <DialogHeader>
+                <DialogTitle>Rate Your Experience</DialogTitle>
+                <DialogDescription>
+                  <div className="space-y-4 mt-4">
+                    <div className="flex justify-center gap-2">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <button
+                          key={star}
+                          onClick={() => setRating(star)}
+                          className="focus:outline-none"
+                        >
+                          {star <= rating ? (
+                            <Star className="w-8 h-8 text-yellow-400 fill-yellow-400" />
+                          ) : (
+                            <StarOff className="w-8 h-8 text-gray-300" />
+                          )}
+                        </button>
+                      ))}
+                    </div>
+                    <Textarea
+                      placeholder="Share your experience (optional)"
+                      value={comment}
+                      onChange={(e) => setComment(e.target.value)}
+                      className="min-h-[100px]"
+                    />
+                    <Button
+                      onClick={handleFeedbackSubmit}
+                      className="w-full bg-medical-primary hover:bg-medical-dark"
+                    >
+                      Submit Feedback
+                    </Button>
+                  </div>
+                </DialogDescription>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
         </Dialog>
       </div>
     </div>
