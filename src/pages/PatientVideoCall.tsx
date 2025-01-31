@@ -1,15 +1,20 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
-import { X, ArrowLeft } from "lucide-react";
+import { X, ArrowLeft, ShoppingCart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChatSection } from "@/components/live-call/ChatSection";
-import { Message } from "@/components/live-call/types";
+import { PrescriptionCard } from "@/components/live-call/PrescriptionCard";
+import { Message, Prescription } from "@/components/live-call/types";
+import { samplePrescriptions } from "@/components/live-call/samplePrescriptions";
 
 const PatientVideoCall = () => {
   const navigate = useNavigate();
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
+  const [prescriptions] = useState<Prescription[]>(samplePrescriptions);
   const { toast } = useToast();
 
   const handleSendMessage = () => {
@@ -44,6 +49,15 @@ const PatientVideoCall = () => {
     navigate("/dashboard");
   };
 
+  const handleGoToPharmacy = () => {
+    localStorage.setItem('prescribedMedications', JSON.stringify(prescriptions));
+    toast({
+      title: "Prescriptions Added",
+      description: "Your prescriptions have been added to your cart.",
+    });
+    navigate("/pharmacy");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent p-6">
       <div className="container mx-auto p-4 max-w-6xl">
@@ -60,8 +74,8 @@ const PatientVideoCall = () => {
           Live Call
         </h1>
 
-        <div className="grid grid-cols-1 gap-6">
-          <div>
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          <div className="lg:col-span-2">
             <div className="bg-gray-800 rounded-lg aspect-video relative mb-4">
               <div className="absolute top-4 right-4">
                 <Button 
@@ -85,6 +99,33 @@ const PatientVideoCall = () => {
               onMessageChange={setNewMessage}
               onSendMessage={handleSendMessage}
             />
+          </div>
+
+          <div className="lg:col-span-1">
+            <Card className="p-4">
+              <div className="flex items-center justify-between mb-4">
+                <h2 className="text-lg font-semibold">Prescribed Medications</h2>
+              </div>
+              <ScrollArea className="h-[400px]">
+                <div className="space-y-4">
+                  {prescriptions.map((prescription) => (
+                    <PrescriptionCard
+                      key={prescription.id}
+                      prescription={prescription}
+                    />
+                  ))}
+                  {prescriptions.length > 0 && (
+                    <Button
+                      className="w-full mt-4 flex items-center gap-2"
+                      onClick={handleGoToPharmacy}
+                    >
+                      <ShoppingCart className="h-4 w-4" />
+                      Order Prescribed Medications
+                    </Button>
+                  )}
+                </div>
+              </ScrollArea>
+            </Card>
           </div>
         </div>
       </div>
