@@ -1,6 +1,6 @@
 export const translations = {
   en: {
-    welcome: "Welcome Mr.",
+    welcome: "Welcome",
     accessServices: "Access professional medical services from the comfort of your home",
     quickDiagnoses: "Quick Diagnoses",
     quickDiagnosesDesc: "Get instant medical assessments from qualified professionals",
@@ -19,10 +19,18 @@ export const translations = {
     email: "Email",
     emergencyContact: "Emergency Contact",
     address: "Address",
-    sehtiId: "Sehti ID"
+    sehtiId: "Sehti ID",
+    available: "Available",
+    notAvailable: "Not Available",
+    viewSchedule: "View Schedule",
+    todaySchedule: "Today's Schedule",
+    homeCareVisit: "Home Care Visit",
+    postSurgeryCare: "Post-Surgery Care",
+    specialization: "Specialization",
+    hospitalAddress: "Hospital Address"
   },
   ar: {
-    welcome: "مرحباً سيد",
+    welcome: "مرحباً",
     accessServices: "الوصول إلى الخدمات الطبية المهنية من راحة منزلك",
     quickDiagnoses: "التشخيص السريع",
     quickDiagnosesDesc: "احصل على تقييمات طبية فورية من متخصصين مؤهلين",
@@ -41,6 +49,14 @@ export const translations = {
     email: "البريد الإلكتروني",
     emergencyContact: "جهة اتصال للطوارئ",
     address: "العنوان",
-    sehtiId: "معرف صحتي"
+    sehtiId: "معرف صحتي",
+    available: "متاح",
+    notAvailable: "غير متاح",
+    viewSchedule: "عرض الجدول",
+    todaySchedule: "جدول اليوم",
+    homeCareVisit: "زيارة رعاية منزلية",
+    postSurgeryCare: "رعاية ما بعد الجراحة",
+    specialization: "التخصص",
+    hospitalAddress: "عنوان المستشفى"
   }
 };

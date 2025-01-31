@@ -53,10 +53,9 @@ const NurseDashboard = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent p-6">
       <div className="max-w-7xl mx-auto space-y-8">
-        {/* Header Section */}
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-bold text-medical-dark">
-            {t("welcome")} Nurse {nurseProfile.lastName}
+            {t("welcome")} {nurseProfile.firstName}
           </h1>
           
           <div className="flex items-center gap-4">
@@ -75,19 +74,17 @@ const NurseDashboard = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <LanguageToggle />
-                <DropdownMenuItem>Help</DropdownMenuItem>
+                <DropdownMenuItem>{t("help")}</DropdownMenuItem>
                 <DropdownMenuItem onClick={handleSignOut} className="text-red-600">
-                  Sign Out
+                  {t("signOut")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
         </div>
 
-        {/* Statistics Section */}
         <DashboardStats />
 
-        {/* Quick Actions Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
           <div className={`relative overflow-hidden rounded-xl shadow-lg transition-all duration-300 ${
             isAvailable 
@@ -116,7 +113,7 @@ const NurseDashboard = () => {
                       : 'text-gray-600'
                   }`} />
                 </div>
-                {isAvailable ? "Available" : "Not Available"}
+                {isAvailable ? t("available") : t("notAvailable")}
               </div>
             </Button>
           </div>
@@ -129,32 +126,30 @@ const NurseDashboard = () => {
               <div className="p-3 bg-medical-light rounded-full">
                 <Calendar className="h-8 w-8 text-medical-primary" />
               </div>
-              <h3 className="text-xl font-semibold text-medical-dark">View Schedule</h3>
+              <h3 className="text-xl font-semibold text-medical-dark">{t("viewSchedule")}</h3>
             </div>
           </div>
         </div>
 
-        {/* Medical Quote and Schedule Section */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           <div className="space-y-6">
             <MedicalQuote />
           </div>
           
-          {/* Schedule Overview */}
           <div className="bg-white p-6 rounded-xl shadow-md space-y-4">
-            <h2 className="text-2xl font-semibold text-medical-dark mb-4">Today's Schedule</h2>
+            <h2 className="text-2xl font-semibold text-medical-dark mb-4">{t("todaySchedule")}</h2>
             <div className="space-y-4">
               <div className="flex items-center justify-between p-3 bg-medical-light rounded-lg">
                 <div>
                   <p className="font-medium">Sarah Johnson</p>
-                  <p className="text-sm text-gray-600">Home Care Visit</p>
+                  <p className="text-sm text-gray-600">{t("homeCareVisit")}</p>
                 </div>
                 <p className="text-medical-primary">10:00 AM</p>
               </div>
               <div className="flex items-center justify-between p-3 bg-medical-light rounded-lg">
                 <div>
                   <p className="font-medium">Michael Chen</p>
-                  <p className="text-sm text-gray-600">Post-Surgery Care</p>
+                  <p className="text-sm text-gray-600">{t("postSurgeryCare")}</p>
                 </div>
                 <p className="text-medical-primary">2:30 PM</p>
               </div>
@@ -162,33 +157,32 @@ const NurseDashboard = () => {
           </div>
         </div>
 
-        {/* Profile Dialog */}
         <Dialog open={isProfileOpen} onOpenChange={setIsProfileOpen}>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              <DialogTitle className="text-medical-primary">Profile Details</DialogTitle>
+              <DialogTitle className="text-medical-primary">{t("profileDetails")}</DialogTitle>
               <DialogDescription>
-                Your professional information and contact details
+                {t("accessServices")}
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-2 items-center gap-4">
-                <div className="font-semibold text-medical-dark">Name</div>
+                <div className="font-semibold text-medical-dark">{t("name")}</div>
                 <div>{nurseProfile.firstName} {nurseProfile.lastName}</div>
                 
-                <div className="font-semibold text-medical-dark">Phone</div>
+                <div className="font-semibold text-medical-dark">{t("phone")}</div>
                 <div>{nurseProfile.phoneNumber}</div>
                 
-                <div className="font-semibold text-medical-dark">Email</div>
+                <div className="font-semibold text-medical-dark">{t("email")}</div>
                 <div className="break-all">{nurseProfile.email}</div>
                 
-                <div className="font-semibold text-medical-dark">Specialization</div>
+                <div className="font-semibold text-medical-dark">{t("specialization")}</div>
                 <div>{nurseProfile.specialization}</div>
                 
-                <div className="font-semibold text-medical-dark">Hospital Address</div>
+                <div className="font-semibold text-medical-dark">{t("hospitalAddress")}</div>
                 <div>{nurseProfile.hospitalAddress}</div>
                 
-                <div className="font-semibold text-medical-dark">Sehti ID</div>
+                <div className="font-semibold text-medical-dark">{t("sehtiId")}</div>
                 <div>{nurseProfile.sehtiId}</div>
               </div>
             </div>
