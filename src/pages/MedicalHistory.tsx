@@ -22,16 +22,25 @@ interface MedicalReport {
   serviceType: string;
 }
 
-interface Feedback {
-  reportId: string;
-  rating: number;
-  comment: string;
-  patientName: string;
-  patientEmail: string;
-  patientPhone: string;
-  doctorName: string;
-  date: string;
-}
+// Sample medical reports data
+const medicalReports: MedicalReport[] = [
+  {
+    id: "1",
+    date: "2024-03-15",
+    hospitalAddress: "123 Medical Center Dr",
+    details: "Regular checkup - all vitals normal",
+    doctorName: "Dr. Sarah Johnson",
+    serviceType: "General Checkup"
+  },
+  {
+    id: "2",
+    date: "2024-03-10",
+    hospitalAddress: "456 Health Plaza",
+    details: "Cardiac evaluation - normal heart rhythm",
+    doctorName: "Dr. Michael Brown",
+    serviceType: "Cardiology"
+  }
+];
 
 const MedicalHistory = () => {
   const navigate = useNavigate();
@@ -39,13 +48,6 @@ const MedicalHistory = () => {
   const [showFeedbackDialog, setShowFeedbackDialog] = useState(false);
   const [rating, setRating] = useState(0);
   const [comment, setComment] = useState("");
-
-  // Mock patient data - in a real app this would come from auth context
-  const patientInfo = {
-    name: "John Doe",
-    email: "john.doe@example.com",
-    phone: "+1234567890"
-  };
 
   const handleGoBack = () => {
     navigate("/dashboard");
@@ -55,20 +57,31 @@ const MedicalHistory = () => {
     setSelectedReport(report);
   };
 
+  const getServiceIcon = (serviceType: string) => {
+    switch (serviceType.toLowerCase()) {
+      case "cardiology":
+        return <Heart className="w-8 h-8 text-medical-primary" />;
+      case "general checkup":
+        return <Stethoscope className="w-8 h-8 text-medical-primary" />;
+      default:
+        return <Clipboard className="w-8 h-8 text-medical-primary" />;
+    }
+  };
+
   const handleFeedbackSubmit = () => {
     if (rating === 0) {
       toast.error("Please select a rating");
       return;
     }
 
-    const feedback: Feedback = {
-      reportId: selectedReport?.id || "",
+    const feedback = {
+      reportId: selectedReport?.id,
       rating,
       comment,
-      patientName: patientInfo.name,
-      patientEmail: patientInfo.email,
-      patientPhone: patientInfo.phone,
-      doctorName: selectedReport?.doctorName || "",
+      patientName: "John Doe", // In a real app, this would come from auth context
+      patientEmail: "john.doe@example.com",
+      patientPhone: "+1234567890",
+      doctorName: selectedReport?.doctorName,
       date: new Date().toISOString(),
     };
 
@@ -95,14 +108,14 @@ const MedicalHistory = () => {
           <h1 className="text-3xl font-bold text-medical-dark">Medical History</h1>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {mockReports.map((report) => (
+          {medicalReports.map((report) => (
             <Card 
               key={report.id} 
               className="transform hover:scale-105 transition-all duration-300 cursor-pointer bg-white/70 backdrop-blur-sm border-medical-accent/20 hover:border-medical-primary/40 hover:shadow-lg flex flex-col items-center justify-center p-6"
               onClick={() => handleCardClick(report)}
             >
               <div className="mb-4">
-                {getIconForServiceType(report.serviceType)}
+                {getServiceIcon(report.serviceType)}
               </div>
               <CardHeader className="pb-2 text-center w-full">
                 <CardTitle className="text-center text-sm font-medium text-medical-dark">
@@ -174,45 +187,45 @@ const MedicalHistory = () => {
               </DialogDescription>
             </DialogHeader>
           </DialogContent>
+        </Dialog>
 
-          <Dialog open={showFeedbackDialog} onOpenChange={setShowFeedbackDialog}>
-            <DialogContent className="max-w-md">
-              <DialogHeader>
-                <DialogTitle>Rate Your Experience</DialogTitle>
-                <DialogDescription>
-                  <div className="space-y-4 mt-4">
-                    <div className="flex justify-center gap-2">
-                      {[1, 2, 3, 4, 5].map((star) => (
-                        <button
-                          key={star}
-                          onClick={() => setRating(star)}
-                          className="focus:outline-none"
-                        >
-                          {star <= rating ? (
-                            <Star className="w-8 h-8 text-yellow-400 fill-yellow-400" />
-                          ) : (
-                            <StarOff className="w-8 h-8 text-gray-300" />
-                          )}
-                        </button>
-                      ))}
-                    </div>
-                    <Textarea
-                      placeholder="Share your experience (optional)"
-                      value={comment}
-                      onChange={(e) => setComment(e.target.value)}
-                      className="min-h-[100px]"
-                    />
-                    <Button
-                      onClick={handleFeedbackSubmit}
-                      className="w-full bg-medical-primary hover:bg-medical-dark"
-                    >
-                      Submit Feedback
-                    </Button>
+        <Dialog open={showFeedbackDialog} onOpenChange={setShowFeedbackDialog}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>Rate Your Experience</DialogTitle>
+              <DialogDescription>
+                <div className="space-y-4 mt-4">
+                  <div className="flex justify-center gap-2">
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <button
+                        key={star}
+                        onClick={() => setRating(star)}
+                        className="focus:outline-none"
+                      >
+                        {star <= rating ? (
+                          <Star className="w-8 h-8 text-yellow-400 fill-yellow-400" />
+                        ) : (
+                          <StarOff className="w-8 h-8 text-gray-300" />
+                        )}
+                      </button>
+                    ))}
                   </div>
-                </DialogDescription>
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
+                  <Textarea
+                    placeholder="Share your experience (optional)"
+                    value={comment}
+                    onChange={(e) => setComment(e.target.value)}
+                    className="min-h-[100px]"
+                  />
+                  <Button
+                    onClick={handleFeedbackSubmit}
+                    className="w-full bg-medical-primary hover:bg-medical-dark"
+                  >
+                    Submit Feedback
+                  </Button>
+                </div>
+              </DialogDescription>
+            </DialogHeader>
+          </DialogContent>
         </Dialog>
       </div>
     </div>
