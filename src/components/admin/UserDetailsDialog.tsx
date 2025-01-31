@@ -38,25 +38,34 @@ export const UserDetailsDialog = ({
 }: UserDetailsDialogProps) => {
   const [editingField, setEditingField] = useState<string | null>(null);
   const [tempValue, setTempValue] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   const handleEdit = (field: string, value: string) => {
     setEditingField(field);
     setTempValue(value);
+    setError(null);
   };
 
   const handleSave = (field: string) => {
     if (!user) return;
 
+    if (field === "password" && (!tempValue || tempValue.trim() === "")) {
+      setError("Password cannot be empty");
+      return;
+    }
+
     const updatedUser = { ...user, [field]: tempValue };
     onUserUpdate(updatedUser);
     setEditingField(null);
     setTempValue("");
+    setError(null);
     toast.success(`${field} updated successfully`);
   };
 
   const handleCancel = () => {
     setEditingField(null);
     setTempValue("");
+    setError(null);
   };
 
   const renderField = (label: string, value: string | undefined, field: string) => {
@@ -66,29 +75,37 @@ export const UserDetailsDialog = ({
         <span className="font-medium text-gray-700 min-w-[120px]">{label}:</span>
         <div className="flex items-center gap-2 flex-1 ml-4">
           {isEditing ? (
-            <div className="flex items-center gap-2 w-full">
-              <Input
-                value={tempValue}
-                onChange={(e) => setTempValue(e.target.value)}
-                className="flex-1"
-                type="text"
-              />
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={() => handleSave(field)}
-                className="text-green-600 hover:text-green-700 hover:bg-green-50"
-              >
-                <Check className="h-4 w-4" />
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={handleCancel}
-                className="text-red-600 hover:text-red-700 hover:bg-red-50"
-              >
-                <X className="h-4 w-4" />
-              </Button>
+            <div className="flex flex-col w-full">
+              <div className="flex items-center gap-2">
+                <Input
+                  value={tempValue}
+                  onChange={(e) => {
+                    setTempValue(e.target.value);
+                    setError(null);
+                  }}
+                  className="flex-1"
+                  type={field === "password" ? "text" : "text"}
+                />
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={() => handleSave(field)}
+                  className="text-green-600 hover:text-green-700 hover:bg-green-50"
+                >
+                  <Check className="h-4 w-4" />
+                </Button>
+                <Button
+                  size="sm"
+                  variant="outline"
+                  onClick={handleCancel}
+                  className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                >
+                  <X className="h-4 w-4" />
+                </Button>
+              </div>
+              {error && field === "password" && (
+                <span className="text-red-500 text-sm mt-1">{error}</span>
+              )}
             </div>
           ) : (
             <div className="flex items-center justify-between w-full">
