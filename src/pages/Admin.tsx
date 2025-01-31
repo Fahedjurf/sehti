@@ -1,6 +1,9 @@
 import { CertificateManagement } from "@/components/admin/CertificateManagement";
 import { UserManagement } from "@/components/admin/UserManagement";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Button } from "@/components/ui/button";
+import { toast } from "sonner";
 
 interface Certificate {
   id: number;
@@ -18,6 +21,14 @@ interface User {
   type: string;
   email: string;
   status: string;
+}
+
+interface HelpRequest {
+  id: number;
+  message: string;
+  status: string;
+  timestamp: string;
+  userEmail: string;
 }
 
 // Mock data with properly formatted URLs
@@ -75,6 +86,15 @@ const initialUsers = [
 
 const Admin = () => {
   const [users, setUsers] = useState<User[]>(initialUsers);
+  const [helpRequests, setHelpRequests] = useState<HelpRequest[]>([]);
+
+  useEffect(() => {
+    // Load help requests from localStorage
+    const storedRequests = localStorage.getItem("helpRequests");
+    if (storedRequests) {
+      setHelpRequests(JSON.parse(storedRequests));
+    }
+  }, []);
 
   const handleApprovedProfessional = (certificate: Certificate) => {
     const newUser: User = {
@@ -87,13 +107,20 @@ const Admin = () => {
     setUsers((prevUsers) => [...prevUsers, newUser]);
   };
 
+  const handleResolveHelpRequest = (requestId: number) => {
+    const updatedRequests = helpRequests.map(request =>
+      request.id === requestId ? { ...request, status: "resolved" } : request
+    );
+    setHelpRequests(updatedRequests);
+    localStorage.setItem("helpRequests", JSON.stringify(updatedRequests));
+    toast.success("Help request marked as resolved");
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent relative overflow-hidden">
-      {/* Decorative elements */}
       <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-medical-accent/20 blur-3xl animate-pulse" />
       <div className="absolute -bottom-32 -left-20 w-96 h-96 rounded-full bg-medical-primary/10 blur-3xl animate-pulse delay-700" />
       
-      {/* Decorative pattern */}
       <div className="absolute inset-0 bg-grid-medical-primary/[0.03] -z-10" />
 
       <div className="max-w-6xl mx-auto p-6 relative">
@@ -102,9 +129,8 @@ const Admin = () => {
             Admin Dashboard
           </h1>
           <p className="text-gray-600 animate-fade-in delay-100">
-            Manage certificates and users
+            Manage certificates, users, and help requests
           </p>
-          {/* Decorative underline */}
           <div className="absolute -bottom-4 left-1/2 transform -translate-x-1/2 w-32 h-1 bg-gradient-to-r from-medical-primary/0 via-medical-primary to-medical-primary/0" />
         </div>
 
@@ -118,6 +144,50 @@ const Admin = () => {
 
           <div className="bg-white/80 backdrop-blur-sm p-8 rounded-xl shadow-lg border border-medical-accent/20 relative">
             <UserManagement users={users} />
+          </div>
+
+          <div className="bg-white/80 backdrop-blur-sm p-8 rounded-xl shadow-lg border border-medical-accent/20 relative">
+            <h2 className="text-2xl font-semibold text-medical-dark mb-6">Help Requests</h2>
+            <ScrollArea className="h-[300px]">
+              <div className="space-y-4">
+                {helpRequests.length === 0 ? (
+                  <p className="text-center text-gray-500">No help requests yet</p>
+                ) : (
+                  helpRequests.map((request) => (
+                    <div
+                      key={request.id}
+                      className="p-4 bg-white rounded-lg border border-gray-200 shadow-sm"
+                    >
+                      <div className="flex justify-between items-start mb-2">
+                        <div>
+                          <p className="font-medium text-medical-dark">{request.userEmail}</p>
+                          <p className="text-sm text-gray-500">
+                            {new Date(request.timestamp).toLocaleString()}
+                          </p>
+                        </div>
+                        <span className={`px-2 py-1 rounded-full text-xs ${
+                          request.status === "pending" 
+                            ? "bg-yellow-100 text-yellow-800" 
+                            : "bg-green-100 text-green-800"
+                        }`}>
+                          {request.status}
+                        </span>
+                      </div>
+                      <p className="text-gray-700 mb-4">{request.message}</p>
+                      {request.status === "pending" && (
+                        <Button
+                          size="sm"
+                          onClick={() => handleResolveHelpRequest(request.id)}
+                          className="w-full"
+                        >
+                          Mark as Resolved
+                        </Button>
+                      )}
+                    </div>
+                  ))
+                )}
+              </div>
+            </ScrollArea>
           </div>
         </div>
       </div>
