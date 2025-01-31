@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { Progress } from "@/components/ui/progress";
 import { LocationMap } from "@/components/nurses/LocationMap";
 
 interface DeliveryStatus {
@@ -84,17 +85,7 @@ const DeliveryTracking = () => {
               </span>
             </div>
 
-            <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-medical-primary transition-all duration-500"
-                style={{
-                  width: `${Math.max(
-                    0,
-                    100 - (deliveryStatus.estimatedTime / 30) * 100
-                  )}%`,
-                }}
-              />
-            </div>
+            <Progress value={Math.max(0, 100 - (deliveryStatus.estimatedTime / 30) * 100)} />
           </div>
 
           <div className="rounded-lg overflow-hidden border border-gray-200">

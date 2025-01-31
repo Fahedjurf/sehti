@@ -58,7 +58,7 @@ export const LocationMap = ({ onLocationChange, driverLocation }: LocationMapPro
           <Marker
             position={driverLocation}
             icon={{
-              url: "https://maps.google.com/mapfiles/ms/icons/deliverytruck.png",
+              url: "/placeholder.svg",
               scaledSize: new window.google.maps.Size(40, 40),
             }}
           />
