@@ -21,6 +21,7 @@ const defaultCenter = {
 
 export const LocationMap = ({ onLocationChange, driverLocation }: LocationMapProps) => {
   const [currentPosition, setCurrentPosition] = useState(defaultCenter);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   useEffect(() => {
     if (navigator.geolocation) {
@@ -40,28 +41,39 @@ export const LocationMap = ({ onLocationChange, driverLocation }: LocationMapPro
     }
   }, [onLocationChange]);
 
+  const handleLoad = () => {
+    setIsLoaded(true);
+  };
+
   return (
-    <LoadScript googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ""}>
+    <LoadScript 
+      googleMapsApiKey={import.meta.env.VITE_GOOGLE_MAPS_API_KEY || ""}
+      onLoad={handleLoad}
+    >
       <GoogleMap
         mapContainerStyle={mapContainerStyle}
         center={currentPosition}
         zoom={15}
       >
-        <Marker
-          position={currentPosition}
-          icon={{
-            url: "/placeholder.svg",
-            scaledSize: new window.google.maps.Size(30, 30),
-          }}
-        />
-        {driverLocation && (
-          <Marker
-            position={driverLocation}
-            icon={{
-              url: "/placeholder.svg",
-              scaledSize: new window.google.maps.Size(40, 40),
-            }}
-          />
+        {isLoaded && (
+          <>
+            <Marker
+              position={currentPosition}
+              icon={{
+                url: "/placeholder.svg",
+                scaledSize: new window.google.maps.Size(30, 30),
+              }}
+            />
+            {driverLocation && (
+              <Marker
+                position={driverLocation}
+                icon={{
+                  url: "/placeholder.svg",
+                  scaledSize: new window.google.maps.Size(40, 40),
+                }}
+              />
+            )}
+          </>
         )}
       </GoogleMap>
     </LoadScript>
