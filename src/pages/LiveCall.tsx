@@ -1,64 +1,37 @@
-import { useState } from "react";
-import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
-import { useToast } from "@/components/ui/use-toast";
-import { X, ArrowLeft, ShoppingCart } from "lucide-react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { ChatSection } from "@/components/live-call/ChatSection";
-import { PrescriptionCard } from "@/components/live-call/PrescriptionCard";
-import { Message, Prescription } from "@/components/live-call/types";
-import { samplePrescriptions } from "@/components/live-call/samplePrescriptions";
+import { Button } from "@/components/ui/button";
+import { ArrowLeft } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 const LiveCall = () => {
   const navigate = useNavigate();
-  const [messages, setMessages] = useState<Message[]>([]);
-  const [newMessage, setNewMessage] = useState("");
-  const [prescriptions] = useState<Prescription[]>(samplePrescriptions);
   const { toast } = useToast();
+  const [waitingTime, setWaitingTime] = useState(0);
 
-  const handleSendMessage = () => {
-    if (newMessage.trim()) {
-      const message: Message = {
-        id: Date.now(),
-        text: newMessage,
-        sender: "patient",
-        timestamp: new Date(),
-      };
-      setMessages([...messages, message]);
-      setNewMessage("");
+  useEffect(() => {
+    // Simulate waiting time counter
+    const interval = setInterval(() => {
+      setWaitingTime((prev) => prev + 1);
+    }, 1000);
 
-      // Simulate doctor's response after 1 second
-      setTimeout(() => {
-        const doctorResponse: Message = {
-          id: Date.now() + 1,
-          text: "I understand. Let me examine your symptoms.",
-          sender: "doctor",
-          timestamp: new Date(),
-        };
-        setMessages(prev => [...prev, doctorResponse]);
-      }, 1000);
-    }
-  };
+    // Simulate doctor connecting after 10 seconds
+    const timeout = setTimeout(() => {
+      toast({
+        title: "Doctor Connected",
+        description: "You are being connected to the doctor...",
+      });
+      navigate("/doctor-live-call");
+    }, 10000);
 
-  const handleEndCall = () => {
-    toast({
-      title: "Call Ended",
-      description: "Your consultation has been completed.",
-    });
-  };
-
-  const handleGoToPharmacy = () => {
-    localStorage.setItem('prescribedMedications', JSON.stringify(prescriptions));
-    toast({
-      title: "Prescriptions Added",
-      description: "Your prescriptions have been added to your cart.",
-    });
-    navigate("/pharmacy");
-  };
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
+  }, [navigate, toast]);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent p-6">
+    <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent">
       <div className="container mx-auto p-4 max-w-6xl">
         <Button
           variant="outline"
@@ -69,63 +42,28 @@ const LiveCall = () => {
           Back to Dashboard
         </Button>
 
-        <h1 className="text-3xl font-bold text-medical-dark mb-8 text-center">
-          Live Call
-        </h1>
-
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-          <div className="lg:col-span-2">
-            <div className="bg-gray-800 rounded-lg aspect-video relative mb-4">
-              <div className="absolute top-4 right-4">
-                <Button 
-                  variant="destructive" 
-                  size="sm" 
-                  onClick={handleEndCall}
-                  className="flex items-center gap-2"
-                >
-                  <X className="h-4 w-4" />
-                  End Call
-                </Button>
-              </div>
-              <div className="absolute bottom-4 left-4 text-white text-sm">
-                Dr. Smith
-              </div>
-            </div>
-
-            <ChatSection
-              messages={messages}
-              newMessage={newMessage}
-              onMessageChange={setNewMessage}
-              onSendMessage={handleSendMessage}
-            />
+        <div className="flex flex-col items-center justify-center space-y-8 mt-20">
+          <div className="w-32 h-32 rounded-full bg-medical-primary/20 animate-pulse" />
+          
+          <h1 className="text-3xl font-bold text-medical-dark text-center">
+            Waiting for Doctor
+          </h1>
+          
+          <p className="text-gray-600 text-center max-w-md">
+            Please wait while we connect you with a doctor. Your estimated waiting time is less than 2 minutes.
+          </p>
+          
+          <div className="text-medical-primary font-semibold">
+            Time elapsed: {waitingTime} seconds
           </div>
 
-          <div className="lg:col-span-1">
-            <Card className="p-4">
-              <div className="flex items-center justify-between mb-4">
-                <h2 className="text-lg font-semibold">Prescribed Medications</h2>
-              </div>
-              <ScrollArea className="h-[400px]">
-                <div className="space-y-4">
-                  {prescriptions.map((prescription) => (
-                    <PrescriptionCard
-                      key={prescription.id}
-                      prescription={prescription}
-                    />
-                  ))}
-                  {prescriptions.length > 0 && (
-                    <Button
-                      className="w-full mt-4 flex items-center gap-2"
-                      onClick={handleGoToPharmacy}
-                    >
-                      <ShoppingCart className="h-4 w-4" />
-                      Order Prescribed Medications
-                    </Button>
-                  )}
-                </div>
-              </ScrollArea>
-            </Card>
-          </div>
+          <Button
+            variant="outline"
+            className="mt-8"
+            onClick={() => navigate("/dashboard")}
+          >
+            Cancel
+          </Button>
         </div>
       </div>
     </div>
