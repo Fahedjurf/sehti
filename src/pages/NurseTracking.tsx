@@ -9,10 +9,9 @@ import { toast } from "@/components/ui/use-toast";
 interface NurseRequest {
   service: {
     id: string;
-    name: string;
+    title: string;
     description: string;
     estimatedTime: string;
-    price: number;
   };
   location: {
     lat: number;
@@ -36,7 +35,6 @@ const NurseTracking = () => {
       try {
         const parsedData = JSON.parse(requestData);
         setNurseRequest(parsedData);
-        // Clean up after retrieving
         localStorage.removeItem("nurseRequest");
       } catch (error) {
         console.error("Error parsing nurse request:", error);
@@ -49,7 +47,6 @@ const NurseTracking = () => {
     }
   }, []);
 
-  // Simulate real-time updates for nurse location
   useEffect(() => {
     const interval = setInterval(() => {
       setNurseLocation((prev) => ({
@@ -99,20 +96,10 @@ const NurseTracking = () => {
 
           {nurseRequest && (
             <div className="mt-8">
-              <h2 className="text-xl font-semibold mb-4">Service Details</h2>
-              <div className="space-y-4 p-4 border rounded-lg bg-gray-50">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="font-medium">Service:</div>
-                  <div>{nurseRequest.service.name}</div>
-                  
-                  <div className="font-medium">Description:</div>
-                  <div>{nurseRequest.service.description}</div>
-                  
-                  <div className="font-medium">Price:</div>
-                  <div>${nurseRequest.service.price}</div>
-                  
-                  <div className="font-medium">Request Time:</div>
-                  <div>{new Date(nurseRequest.requestTime).toLocaleString()}</div>
+              <h2 className="text-xl font-semibold mb-4">Service Type</h2>
+              <div className="p-4 border rounded-lg bg-gray-50">
+                <div className="text-lg text-medical-dark">
+                  {nurseRequest.service.title}
                 </div>
               </div>
             </div>
