@@ -107,6 +107,12 @@ const Admin = () => {
   const [showUserDialog, setShowUserDialog] = useState(false);
   const [editingField, setEditingField] = useState<string | null>(null);
   const [tempValue, setTempValue] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
+  const [showOTPConfirm, setShowOTPConfirm] = useState(false);
+  const [otp, setOtp] = useState("");
+  const [tempEmail, setTempEmail] = useState("");
+  const [tempPhone, setTempPhone] = useState("");
 
   useEffect(() => {
     // Load help requests from localStorage
@@ -150,8 +156,17 @@ const Admin = () => {
   };
 
   const handleEdit = (field: string, value: string) => {
-    setEditingField(field);
-    setTempValue(value);
+    if (field === 'email') {
+      setTempEmail(value);
+      setShowPasswordConfirm(true);
+    } else if (field === 'phoneNumber') {
+      setTempPhone(value);
+      setShowOTPConfirm(true);
+      toast.success("OTP sent to your phone number");
+    } else {
+      setEditingField(field);
+      setTempValue(value);
+    }
   };
 
   const handleSave = async (field: string) => {
@@ -161,16 +176,21 @@ const Admin = () => {
     let newValue = tempValue;
 
     if (field === 'email') {
-      const password = window.prompt("Enter your password to confirm:");
-      if (!password) {
+      newValue = tempEmail;
+      // Here you would typically verify the password with your backend
+      if (!confirmPassword) {
         shouldUpdate = false;
       }
+      setShowPasswordConfirm(false);
+      setConfirmPassword("");
     } else if (field === 'phoneNumber') {
-      const otp = window.prompt("Enter the OTP sent to your phone:");
+      newValue = tempPhone;
       if (otp !== '123456') { // In real app, verify with backend
         toast.error("Invalid OTP");
         shouldUpdate = false;
       }
+      setShowOTPConfirm(false);
+      setOtp("");
     }
 
     if (shouldUpdate) {
@@ -310,15 +330,34 @@ const Admin = () => {
                 <div className="space-y-2">
                   <Label>Email</Label>
                   <div className="flex items-center gap-2">
-                    {editingField === 'email' ? (
-                      <div className="flex-1 flex gap-2">
+                    {showPasswordConfirm ? (
+                      <div className="space-y-4 w-full">
                         <Input
-                          value={tempValue}
-                          onChange={(e) => setTempValue(e.target.value)}
-                          className="flex-1"
+                          type="email"
+                          value={tempEmail}
+                          onChange={(e) => setTempEmail(e.target.value)}
+                          placeholder="New email"
                         />
-                        <Button size="sm" onClick={() => handleSave('email')}>Save</Button>
-                        <Button size="sm" variant="outline" onClick={() => setEditingField(null)}>Cancel</Button>
+                        <Input
+                          type="password"
+                          value={confirmPassword}
+                          onChange={(e) => setConfirmPassword(e.target.value)}
+                          placeholder="Enter password to confirm"
+                        />
+                        <div className="flex gap-2 justify-end">
+                          <Button size="sm" onClick={() => handleSave('email')}>Confirm</Button>
+                          <Button 
+                            size="sm" 
+                            variant="outline" 
+                            onClick={() => {
+                              setShowPasswordConfirm(false);
+                              setConfirmPassword("");
+                              setTempEmail("");
+                            }}
+                          >
+                            Cancel
+                          </Button>
+                        </div>
                       </div>
                     ) : (
                       <div className="flex-1 flex items-center justify-between">
@@ -339,15 +378,35 @@ const Admin = () => {
                 <div className="space-y-2">
                   <Label>Phone Number</Label>
                   <div className="flex items-center gap-2">
-                    {editingField === 'phoneNumber' ? (
-                      <div className="flex-1 flex gap-2">
+                    {showOTPConfirm ? (
+                      <div className="space-y-4 w-full">
                         <Input
-                          value={tempValue}
-                          onChange={(e) => setTempValue(e.target.value)}
-                          className="flex-1"
+                          type="tel"
+                          value={tempPhone}
+                          onChange={(e) => setTempPhone(e.target.value)}
+                          placeholder="New phone number"
                         />
-                        <Button size="sm" onClick={() => handleSave('phoneNumber')}>Save</Button>
-                        <Button size="sm" variant="outline" onClick={() => setEditingField(null)}>Cancel</Button>
+                        <Input
+                          type="text"
+                          value={otp}
+                          onChange={(e) => setOtp(e.target.value)}
+                          placeholder="Enter OTP"
+                          maxLength={6}
+                        />
+                        <div className="flex gap-2 justify-end">
+                          <Button size="sm" onClick={() => handleSave('phoneNumber')}>Verify</Button>
+                          <Button 
+                            size="sm" 
+                            variant="outline" 
+                            onClick={() => {
+                              setShowOTPConfirm(false);
+                              setOtp("");
+                              setTempPhone("");
+                            }}
+                          >
+                            Cancel
+                          </Button>
+                        </div>
                       </div>
                     ) : (
                       <div className="flex-1 flex items-center justify-between">
