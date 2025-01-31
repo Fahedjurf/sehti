@@ -4,10 +4,19 @@ import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { LocationMap } from "@/components/nurses/LocationMap";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import { CartItem } from "@/components/pharmacy/types";
 
 interface DeliveryStatus {
   status: "preparing" | "on_the_way" | "delivered";
-  estimatedTime: number; // in minutes
+  estimatedTime: number;
   driverLocation: {
     lat: number;
     lng: number;
@@ -16,6 +25,7 @@ interface DeliveryStatus {
 
 const DeliveryTracking = () => {
   const navigate = useNavigate();
+  const [orderItems, setOrderItems] = useState<CartItem[]>([]);
   const [deliveryStatus, setDeliveryStatus] = useState<DeliveryStatus>({
     status: "preparing",
     estimatedTime: 30,
@@ -24,6 +34,15 @@ const DeliveryTracking = () => {
       lng: 46.6753,
     },
   });
+
+  useEffect(() => {
+    // Get order items from localStorage
+    const items = localStorage.getItem("orderItems");
+    if (items) {
+      setOrderItems(JSON.parse(items));
+      localStorage.removeItem("orderItems"); // Clean up after retrieving
+    }
+  }, []);
 
   // Simulate real-time updates
   useEffect(() => {
@@ -60,6 +79,10 @@ const DeliveryTracking = () => {
     }
   };
 
+  const calculateTotal = () => {
+    return orderItems.reduce((total, item) => total + item.price * item.quantity, 0);
+  };
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent p-6">
       <div className="max-w-4xl mx-auto">
@@ -88,12 +111,48 @@ const DeliveryTracking = () => {
             <Progress value={Math.max(0, 100 - (deliveryStatus.estimatedTime / 30) * 100)} />
           </div>
 
-          <div className="rounded-lg overflow-hidden border border-gray-200">
+          <div className="rounded-lg overflow-hidden border border-gray-200 h-[300px]">
             <LocationMap
               onLocationChange={() => {}}
               driverLocation={deliveryStatus.driverLocation}
             />
           </div>
+
+          {orderItems.length > 0 && (
+            <div className="mt-8">
+              <h2 className="text-xl font-semibold mb-4">Order Details</h2>
+              <div className="rounded-lg border">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Item</TableHead>
+                      <TableHead>Quantity</TableHead>
+                      <TableHead>Price</TableHead>
+                      <TableHead>Total</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {orderItems.map((item) => (
+                      <TableRow key={item.id}>
+                        <TableCell className="font-medium">{item.name}</TableCell>
+                        <TableCell>{item.quantity}</TableCell>
+                        <TableCell>${item.price.toFixed(2)}</TableCell>
+                        <TableCell>${(item.price * item.quantity).toFixed(2)}</TableCell>
+                      </TableRow>
+                    ))}
+                    <TableRow>
+                      <TableCell colSpan={3} className="text-right font-semibold">
+                        Total Amount:
+                      </TableCell>
+                      <TableCell className="font-semibold">
+                        ${calculateTotal().toFixed(2)}
+                      </TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </div>
