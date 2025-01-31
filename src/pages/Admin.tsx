@@ -105,6 +105,8 @@ const Admin = () => {
   const [helpRequests, setHelpRequests] = useState<HelpRequest[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [showUserDialog, setShowUserDialog] = useState(false);
+  const [editingField, setEditingField] = useState<string | null>(null);
+  const [tempValue, setTempValue] = useState("");
 
   useEffect(() => {
     // Load help requests from localStorage
@@ -145,6 +147,42 @@ const Admin = () => {
       setSelectedUser(user);
       setShowUserDialog(true);
     }
+  };
+
+  const handleEdit = (field: string, value: string) => {
+    setEditingField(field);
+    setTempValue(value);
+  };
+
+  const handleSave = async (field: string) => {
+    if (!selectedUser) return;
+
+    let shouldUpdate = true;
+    let newValue = tempValue;
+
+    if (field === 'email') {
+      const password = window.prompt("Enter your password to confirm:");
+      if (!password) {
+        shouldUpdate = false;
+      }
+    } else if (field === 'phoneNumber') {
+      const otp = window.prompt("Enter the OTP sent to your phone:");
+      if (otp !== '123456') { // In real app, verify with backend
+        toast.error("Invalid OTP");
+        shouldUpdate = false;
+      }
+    }
+
+    if (shouldUpdate) {
+      setUsers(users.map(u =>
+        u.id === selectedUser.id ? { ...u, [field]: newValue } : u
+      ));
+      setSelectedUser({ ...selectedUser, [field]: newValue });
+      toast.success(`${field} updated successfully`);
+    }
+
+    setEditingField(null);
+    setTempValue("");
   };
 
   return (
@@ -239,149 +277,177 @@ const Admin = () => {
           {selectedUser && (
             <div className="space-y-4">
               <div className="grid gap-4">
+                {/* Name Field */}
                 <div className="space-y-2">
                   <Label>Name</Label>
                   <div className="flex items-center gap-2">
-                    <Input value={selectedUser.name} readOnly />
-                    <Button 
-                      size="sm"
-                      variant="outline"
-                      onClick={() => {
-                        const newName = window.prompt("Enter new name:", selectedUser.name);
-                        if (newName) {
-                          setUsers(users.map(u => 
-                            u.id === selectedUser.id ? { ...u, name: newName } : u
-                          ));
-                          setSelectedUser({ ...selectedUser, name: newName });
-                        }
-                      }}
-                    >
-                      Edit
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label>Email</Label>
-                  <div className="flex items-center gap-2">
-                    <Input value={selectedUser.email} readOnly />
-                    <Button 
-                      size="sm"
-                      variant="outline"
-                      onClick={() => {
-                        const newEmail = window.prompt("Enter new email:", selectedUser.email);
-                        if (newEmail) {
-                          const password = window.prompt("Enter your password to confirm:");
-                          if (password) {
-                            setUsers(users.map(u => 
-                              u.id === selectedUser.id ? { ...u, email: newEmail } : u
-                            ));
-                            setSelectedUser({ ...selectedUser, email: newEmail });
-                            toast.success("Email updated successfully");
-                          }
-                        }
-                      }}
-                    >
-                      Edit
-                    </Button>
-                  </div>
-                </div>
-
-                <div className="space-y-2">
-                  <Label>Phone Number</Label>
-                  <div className="flex items-center gap-2">
-                    <Input value={selectedUser.phoneNumber || "Not set"} readOnly />
-                    <Button 
-                      size="sm"
-                      variant="outline"
-                      onClick={() => {
-                        const newPhone = window.prompt("Enter new phone number:", selectedUser.phoneNumber);
-                        if (newPhone) {
-                          // Simulate OTP verification
-                          const otp = window.prompt("Enter the OTP sent to your phone:");
-                          if (otp === "123456") { // In real app, verify with backend
-                            setUsers(users.map(u => 
-                              u.id === selectedUser.id ? { ...u, phoneNumber: newPhone } : u
-                            ));
-                            setSelectedUser({ ...selectedUser, phoneNumber: newPhone });
-                            toast.success("Phone number updated successfully");
-                          } else {
-                            toast.error("Invalid OTP");
-                          }
-                        }
-                      }}
-                    >
-                      Edit
-                    </Button>
-                  </div>
-                </div>
-
-                {selectedUser.type !== "patient" && (
-                  <div className="space-y-2">
-                    <Label>Status</Label>
-                    <div className="flex items-center gap-2">
-                      <Input value={selectedUser.status} readOnly />
-                      <Button 
-                        size="sm"
-                        variant="outline"
-                        onClick={() => {
-                          const newStatus = selectedUser.status === "active" ? "inactive" : "active";
-                          setUsers(users.map(u => 
-                            u.id === selectedUser.id ? { ...u, status: newStatus } : u
-                          ));
-                          setSelectedUser({ ...selectedUser, status: newStatus });
-                          toast.success("Status updated successfully");
-                        }}
-                      >
-                        Toggle
-                      </Button>
-                    </div>
-                  </div>
-                )}
-
-                {(selectedUser.type === "doctor" || selectedUser.type === "nurse") && (
-                  <>
-                    <div className="space-y-2">
-                      <Label>Specialization</Label>
-                      <div className="flex items-center gap-2">
-                        <Input value={selectedUser.specialization || "Not set"} readOnly />
-                        <Button 
+                    {editingField === 'name' ? (
+                      <div className="flex-1 flex gap-2">
+                        <Input
+                          value={tempValue}
+                          onChange={(e) => setTempValue(e.target.value)}
+                          className="flex-1"
+                        />
+                        <Button size="sm" onClick={() => handleSave('name')}>Save</Button>
+                        <Button size="sm" variant="outline" onClick={() => setEditingField(null)}>Cancel</Button>
+                      </div>
+                    ) : (
+                      <div className="flex-1 flex items-center justify-between">
+                        <span className="text-gray-900">{selectedUser.name}</span>
+                        <Button
                           size="sm"
-                          variant="outline"
-                          onClick={() => {
-                            const newSpec = window.prompt("Enter new specialization:", selectedUser.specialization);
-                            if (newSpec) {
-                              setUsers(users.map(u => 
-                                u.id === selectedUser.id ? { ...u, specialization: newSpec } : u
-                              ));
-                              setSelectedUser({ ...selectedUser, specialization: newSpec });
-                            }
-                          }}
+                          variant="ghost"
+                          onClick={() => handleEdit('name', selectedUser.name)}
                         >
                           Edit
                         </Button>
                       </div>
-                    </div>
+                    )}
+                  </div>
+                </div>
 
-                    <div className="space-y-2">
-                      <Label>Experience</Label>
-                      <div className="flex items-center gap-2">
-                        <Input value={selectedUser.experience || "Not set"} readOnly />
-                        <Button 
+                {/* Email Field */}
+                <div className="space-y-2">
+                  <Label>Email</Label>
+                  <div className="flex items-center gap-2">
+                    {editingField === 'email' ? (
+                      <div className="flex-1 flex gap-2">
+                        <Input
+                          value={tempValue}
+                          onChange={(e) => setTempValue(e.target.value)}
+                          className="flex-1"
+                        />
+                        <Button size="sm" onClick={() => handleSave('email')}>Save</Button>
+                        <Button size="sm" variant="outline" onClick={() => setEditingField(null)}>Cancel</Button>
+                      </div>
+                    ) : (
+                      <div className="flex-1 flex items-center justify-between">
+                        <span className="text-gray-900">{selectedUser.email}</span>
+                        <Button
                           size="sm"
-                          variant="outline"
-                          onClick={() => {
-                            const newExp = window.prompt("Enter new experience:", selectedUser.experience);
-                            if (newExp) {
-                              setUsers(users.map(u => 
-                                u.id === selectedUser.id ? { ...u, experience: newExp } : u
-                              ));
-                              setSelectedUser({ ...selectedUser, experience: newExp });
-                            }
-                          }}
+                          variant="ghost"
+                          onClick={() => handleEdit('email', selectedUser.email)}
                         >
                           Edit
                         </Button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Phone Number Field */}
+                <div className="space-y-2">
+                  <Label>Phone Number</Label>
+                  <div className="flex items-center gap-2">
+                    {editingField === 'phoneNumber' ? (
+                      <div className="flex-1 flex gap-2">
+                        <Input
+                          value={tempValue}
+                          onChange={(e) => setTempValue(e.target.value)}
+                          className="flex-1"
+                        />
+                        <Button size="sm" onClick={() => handleSave('phoneNumber')}>Save</Button>
+                        <Button size="sm" variant="outline" onClick={() => setEditingField(null)}>Cancel</Button>
+                      </div>
+                    ) : (
+                      <div className="flex-1 flex items-center justify-between">
+                        <span className="text-gray-900">{selectedUser.phoneNumber || "Not set"}</span>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => handleEdit('phoneNumber', selectedUser.phoneNumber || "")}
+                        >
+                          Edit
+                        </Button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Status Field (only for doctors and nurses) */}
+                {selectedUser.type !== "patient" && (
+                  <div className="space-y-2">
+                    <Label>Status</Label>
+                    <div className="flex items-center gap-2">
+                      <div className="flex-1 flex items-center justify-between">
+                        <span className="text-gray-900">{selectedUser.status}</span>
+                        <Button
+                          size="sm"
+                          variant="ghost"
+                          onClick={() => {
+                            const newStatus = selectedUser.status === "active" ? "inactive" : "active";
+                            setUsers(users.map(u =>
+                              u.id === selectedUser.id ? { ...u, status: newStatus } : u
+                            ));
+                            setSelectedUser({ ...selectedUser, status: newStatus });
+                            toast.success("Status updated successfully");
+                          }}
+                        >
+                          Toggle
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
+                {/* Professional Fields (only for doctors and nurses) */}
+                {(selectedUser.type === "doctor" || selectedUser.type === "nurse") && (
+                  <>
+                    {/* Specialization Field */}
+                    <div className="space-y-2">
+                      <Label>Specialization</Label>
+                      <div className="flex items-center gap-2">
+                        {editingField === 'specialization' ? (
+                          <div className="flex-1 flex gap-2">
+                            <Input
+                              value={tempValue}
+                              onChange={(e) => setTempValue(e.target.value)}
+                              className="flex-1"
+                            />
+                            <Button size="sm" onClick={() => handleSave('specialization')}>Save</Button>
+                            <Button size="sm" variant="outline" onClick={() => setEditingField(null)}>Cancel</Button>
+                          </div>
+                        ) : (
+                          <div className="flex-1 flex items-center justify-between">
+                            <span className="text-gray-900">{selectedUser.specialization || "Not set"}</span>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => handleEdit('specialization', selectedUser.specialization || "")}
+                            >
+                              Edit
+                            </Button>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Experience Field */}
+                    <div className="space-y-2">
+                      <Label>Experience</Label>
+                      <div className="flex items-center gap-2">
+                        {editingField === 'experience' ? (
+                          <div className="flex-1 flex gap-2">
+                            <Input
+                              value={tempValue}
+                              onChange={(e) => setTempValue(e.target.value)}
+                              className="flex-1"
+                            />
+                            <Button size="sm" onClick={() => handleSave('experience')}>Save</Button>
+                            <Button size="sm" variant="outline" onClick={() => setEditingField(null)}>Cancel</Button>
+                          </div>
+                        ) : (
+                          <div className="flex-1 flex items-center justify-between">
+                            <span className="text-gray-900">{selectedUser.experience || "Not set"}</span>
+                            <Button
+                              size="sm"
+                              variant="ghost"
+                              onClick={() => handleEdit('experience', selectedUser.experience || "")}
+                            >
+                              Edit
+                            </Button>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </>
