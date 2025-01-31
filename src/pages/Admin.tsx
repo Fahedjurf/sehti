@@ -10,6 +10,8 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 interface Certificate {
   id: number;
@@ -27,6 +29,10 @@ interface User {
   type: string;
   email: string;
   status: string;
+  phoneNumber: string;
+  address?: string;
+  specialization?: string;
+  experience?: string;
 }
 
 interface HelpRequest {
@@ -66,6 +72,7 @@ const initialUsers = [
     type: "doctor",
     email: "michael.brown@example.com",
     status: "active",
+    phoneNumber: "123-456-7890",
   },
   {
     id: 2,
@@ -73,6 +80,7 @@ const initialUsers = [
     type: "nurse",
     email: "emily.davis@example.com",
     status: "active",
+    phoneNumber: "987-654-3210",
   },
   {
     id: 3,
@@ -80,6 +88,7 @@ const initialUsers = [
     type: "patient",
     email: "john.doe@example.com",
     status: "active",
+    phoneNumber: "555-555-5555",
   },
   {
     id: 4,
@@ -87,6 +96,7 @@ const initialUsers = [
     type: "patient",
     email: "jane.smith@example.com",
     status: "active",
+    phoneNumber: "444-444-4444",
   },
 ];
 
@@ -111,6 +121,7 @@ const Admin = () => {
       type: certificate.type,
       email: certificate.email,
       status: "active",
+      phoneNumber: "Not set",
     };
     setUsers((prevUsers) => [...prevUsers, newUser]);
   };
@@ -221,21 +232,160 @@ const Admin = () => {
       </div>
 
       <Dialog open={showUserDialog} onOpenChange={setShowUserDialog}>
-        <DialogContent>
+        <DialogContent className="max-w-md">
           <DialogHeader>
             <DialogTitle>User Details</DialogTitle>
           </DialogHeader>
           {selectedUser && (
             <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-2">
-                <div className="text-sm font-medium text-gray-500">Name:</div>
-                <div>{selectedUser.name}</div>
-                <div className="text-sm font-medium text-gray-500">Email:</div>
-                <div>{selectedUser.email}</div>
-                <div className="text-sm font-medium text-gray-500">Type:</div>
-                <div className="capitalize">{selectedUser.type}</div>
-                <div className="text-sm font-medium text-gray-500">Status:</div>
-                <div className="capitalize">{selectedUser.status}</div>
+              <div className="grid gap-4">
+                <div className="space-y-2">
+                  <Label>Name</Label>
+                  <div className="flex items-center gap-2">
+                    <Input value={selectedUser.name} readOnly />
+                    <Button 
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        const newName = window.prompt("Enter new name:", selectedUser.name);
+                        if (newName) {
+                          setUsers(users.map(u => 
+                            u.id === selectedUser.id ? { ...u, name: newName } : u
+                          ));
+                          setSelectedUser({ ...selectedUser, name: newName });
+                        }
+                      }}
+                    >
+                      Edit
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Email</Label>
+                  <div className="flex items-center gap-2">
+                    <Input value={selectedUser.email} readOnly />
+                    <Button 
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        const newEmail = window.prompt("Enter new email:", selectedUser.email);
+                        if (newEmail) {
+                          const password = window.prompt("Enter your password to confirm:");
+                          if (password) {
+                            setUsers(users.map(u => 
+                              u.id === selectedUser.id ? { ...u, email: newEmail } : u
+                            ));
+                            setSelectedUser({ ...selectedUser, email: newEmail });
+                            toast.success("Email updated successfully");
+                          }
+                        }
+                      }}
+                    >
+                      Edit
+                    </Button>
+                  </div>
+                </div>
+
+                <div className="space-y-2">
+                  <Label>Phone Number</Label>
+                  <div className="flex items-center gap-2">
+                    <Input value={selectedUser.phoneNumber || "Not set"} readOnly />
+                    <Button 
+                      size="sm"
+                      variant="outline"
+                      onClick={() => {
+                        const newPhone = window.prompt("Enter new phone number:", selectedUser.phoneNumber);
+                        if (newPhone) {
+                          // Simulate OTP verification
+                          const otp = window.prompt("Enter the OTP sent to your phone:");
+                          if (otp === "123456") { // In real app, verify with backend
+                            setUsers(users.map(u => 
+                              u.id === selectedUser.id ? { ...u, phoneNumber: newPhone } : u
+                            ));
+                            setSelectedUser({ ...selectedUser, phoneNumber: newPhone });
+                            toast.success("Phone number updated successfully");
+                          } else {
+                            toast.error("Invalid OTP");
+                          }
+                        }
+                      }}
+                    >
+                      Edit
+                    </Button>
+                  </div>
+                </div>
+
+                {selectedUser.type !== "patient" && (
+                  <div className="space-y-2">
+                    <Label>Status</Label>
+                    <div className="flex items-center gap-2">
+                      <Input value={selectedUser.status} readOnly />
+                      <Button 
+                        size="sm"
+                        variant="outline"
+                        onClick={() => {
+                          const newStatus = selectedUser.status === "active" ? "inactive" : "active";
+                          setUsers(users.map(u => 
+                            u.id === selectedUser.id ? { ...u, status: newStatus } : u
+                          ));
+                          setSelectedUser({ ...selectedUser, status: newStatus });
+                          toast.success("Status updated successfully");
+                        }}
+                      >
+                        Toggle
+                      </Button>
+                    </div>
+                  </div>
+                )}
+
+                {(selectedUser.type === "doctor" || selectedUser.type === "nurse") && (
+                  <>
+                    <div className="space-y-2">
+                      <Label>Specialization</Label>
+                      <div className="flex items-center gap-2">
+                        <Input value={selectedUser.specialization || "Not set"} readOnly />
+                        <Button 
+                          size="sm"
+                          variant="outline"
+                          onClick={() => {
+                            const newSpec = window.prompt("Enter new specialization:", selectedUser.specialization);
+                            if (newSpec) {
+                              setUsers(users.map(u => 
+                                u.id === selectedUser.id ? { ...u, specialization: newSpec } : u
+                              ));
+                              setSelectedUser({ ...selectedUser, specialization: newSpec });
+                            }
+                          }}
+                        >
+                          Edit
+                        </Button>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Experience</Label>
+                      <div className="flex items-center gap-2">
+                        <Input value={selectedUser.experience || "Not set"} readOnly />
+                        <Button 
+                          size="sm"
+                          variant="outline"
+                          onClick={() => {
+                            const newExp = window.prompt("Enter new experience:", selectedUser.experience);
+                            if (newExp) {
+                              setUsers(users.map(u => 
+                                u.id === selectedUser.id ? { ...u, experience: newExp } : u
+                              ));
+                              setSelectedUser({ ...selectedUser, experience: newExp });
+                            }
+                          }}
+                        >
+                          Edit
+                        </Button>
+                      </div>
+                    </div>
+                  </>
+                )}
               </div>
             </div>
           )}
