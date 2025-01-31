@@ -71,7 +71,7 @@ export const UserDetailsDialog = ({
                 value={tempValue}
                 onChange={(e) => setTempValue(e.target.value)}
                 className="flex-1"
-                type={field === "password" ? "password" : "text"}
+                type="text"
               />
               <Button
                 size="sm"
@@ -93,7 +93,7 @@ export const UserDetailsDialog = ({
           ) : (
             <div className="flex items-center justify-between w-full">
               <span className="text-gray-900">
-                {field === "password" ? "••••••••" : value || "Not set"}
+                {value || "Not set"}
               </span>
               <Button
                 size="sm"
