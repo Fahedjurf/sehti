@@ -36,10 +36,14 @@ const DeliveryTracking = () => {
   });
 
   useEffect(() => {
+    console.log("Checking localStorage for orderItems");
     const items = localStorage.getItem("orderItems");
+    console.log("Items from localStorage:", items);
+    
     if (items) {
       try {
         const parsedItems = JSON.parse(items);
+        console.log("Parsed items:", parsedItems);
         setOrderItems(parsedItems);
         // Clean up after retrieving
         localStorage.removeItem("orderItems");
@@ -87,6 +91,8 @@ const DeliveryTracking = () => {
     return orderItems.reduce((total, item) => total + item.price * item.quantity, 0);
   };
 
+  console.log("Current orderItems state:", orderItems);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent p-6">
       <div className="max-w-4xl mx-auto">
@@ -122,9 +128,9 @@ const DeliveryTracking = () => {
             />
           </div>
 
-          {orderItems && orderItems.length > 0 && (
-            <div className="mt-8">
-              <h2 className="text-xl font-semibold mb-4">Order Details</h2>
+          <div className="mt-8">
+            <h2 className="text-xl font-semibold mb-4">Order Details</h2>
+            {orderItems && orderItems.length > 0 ? (
               <div className="rounded-lg border">
                 <Table>
                   <TableHeader>
@@ -155,8 +161,12 @@ const DeliveryTracking = () => {
                   </TableBody>
                 </Table>
               </div>
-            </div>
-          )}
+            ) : (
+              <div className="text-center p-4 border rounded-lg bg-gray-50">
+                No items in your order
+              </div>
+            )}
+          </div>
         </div>
       </div>
     </div>
