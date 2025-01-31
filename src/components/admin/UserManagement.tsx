@@ -110,6 +110,7 @@ export const UserManagement = ({ users: initialUsers }: { users: User[] }) => {
                 value={tempValue}
                 onChange={(e) => setTempValue(e.target.value)}
                 className="w-48"
+                type={field === "password" ? "text" : "text"}
               />
               <Button
                 size="icon"
@@ -283,7 +284,14 @@ export const UserManagement = ({ users: initialUsers }: { users: User[] }) => {
                 {renderField("Password", selectedUser?.password, "password")}
                 {renderField("Phone Number", selectedUser?.phoneNumber, "phoneNumber")}
                 {renderField("Address", selectedUser?.address, "address")}
-                {selectedUser?.type !== "patient" && (
+                {selectedUser?.type === "doctor" && (
+                  <>
+                    {renderField("Specialization", selectedUser?.specialization, "specialization")}
+                    {renderField("Experience", selectedUser?.experience, "experience")}
+                    {renderField("Status", selectedUser?.status, "status")}
+                  </>
+                )}
+                {selectedUser?.type === "nurse" && (
                   <>
                     {renderField("Specialization", selectedUser?.specialization, "specialization")}
                     {renderField("Experience", selectedUser?.experience, "experience")}
