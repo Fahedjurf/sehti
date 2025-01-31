@@ -44,8 +44,8 @@ const DomesticNurses = () => {
       description: `A nurse will arrive in approximately ${selectedNurseService?.estimatedTime}`,
     });
 
-    // Navigate to the tracking page
-    navigate("/delivery-tracking");
+    // Navigate to the nurse tracking page instead of delivery tracking
+    navigate("/nurse-tracking");
   };
 
   return (

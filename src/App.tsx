@@ -19,6 +19,7 @@ import DoctorVideoCall from "./pages/DoctorVideoCall";
 import Schedule from "./pages/Schedule";
 import Admin from "./pages/Admin";
 import DeliveryTracking from "./pages/DeliveryTracking";
+import NurseTracking from "./pages/NurseTracking";
 
 const queryClient = new QueryClient();
 
@@ -45,6 +46,7 @@ const App = () => (
             <Route path="/schedule" element={<Schedule />} />
             <Route path="/admin" element={<Admin />} />
             <Route path="/delivery-tracking" element={<DeliveryTracking />} />
+            <Route path="/nurse-tracking" element={<NurseTracking />} />
           </Routes>
         </BrowserRouter>
       </TooltipProvider>
