@@ -32,10 +32,20 @@ const DomesticNurses = () => {
 
     const selectedNurseService = nurseServices.find(service => service.id === selectedService);
     
+    // Save the current location and service details to localStorage for tracking
+    localStorage.setItem('nurseRequest', JSON.stringify({
+      service: selectedNurseService,
+      location: location,
+      requestTime: new Date().toISOString()
+    }));
+    
     toast({
       title: "Service Requested",
       description: `A nurse will arrive in approximately ${selectedNurseService?.estimatedTime}`,
     });
+
+    // Navigate to the tracking page
+    navigate("/delivery-tracking");
   };
 
   return (
