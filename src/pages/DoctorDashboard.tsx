@@ -73,16 +73,15 @@ const DoctorDashboard = () => {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <LanguageToggle />
-                <DropdownMenuItem>Help</DropdownMenuItem>
+                <DropdownMenuItem>{t("helpCenter")}</DropdownMenuItem>
                 <DropdownMenuItem onClick={handleSignOut} className="text-red-600">
-                  Sign Out
+                  {t("signOut")}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
         </div>
 
-        {/* Statistics Section */}
         <DashboardStats />
 
         {/* Quick Actions Section */}
@@ -143,29 +142,29 @@ const DoctorDashboard = () => {
         <Dialog open={isProfileOpen} onOpenChange={setIsProfileOpen}>
           <DialogContent className="sm:max-w-[425px]">
             <DialogHeader>
-              <DialogTitle className="text-medical-primary">Profile Details</DialogTitle>
+              <DialogTitle className="text-medical-primary">{t("profileDetails")}</DialogTitle>
               <DialogDescription>
-                Your professional information and contact details
+                {t("profileDetails")}
               </DialogDescription>
             </DialogHeader>
             <div className="grid gap-4 py-4">
               <div className="grid grid-cols-2 items-center gap-4">
-                <div className="font-semibold text-medical-dark">Name</div>
+                <div className="font-semibold text-medical-dark">{t("name")}</div>
                 <div>{doctorProfile.firstName} {doctorProfile.lastName}</div>
                 
-                <div className="font-semibold text-medical-dark">Phone</div>
+                <div className="font-semibold text-medical-dark">{t("phone")}</div>
                 <div>{doctorProfile.phoneNumber}</div>
                 
-                <div className="font-semibold text-medical-dark">Email</div>
+                <div className="font-semibold text-medical-dark">{t("email")}</div>
                 <div className="break-all">{doctorProfile.email}</div>
                 
-                <div className="font-semibold text-medical-dark">Specialization</div>
+                <div className="font-semibold text-medical-dark">{t("specialization")}</div>
                 <div>{doctorProfile.specialization}</div>
                 
-                <div className="font-semibold text-medical-dark">Hospital Address</div>
+                <div className="font-semibold text-medical-dark">{t("hospitalAddress")}</div>
                 <div>{doctorProfile.hospitalAddress}</div>
                 
-                <div className="font-semibold text-medical-dark">Sehti ID</div>
+                <div className="font-semibold text-medical-dark">{t("sehtiId")}</div>
                 <div>{doctorProfile.sehtiId}</div>
               </div>
             </div>
