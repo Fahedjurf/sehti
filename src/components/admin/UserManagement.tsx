@@ -101,28 +101,28 @@ export const UserManagement = ({ users: initialUsers }: { users: User[] }) => {
   const renderField = (label: string, value: string | undefined, field: string) => {
     const isEditing = editingField === field;
     return (
-      <div className="flex items-center justify-between py-2 border-b">
-        <span className="font-medium text-gray-700">{label}:</span>
-        <div className="flex items-center gap-2">
+      <div className="flex items-center justify-between py-3 border-b">
+        <span className="font-medium text-gray-700 min-w-[120px]">{label}:</span>
+        <div className="flex items-center gap-2 flex-1 ml-4">
           {isEditing ? (
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 w-full">
               <Input
                 value={tempValue}
                 onChange={(e) => setTempValue(e.target.value)}
-                className="w-48"
-                type={field === "password" ? "text" : "text"}
+                className="flex-1"
+                type="text"
               />
               <Button
-                size="icon"
-                variant="ghost"
+                size="sm"
+                variant="outline"
                 onClick={() => handleSave(field)}
                 className="text-green-600 hover:text-green-700 hover:bg-green-50"
               >
                 <Check className="h-4 w-4" />
               </Button>
               <Button
-                size="icon"
-                variant="ghost"
+                size="sm"
+                variant="outline"
                 onClick={handleCancel}
                 className="text-red-600 hover:text-red-700 hover:bg-red-50"
               >
@@ -130,17 +130,18 @@ export const UserManagement = ({ users: initialUsers }: { users: User[] }) => {
               </Button>
             </div>
           ) : (
-            <>
+            <div className="flex items-center justify-between w-full">
               <span className="text-gray-900">{value || "Not set"}</span>
               <Button
-                size="icon"
-                variant="ghost"
+                size="sm"
+                variant="outline"
                 onClick={() => handleEdit(field, value || "")}
-                className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                className="ml-2 text-blue-600 hover:text-blue-700 hover:bg-blue-50"
               >
-                <Pencil className="h-4 w-4" />
+                <Pencil className="h-4 w-4 mr-1" />
+                Edit
               </Button>
-            </>
+            </div>
           )}
         </div>
       </div>
