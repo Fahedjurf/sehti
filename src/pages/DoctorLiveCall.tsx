@@ -5,7 +5,7 @@ import { Message } from "@/components/live-call/types";
 import { Product } from "@/components/pharmacy/types";
 import { ConsultationView } from "@/components/live-call/ConsultationView";
 import { Button } from "@/components/ui/button";
-import { Phone } from "lucide-react";
+import { Phone, ArrowLeft } from "lucide-react";
 
 const mockMedicalHistory = [
   {
@@ -65,6 +65,10 @@ const DoctorLiveCall = () => {
     }
   };
 
+  const handleBackToDashboard = () => {
+    navigate("/doctor-dashboard");
+  };
+
   const handleSendMessage = () => {
     if (newMessage.trim()) {
       const message: Message = {
@@ -104,7 +108,6 @@ const DoctorLiveCall = () => {
       title: "Medical History",
       description: "Viewing patient's medical history.",
     });
-    // You can implement additional logic here, like opening a modal or navigating to a history page
   };
 
   const handleAddPrescription = (product: Product) => {
@@ -125,26 +128,36 @@ const DoctorLiveCall = () => {
 
   if (!isCallAccepted) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent p-6 flex items-center justify-center">
-        <div className="text-center space-y-8">
-          <Button
-            onClick={handleToggleReceiving}
-            className={`w-48 h-48 rounded-full text-xl font-semibold transition-all duration-300 ${
-              isReceivingCalls 
-                ? 'bg-medical-primary hover:bg-medical-primary/90 animate-pulse'
-                : 'bg-gray-200 hover:bg-gray-300'
-            }`}
-          >
-            <div className="flex flex-col items-center gap-4">
-              <Phone className="w-12 h-12" />
-              <span>{isReceivingCalls ? 'Receiving Calls...' : 'Start Receiving'}</span>
-            </div>
-          </Button>
-          {isReceivingCalls && (
-            <p className="text-medical-primary animate-pulse">
-              Waiting for patient calls...
-            </p>
-          )}
+      <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent p-6">
+        <Button
+          variant="outline"
+          className="mb-6 flex items-center gap-2 bg-white/80 backdrop-blur-sm border-medical-primary text-medical-primary hover:bg-medical-light hover:text-medical-dark transition-all duration-300"
+          onClick={handleBackToDashboard}
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Back to Dashboard
+        </Button>
+        <div className="flex items-center justify-center h-[calc(100vh-120px)]">
+          <div className="text-center space-y-8">
+            <Button
+              onClick={handleToggleReceiving}
+              className={`w-48 h-48 rounded-full text-xl font-semibold transition-all duration-300 ${
+                isReceivingCalls 
+                  ? 'bg-medical-primary hover:bg-medical-primary/90 animate-pulse'
+                  : 'bg-gray-200 hover:bg-gray-300'
+              }`}
+            >
+              <div className="flex flex-col items-center gap-4">
+                <Phone className="w-12 h-12" />
+                <span>{isReceivingCalls ? 'Receiving Calls...' : 'Start Receiving'}</span>
+              </div>
+            </Button>
+            {isReceivingCalls && (
+              <p className="text-medical-primary animate-pulse">
+                Waiting for patient calls...
+              </p>
+            )}
+          </div>
         </div>
       </div>
     );
@@ -152,7 +165,7 @@ const DoctorLiveCall = () => {
 
   return (
     <ConsultationView
-      onBack={() => navigate("/doctor-dashboard")}
+      onBack={handleBackToDashboard}
       onEndCall={handleEndCall}
       onViewHistory={handleViewHistory}
       messages={messages}
