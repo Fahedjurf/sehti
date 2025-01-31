@@ -71,6 +71,10 @@ const PharmaceuticalSupplies = () => {
       alert("Please select a payment method");
       return;
     }
+
+    // Store cart items in localStorage before navigation
+    localStorage.setItem("orderItems", JSON.stringify(cart));
+    
     if (paymentMethod === "card") {
       setShowCardDialog(true);
     } else {
@@ -79,14 +83,9 @@ const PharmaceuticalSupplies = () => {
     }
   };
 
-  const handlePaymentMethodChange = (value: string) => {
-    setPaymentMethod(value);
-    if (value === "card") {
-      setShowCardDialog(true);
-    }
-  };
-
   const handleCardDetailsSubmit = () => {
+    // Store cart items in localStorage before navigation
+    localStorage.setItem("orderItems", JSON.stringify(cart));
     setShowCardDialog(false);
     navigate("/delivery-tracking");
   };
