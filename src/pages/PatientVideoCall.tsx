@@ -46,18 +46,11 @@ const PatientVideoCall = () => {
     navigate("/dashboard");
   };
 
-  const handleViewHistory = () => {
-    toast({
-      title: "Medical History",
-      description: "Viewing your medical history.",
-    });
-  };
-
   return (
     <ConsultationView
       onBack={handleBackToDashboard}
       onEndCall={handleEndCall}
-      onViewHistory={handleViewHistory}
+      onViewHistory={() => {}} // Empty function since we're not showing the button
       messages={messages}
       newMessage={newMessage}
       onMessageChange={setNewMessage}

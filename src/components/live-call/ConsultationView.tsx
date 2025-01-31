@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, X, FileText } from "lucide-react";
+import { ArrowLeft, X } from "lucide-react";
 import { ChatSection } from "@/components/live-call/ChatSection";
 import { PrescriptionSection } from "@/components/live-call/PrescriptionSection";
 import { Message } from "@/components/live-call/types";
@@ -21,7 +21,6 @@ interface ConsultationViewProps {
 export const ConsultationView = ({
   onBack,
   onEndCall,
-  onViewHistory,
   messages,
   newMessage,
   onMessageChange,
@@ -49,15 +48,6 @@ export const ConsultationView = ({
         <div className="lg:col-span-2">
           <div className="bg-gray-800 rounded-lg aspect-video relative mb-4">
             <div className="absolute top-4 right-4 flex gap-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={onViewHistory}
-                className="flex items-center gap-2 bg-white/90"
-              >
-                <FileText className="h-4 w-4" />
-                View Medical History
-              </Button>
               <Button 
                 variant="destructive" 
                 size="sm" 
