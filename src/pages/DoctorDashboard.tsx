@@ -18,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 import { LanguageToggle } from "@/components/LanguageToggle";
 import { MedicalQuote } from "@/components/ui/medical-quote";
 import { DashboardStats } from "@/components/doctor/DashboardStats";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const doctorProfile = {
   firstName: "John",
@@ -33,6 +34,7 @@ const doctorProfile = {
 const DoctorDashboard = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const handleSignOut = () => {
     navigate("/");
@@ -52,7 +54,7 @@ const DoctorDashboard = () => {
         {/* Header Section */}
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-bold text-medical-dark">
-            Welcome Dr. {doctorProfile.lastName}
+            {t("welcome")} Dr. {doctorProfile.lastName}
           </h1>
           
           <div className="flex items-center gap-4">

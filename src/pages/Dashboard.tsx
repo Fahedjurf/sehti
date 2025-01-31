@@ -14,6 +14,8 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { useState } from "react";
+import { LanguageToggle } from "@/components/LanguageToggle";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const categories = [
   {
@@ -52,12 +54,8 @@ const userProfile = {
 };
 
 const Index = () => {
-  const [language, setLanguage] = useState<"en" | "ar">("en");
   const [isProfileOpen, setIsProfileOpen] = useState(false);
-
-  const toggleLanguage = () => {
-    setLanguage(prev => prev === "en" ? "ar" : "en");
-  };
+  const { t } = useLanguage();
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent">
@@ -78,9 +76,7 @@ const Index = () => {
               <MoreVertical className="h-6 w-6 text-gray-600" />
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem onClick={toggleLanguage}>
-                {language === "en" ? "Switch to Arabic" : "Switch to English"}
-              </DropdownMenuItem>
+              <LanguageToggle />
               <DropdownMenuItem>Settings</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

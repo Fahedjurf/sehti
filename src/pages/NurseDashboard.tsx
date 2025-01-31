@@ -18,6 +18,8 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { DashboardStats } from "@/components/doctor/DashboardStats";
 import { MedicalQuote } from "@/components/ui/medical-quote";
+import { LanguageToggle } from "@/components/LanguageToggle";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const nurseProfile = {
   firstName: "Jane",
@@ -34,6 +36,7 @@ const NurseDashboard = () => {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isAvailable, setIsAvailable] = useState(false);
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const handleSignOut = () => {
     navigate("/");
@@ -53,7 +56,7 @@ const NurseDashboard = () => {
         {/* Header Section */}
         <div className="flex justify-between items-center">
           <h1 className="text-3xl font-bold text-medical-dark">
-            Welcome Nurse {nurseProfile.lastName}
+            {t("welcome")} Nurse {nurseProfile.lastName}
           </h1>
           
           <div className="flex items-center gap-4">
@@ -71,6 +74,7 @@ const NurseDashboard = () => {
                 <MoreVertical className="h-6 w-6 text-gray-600" />
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
+                <LanguageToggle />
                 <DropdownMenuItem>Help</DropdownMenuItem>
                 <DropdownMenuItem onClick={handleSignOut} className="text-red-600">
                   Sign Out
