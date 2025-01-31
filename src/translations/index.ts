@@ -11,7 +11,7 @@ export const translations = {
     liveCall: "Live Call",
     liveCallDesc: "Connect instantly with healthcare professionals",
     medicalHistory: "Medical History",
-    help: "Help",
+    helpCenter: "Help Center",
     signOut: "Sign Out",
     profileDetails: "Profile Details",
     name: "Name",
@@ -59,7 +59,6 @@ export const translations = {
     howCanWeHelp: "How can we help you?",
     submitRequest: "Submit Request",
     back: "Back",
-    help: "Help",
     settings: "Settings"
   },
   ar: {
@@ -74,7 +73,7 @@ export const translations = {
     liveCall: "مكالمة مباشرة",
     liveCallDesc: "تواصل فوراً مع متخصصي الرعاية الصحية",
     medicalHistory: "السجل الطبي",
-    help: "المساعدة",
+    helpCenter: "مركز المساعدة",
     signOut: "تسجيل الخروج",
     profileDetails: "تفاصيل الملف الشخصي",
     name: "الاسم",
@@ -122,7 +121,6 @@ export const translations = {
     howCanWeHelp: "كيف يمكننا مساعدتك؟",
     submitRequest: "إرسال الطلب",
     back: "رجوع",
-    help: "مساعدة",
     settings: "الإعدادات"
   }
 };
