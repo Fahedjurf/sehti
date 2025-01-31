@@ -71,9 +71,12 @@ const PharmaceuticalSupplies = () => {
       alert("Please select a payment method");
       return;
     }
-    // Handle checkout logic here
-    console.log("Checking out with payment method:", paymentMethod);
-    console.log("Cart items:", cart);
+    if (paymentMethod === "card") {
+      setShowCardDialog(true);
+    } else {
+      // For cash on delivery, navigate directly to tracking
+      navigate("/delivery-tracking");
+    }
   };
 
   const handlePaymentMethodChange = (value: string) => {
@@ -85,7 +88,7 @@ const PharmaceuticalSupplies = () => {
 
   const handleCardDetailsSubmit = () => {
     setShowCardDialog(false);
-    handleCheckout();
+    navigate("/delivery-tracking");
   };
 
   useEffect(() => {

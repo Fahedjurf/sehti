@@ -3,6 +3,10 @@ import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 
 interface LocationMapProps {
   onLocationChange: (lat: number, lng: number) => void;
+  driverLocation?: {
+    lat: number;
+    lng: number;
+  };
 }
 
 const mapContainerStyle = {
@@ -15,7 +19,7 @@ const defaultCenter = {
   lng: 46.6753,
 };
 
-export const LocationMap = ({ onLocationChange }: LocationMapProps) => {
+export const LocationMap = ({ onLocationChange, driverLocation }: LocationMapProps) => {
   const [currentPosition, setCurrentPosition] = useState(defaultCenter);
 
   useEffect(() => {
@@ -43,7 +47,22 @@ export const LocationMap = ({ onLocationChange }: LocationMapProps) => {
         center={currentPosition}
         zoom={15}
       >
-        <Marker position={currentPosition} />
+        <Marker
+          position={currentPosition}
+          icon={{
+            url: "/placeholder.svg",
+            scaledSize: new window.google.maps.Size(30, 30),
+          }}
+        />
+        {driverLocation && (
+          <Marker
+            position={driverLocation}
+            icon={{
+              url: "https://maps.google.com/mapfiles/ms/icons/deliverytruck.png",
+              scaledSize: new window.google.maps.Size(40, 40),
+            }}
+          />
+        )}
       </GoogleMap>
     </LoadScript>
   );
