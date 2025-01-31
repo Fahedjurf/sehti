@@ -1,17 +1,10 @@
 import { CertificateManagement } from "@/components/admin/CertificateManagement";
 import { UserManagement } from "@/components/admin/UserManagement";
+import { UserDetailsDialog } from "@/components/admin/UserDetailsDialog";
 import { useState, useEffect } from "react";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
 
 interface Certificate {
   id: number;
@@ -105,14 +98,6 @@ const Admin = () => {
   const [helpRequests, setHelpRequests] = useState<HelpRequest[]>([]);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [showUserDialog, setShowUserDialog] = useState(false);
-  const [editingField, setEditingField] = useState<string | null>(null);
-  const [tempValue, setTempValue] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPasswordConfirm, setShowPasswordConfirm] = useState(false);
-  const [showOTPConfirm, setShowOTPConfirm] = useState(false);
-  const [otp, setOtp] = useState("");
-  const [tempEmail, setTempEmail] = useState("");
-  const [tempPhone, setTempPhone] = useState("");
 
   useEffect(() => {
     // Load help requests from localStorage
@@ -152,58 +137,12 @@ const Admin = () => {
     if (user) {
       setSelectedUser(user);
       setShowUserDialog(true);
-      setEditingField(null);
     }
   };
 
-  const handleEdit = (field: string, value: string) => {
-    if (field === 'email') {
-      setTempEmail(value);
-      setShowPasswordConfirm(true);
-    } else if (field === 'phoneNumber') {
-      setTempPhone(value);
-      setShowOTPConfirm(true);
-      toast.success("OTP sent to your phone number");
-    } else {
-      setEditingField(field);
-      setTempValue(value);
-    }
-  };
-
-  const handleSave = async (field: string) => {
-    if (!selectedUser) return;
-
-    let shouldUpdate = true;
-    let newValue = tempValue;
-
-    if (field === 'email') {
-      newValue = tempEmail;
-      // Here you would typically verify the password with your backend
-      if (!confirmPassword) {
-        shouldUpdate = false;
-      }
-      setShowPasswordConfirm(false);
-      setConfirmPassword("");
-    } else if (field === 'phoneNumber') {
-      newValue = tempPhone;
-      if (otp !== '123456') { // In real app, verify with backend
-        toast.error("Invalid OTP");
-        shouldUpdate = false;
-      }
-      setShowOTPConfirm(false);
-      setOtp("");
-    }
-
-    if (shouldUpdate) {
-      setUsers(users.map(u =>
-        u.id === selectedUser.id ? { ...u, [field]: newValue } : u
-      ));
-      setSelectedUser({ ...selectedUser, [field]: newValue });
-      toast.success(`${field} updated successfully`);
-    }
-
-    setEditingField(null);
-    setTempValue("");
+  const handleUserUpdate = (updatedUser: User) => {
+    setUsers(users.map(u => u.id === updatedUser.id ? updatedUser : u));
+    setSelectedUser(updatedUser);
   };
 
   return (
@@ -290,38 +229,12 @@ const Admin = () => {
         </div>
       </div>
 
-      <Dialog open={showUserDialog} onOpenChange={setShowUserDialog}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle>User Details</DialogTitle>
-          </DialogHeader>
-          {selectedUser && (
-            <div className="space-y-4">
-              <div className="grid gap-4">
-                {renderField("Name", selectedUser.name, "name")}
-                {renderField("Email", selectedUser.email, "email")}
-                {renderField("Password", selectedUser.password, "password")}
-                {renderField("Phone Number", selectedUser.phoneNumber, "phoneNumber")}
-                {renderField("Address", selectedUser.address, "address")}
-                {selectedUser.type === "doctor" && (
-                  <>
-                    {renderField("Specialization", selectedUser.specialization, "specialization")}
-                    {renderField("Experience", selectedUser.experience, "experience")}
-                    {renderField("Status", selectedUser.status, "status")}
-                  </>
-                )}
-                {selectedUser.type === "nurse" && (
-                  <>
-                    {renderField("Specialization", selectedUser.specialization, "specialization")}
-                    {renderField("Experience", selectedUser.experience, "experience")}
-                    {renderField("Status", selectedUser.status, "status")}
-                  </>
-                )}
-              </div>
-            </div>
-          )}
-        </DialogContent>
-      </Dialog>
+      <UserDetailsDialog
+        open={showUserDialog}
+        onOpenChange={setShowUserDialog}
+        user={selectedUser}
+        onUserUpdate={handleUserUpdate}
+      />
     </div>
   );
 };
