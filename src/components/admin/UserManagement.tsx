@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { UserMinus, UserPlus, Search, Star } from "lucide-react";
+import { UserMinus, UserPlus, Search, Star, Pencil, Check, X } from "lucide-react";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -25,6 +25,11 @@ interface User {
   type: string;
   email: string;
   status: string;
+  password?: string;
+  phoneNumber?: string;
+  address?: string;
+  specialization?: string;
+  experience?: string;
   feedback?: {
     rating: number;
     comment: string;
@@ -40,6 +45,9 @@ export const UserManagement = ({ users: initialUsers }: { users: User[] }) => {
   const [users, setUsers] = useState(initialUsers);
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [showFeedbackDialog, setShowFeedbackDialog] = useState(false);
+  const [showUserDialog, setShowUserDialog] = useState(false);
+  const [editingField, setEditingField] = useState<string | null>(null);
+  const [tempValue, setTempValue] = useState("");
 
   const filteredUsers = users.filter(
     (user) =>
@@ -60,6 +68,82 @@ export const UserManagement = ({ users: initialUsers }: { users: User[] }) => {
   const handleShowFeedback = (user: User) => {
     setSelectedUser(user);
     setShowFeedbackDialog(true);
+  };
+
+  const handleShowUserDetails = (user: User) => {
+    setSelectedUser(user);
+    setShowUserDialog(true);
+    setEditingField(null);
+  };
+
+  const handleEdit = (field: string, value: string) => {
+    setEditingField(field);
+    setTempValue(value);
+  };
+
+  const handleSave = (field: string) => {
+    if (!selectedUser) return;
+
+    setUsers(users.map(u =>
+      u.id === selectedUser.id ? { ...u, [field]: tempValue } : u
+    ));
+    setSelectedUser({ ...selectedUser, [field]: tempValue });
+    setEditingField(null);
+    setTempValue("");
+    toast.success(`${field} updated successfully`);
+  };
+
+  const handleCancel = () => {
+    setEditingField(null);
+    setTempValue("");
+  };
+
+  const renderField = (label: string, value: string | undefined, field: string) => {
+    const isEditing = editingField === field;
+    return (
+      <div className="flex items-center justify-between py-2 border-b">
+        <span className="font-medium text-gray-700">{label}:</span>
+        <div className="flex items-center gap-2">
+          {isEditing ? (
+            <div className="flex items-center gap-2">
+              <Input
+                value={tempValue}
+                onChange={(e) => setTempValue(e.target.value)}
+                className="w-48"
+              />
+              <Button
+                size="icon"
+                variant="ghost"
+                onClick={() => handleSave(field)}
+                className="text-green-600 hover:text-green-700 hover:bg-green-50"
+              >
+                <Check className="h-4 w-4" />
+              </Button>
+              <Button
+                size="icon"
+                variant="ghost"
+                onClick={handleCancel}
+                className="text-red-600 hover:text-red-700 hover:bg-red-50"
+              >
+                <X className="h-4 w-4" />
+              </Button>
+            </div>
+          ) : (
+            <>
+              <span className="text-gray-900">{value || "Not set"}</span>
+              <Button
+                size="icon"
+                variant="ghost"
+                onClick={() => handleEdit(field, value || "")}
+                className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+              >
+                <Pencil className="h-4 w-4" />
+              </Button>
+            </>
+          )}
+        </div>
+      </div>
+    );
   };
 
   return (
@@ -115,14 +199,24 @@ export const UserManagement = ({ users: initialUsers }: { users: User[] }) => {
                 )}
               </TableCell>
               <TableCell>
-                <Button
-                  variant="ghost"
-                  size="icon"
-                  className="text-red-600 hover:text-red-700 hover:bg-red-50"
-                  onClick={() => handleRemoveUser(user.id)}
-                >
-                  <UserMinus className="h-5 w-5" />
-                </Button>
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-blue-600 hover:text-blue-700 hover:bg-blue-50"
+                    onClick={() => handleShowUserDetails(user)}
+                  >
+                    <Pencil className="h-5 w-5" />
+                  </Button>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                    onClick={() => handleRemoveUser(user.id)}
+                  >
+                    <UserMinus className="h-5 w-5" />
+                  </Button>
+                </div>
               </TableCell>
             </TableRow>
           ))}
@@ -171,6 +265,30 @@ export const UserManagement = ({ users: initialUsers }: { users: User[] }) => {
                 ))}
                 {(!selectedUser?.feedback || selectedUser.feedback.length === 0) && (
                   <p className="text-center text-gray-500">No feedback yet</p>
+                )}
+              </div>
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
+
+      <Dialog open={showUserDialog} onOpenChange={setShowUserDialog}>
+        <DialogContent className="max-w-md">
+          <DialogHeader>
+            <DialogTitle>User Details</DialogTitle>
+            <DialogDescription>
+              <div className="space-y-2 mt-4">
+                {renderField("Name", selectedUser?.name, "name")}
+                {renderField("Email", selectedUser?.email, "email")}
+                {renderField("Password", selectedUser?.password, "password")}
+                {renderField("Phone Number", selectedUser?.phoneNumber, "phoneNumber")}
+                {renderField("Address", selectedUser?.address, "address")}
+                {selectedUser?.type !== "patient" && (
+                  <>
+                    {renderField("Specialization", selectedUser?.specialization, "specialization")}
+                    {renderField("Experience", selectedUser?.experience, "experience")}
+                    {renderField("Status", selectedUser?.status, "status")}
+                  </>
                 )}
               </div>
             </DialogDescription>
