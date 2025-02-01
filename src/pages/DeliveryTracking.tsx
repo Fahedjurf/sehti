@@ -4,6 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { LocationMap } from "@/components/nurses/LocationMap";
+import { ThreeDotsMenu } from "@/components/ThreeDotsMenu";
 import {
   Table,
   TableBody,
@@ -95,6 +96,11 @@ const DeliveryTracking = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent p-6">
+      {/* Three Dots Menu */}
+      <div className="absolute top-4 right-4 z-50">
+        <ThreeDotsMenu />
+      </div>
+
       <div className="max-w-4xl mx-auto">
         <Button
           variant="outline"
