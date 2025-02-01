@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/components/ui/use-toast";
-import { X, ArrowLeft, ShoppingCart } from "lucide-react";
+import { X, ShoppingCart } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChatSection } from "@/components/live-call/ChatSection";
@@ -35,7 +35,11 @@ const LiveCall = () => {
   };
 
   const handleEndCall = () => {
-    // Function to handle ending the call
+    navigate("/dashboard");
+    toast({
+      title: "Call Ended",
+      description: "Your consultation has been ended successfully.",
+    });
   };
 
   const handleAddToPharmacy = () => {
@@ -64,15 +68,6 @@ const LiveCall = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent p-6">
       <div className="container mx-auto p-4 max-w-6xl">
-        <Button
-          variant="outline"
-          className="mb-6 flex items-center gap-2 bg-white/80 backdrop-blur-sm border-medical-primary text-medical-primary hover:bg-medical-light hover:text-medical-dark transition-all duration-300"
-          onClick={() => navigate("/dashboard")}
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to Dashboard
-        </Button>
-
         <h1 className="text-3xl font-bold text-medical-dark mb-8 text-center">
           Live Call
         </h1>
