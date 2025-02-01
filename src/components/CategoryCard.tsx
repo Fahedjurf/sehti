@@ -1,5 +1,6 @@
 import { LucideIcon } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 interface CategoryCardProps {
   title: string;
@@ -9,19 +10,20 @@ interface CategoryCardProps {
 
 export const CategoryCard = ({ title, icon: Icon, description }: CategoryCardProps) => {
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const handleClick = () => {
     switch (title) {
-      case "Quick Diagnoses":
+      case t("quickDiagnoses"):
         navigate("/quick-diagnoses");
         break;
-      case "Live Call":
+      case t("liveCall"):
         navigate("/live-call");
         break;
-      case "Domestic Nurses":
+      case t("domesticNurses"):
         navigate("/domestic-nurses");
         break;
-      case "Pharmaceutical Supplies Delivery":
+      case t("pharmaceuticalSupplies"):
         navigate("/pharmacy");
         break;
     }
