@@ -17,6 +17,7 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { ThreeDotsMenu } from "@/components/ThreeDotsMenu";
 
 const appointments = [
   {
@@ -87,6 +88,11 @@ const Schedule = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent">
       <div className="container mx-auto p-6">
+        {/* Three Dots Menu */}
+        <div className="absolute top-4 right-4 z-50">
+          <ThreeDotsMenu />
+        </div>
+
         <Button
           onClick={() => navigate("/doctor-dashboard")}
           className="mb-8 bg-medical-primary hover:bg-medical-dark text-white flex items-center gap-2 px-6 py-3 rounded-lg shadow-md transition-all duration-200"
