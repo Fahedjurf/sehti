@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { ShoppingCart, ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { ThreeDotsMenu } from "@/components/ThreeDotsMenu";
 import {
   Sheet,
   SheetContent,
@@ -117,6 +118,11 @@ const PharmaceuticalSupplies = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent p-6">
+      {/* Three Dots Menu */}
+      <div className="absolute top-4 right-4 z-50">
+        <ThreeDotsMenu />
+      </div>
+
       <div className="max-w-7xl mx-auto">
         <Button
           variant="outline"
