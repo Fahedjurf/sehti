@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
-import { ArrowLeft, X, FileText } from "lucide-react";
+import { X, FileText } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { ChatSection } from "@/components/live-call/ChatSection";
@@ -9,7 +9,7 @@ import { PrescriptionCard } from "@/components/live-call/PrescriptionCard";
 import { PrescriptionManager } from "@/components/doctor/PrescriptionManager";
 import { Message } from "@/components/live-call/types";
 import { Product } from "@/components/pharmacy/types";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import {
   Dialog,
   DialogContent,
@@ -25,7 +25,6 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
-// Mock medical history data - in a real app, this would come from an API
 const mockMedicalHistory = [
   {
     id: 1,
@@ -109,15 +108,6 @@ const DoctorVideoCall = () => {
   return (
     <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent p-6">
       <div className="container mx-auto p-4 max-w-6xl">
-        <Button
-          variant="outline"
-          className="mb-6 flex items-center gap-2 bg-white/80 backdrop-blur-sm border-medical-primary text-medical-primary hover:bg-medical-light hover:text-medical-dark transition-all duration-300"
-          onClick={() => navigate("/doctor-dashboard")}
-        >
-          <ArrowLeft className="h-4 w-4" />
-          Back to Dashboard
-        </Button>
-
         <h1 className="text-3xl font-bold text-medical-dark mb-8 text-center">
           Video Consultation
         </h1>
