@@ -5,6 +5,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { ThreeDotsMenu } from "@/components/ThreeDotsMenu";
 
 const symptoms = [
   "Fever",
@@ -55,6 +56,11 @@ Please consult with a healthcare professional for an accurate diagnosis.`;
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent/30">
+      {/* Three Dots Menu */}
+      <div className="absolute top-4 right-4 z-50">
+        <ThreeDotsMenu />
+      </div>
+
       <div className="max-w-4xl mx-auto p-6">
         <Button
           variant="outline"
