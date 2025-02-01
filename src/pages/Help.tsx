@@ -4,11 +4,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { ArrowLeft } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
+import { ThreeDotsMenu } from "@/components/ThreeDotsMenu";
+import { useLanguage } from "@/contexts/LanguageContext";
 
 const Help = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const [helpRequest, setHelpRequest] = useState("");
+  const { t } = useLanguage();
 
   const handleSubmit = () => {
     if (!helpRequest.trim()) {
@@ -42,25 +45,29 @@ const Help = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent p-6">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto relative">
+        <div className="absolute top-0 right-0 z-50">
+          <ThreeDotsMenu />
+        </div>
+
         <Button
           variant="outline"
           className="mb-6 flex items-center gap-2 bg-white/80 backdrop-blur-sm border-medical-primary text-medical-primary hover:bg-medical-light hover:text-medical-dark transition-all duration-300"
           onClick={() => navigate(-1)}
         >
           <ArrowLeft className="h-4 w-4" />
-          Back
+          {t("back")}
         </Button>
 
         <div className="bg-white/80 backdrop-blur-sm rounded-xl p-8 shadow-lg border border-medical-light">
           <h1 className="text-3xl font-bold text-center text-medical-dark mb-8">
-            Help Center
+            {t("helpTitle")}
           </h1>
 
           <div className="space-y-6">
             <div>
               <h2 className="text-xl font-semibold text-medical-dark mb-2">
-                How can we help you?
+                {t("howCanWeHelp")}
               </h2>
               <p className="text-gray-600 mb-4">
                 Please describe your issue or question in detail below, and our admin team will assist you as soon as possible.
@@ -78,7 +85,7 @@ const Help = () => {
               onClick={handleSubmit}
               className="w-full bg-medical-primary hover:bg-medical-dark text-white transition-colors"
             >
-              Submit Help Request
+              {t("submitRequest")}
             </Button>
           </div>
         </div>
