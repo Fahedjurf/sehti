@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import { LocationMap } from "@/components/nurses/LocationMap";
 import { toast } from "@/components/ui/use-toast";
+import { ThreeDotsMenu } from "@/components/ThreeDotsMenu";
 
 interface NurseRequest {
   service: {
@@ -61,7 +62,11 @@ const NurseTracking = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent p-6">
-      <div className="max-w-4xl mx-auto">
+      <div className="max-w-4xl mx-auto relative">
+        <div className="absolute top-0 right-0 z-50">
+          <ThreeDotsMenu />
+        </div>
+
         <Button
           variant="outline"
           className="mb-6 flex items-center gap-2 bg-white/80 backdrop-blur-sm border-medical-primary text-medical-primary hover:bg-medical-light hover:text-medical-dark transition-all duration-300"
