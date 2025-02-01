@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowLeft, User, Calendar, Clipboard, Heart, Stethoscope, Star, StarOff } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Textarea } from "@/components/ui/textarea";
+import { ThreeDotsMenu } from "@/components/ThreeDotsMenu";
 import {
   Dialog,
   DialogContent,
@@ -95,6 +96,11 @@ const MedicalHistory = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent p-6">
+      {/* Three Dots Menu */}
+      <div className="absolute top-4 right-4 z-50">
+        <ThreeDotsMenu />
+      </div>
+
       <div className="max-w-4xl mx-auto">
         <div className="flex items-center mb-6 justify-center">
           <Button 
@@ -107,6 +113,7 @@ const MedicalHistory = () => {
           </Button>
           <h1 className="text-3xl font-bold text-medical-dark">Medical History</h1>
         </div>
+
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {medicalReports.map((report) => (
             <Card 
