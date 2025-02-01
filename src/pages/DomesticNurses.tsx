@@ -6,6 +6,7 @@ import { ArrowLeft } from "lucide-react";
 import { useToast } from "@/components/ui/use-toast";
 import { LocationMap } from "@/components/nurses/LocationMap";
 import { ServiceSelection, nurseServices } from "@/components/nurses/ServiceSelection";
+import { ThreeDotsMenu } from "@/components/ThreeDotsMenu";
 
 const DomesticNurses = () => {
   const navigate = useNavigate();
@@ -32,7 +33,6 @@ const DomesticNurses = () => {
 
     const selectedNurseService = nurseServices.find(service => service.id === selectedService);
     
-    // Save the current location and service details to localStorage for tracking
     localStorage.setItem('nurseRequest', JSON.stringify({
       service: selectedNurseService,
       location: location,
@@ -44,12 +44,16 @@ const DomesticNurses = () => {
       description: `A nurse will arrive in approximately ${selectedNurseService?.estimatedTime}`,
     });
 
-    // Navigate to the nurse tracking page instead of delivery tracking
     navigate("/nurse-tracking");
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent relative overflow-hidden">
+      {/* Three Dots Menu */}
+      <div className="absolute top-4 right-4 z-50">
+        <ThreeDotsMenu />
+      </div>
+
       <div className="absolute -top-20 -right-20 w-64 h-64 rounded-full bg-medical-accent/20 blur-3xl animate-pulse" />
       <div className="absolute -bottom-32 -left-20 w-96 h-96 rounded-full bg-medical-primary/10 blur-3xl animate-pulse delay-700" />
       <div className="absolute inset-0 bg-grid-medical-primary/[0.03] -z-10" />
