@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { toast } from "sonner";
 import { MedicalQuote } from "@/components/ui/medical-quote";
+import { ThreeDotsMenu } from "@/components/ThreeDotsMenu";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -62,6 +63,9 @@ const Login = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent/30 flex items-center justify-center">
+      <div className="absolute top-4 right-4">
+        <ThreeDotsMenu />
+      </div>
       <div className="container px-4 py-12 grid md:grid-cols-2 gap-8 items-center max-w-6xl">
         <div className="space-y-8 hidden md:block">
           <div className="text-4xl font-bold text-medical-dark mb-4">
