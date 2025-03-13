@@ -1,3 +1,4 @@
+
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowLeft } from "lucide-react";
@@ -6,6 +7,7 @@ import { Progress } from "@/components/ui/progress";
 import { LocationMap } from "@/components/nurses/LocationMap";
 import { toast } from "@/components/ui/use-toast";
 import { ThreeDotsMenu } from "@/components/ThreeDotsMenu";
+import { useResponsive } from "@/hooks/use-mobile";
 
 interface NurseRequest {
   service: {
@@ -23,6 +25,7 @@ interface NurseRequest {
 
 const NurseTracking = () => {
   const navigate = useNavigate();
+  const { isMobile } = useResponsive();
   const [nurseRequest, setNurseRequest] = useState<NurseRequest | null>(null);
   const [nurseLocation, setNurseLocation] = useState({
     lat: 24.7136,
@@ -61,7 +64,7 @@ const NurseTracking = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent p-6">
+    <div className="min-h-screen bg-gradient-to-br from-medical-light via-white to-medical-accent p-4 md:p-6">
       <div className="max-w-4xl mx-auto relative">
         <div className="absolute top-0 right-0 z-50">
           <ThreeDotsMenu />
@@ -69,21 +72,21 @@ const NurseTracking = () => {
 
         <Button
           variant="outline"
-          className="mb-6 flex items-center gap-2 bg-white/80 backdrop-blur-sm border-medical-primary text-medical-primary hover:bg-medical-light hover:text-medical-dark transition-all duration-300"
+          className="mb-4 md:mb-6 flex items-center gap-2 bg-white/80 backdrop-blur-sm border-medical-primary text-medical-primary hover:bg-medical-light hover:text-medical-dark transition-all duration-300"
           onClick={() => navigate("/domestic-nurses")}
         >
           <ArrowLeft className="h-4 w-4" />
           Back to Domestic Nurses
         </Button>
 
-        <div className="bg-white rounded-lg shadow-lg p-6 space-y-6">
-          <h1 className="text-2xl font-bold text-medical-dark">
+        <div className="bg-white rounded-lg shadow-lg p-4 md:p-6 space-y-4 md:space-y-6">
+          <h1 className="text-xl md:text-2xl font-bold text-medical-dark">
             Nurse Service Tracking
           </h1>
 
-          <div className="space-y-4">
-            <div className="flex items-center justify-between">
-              <span className="text-lg font-medium">Nurse is on the way</span>
+          <div className="space-y-3 md:space-y-4">
+            <div className={`flex ${isMobile ? 'flex-col gap-1' : 'items-center justify-between'}`}>
+              <span className="text-base md:text-lg font-medium">Nurse is on the way</span>
               <span className="text-medical-primary">
                 Estimated arrival: {estimatedTime} minutes
               </span>
@@ -92,7 +95,7 @@ const NurseTracking = () => {
             <Progress value={Math.max(0, 100 - (estimatedTime / 30) * 100)} />
           </div>
 
-          <div className="rounded-lg overflow-hidden border border-gray-200 h-[300px]">
+          <div className="rounded-lg overflow-hidden border border-gray-200 h-[250px] md:h-[300px]">
             <LocationMap
               onLocationChange={() => {}}
               driverLocation={nurseLocation}
@@ -100,10 +103,10 @@ const NurseTracking = () => {
           </div>
 
           {nurseRequest && (
-            <div className="mt-8">
-              <h2 className="text-xl font-semibold mb-4">Service Type</h2>
-              <div className="p-4 border rounded-lg bg-gray-50">
-                <div className="text-lg text-medical-dark">
+            <div className="mt-6 md:mt-8">
+              <h2 className="text-lg md:text-xl font-semibold mb-3 md:mb-4">Service Type</h2>
+              <div className="p-3 md:p-4 border rounded-lg bg-gray-50">
+                <div className="text-base md:text-lg text-medical-dark">
                   {nurseRequest.service.title}
                 </div>
               </div>
